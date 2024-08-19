@@ -1,0 +1,52 @@
+// Define your themes
+$default-theme: (
+  primary-color: #007bff,
+  secondary-color: #278634,
+  background-color: #f8f9fa
+);
+
+$dark-theme: (
+  primary-color: red,
+  secondary-color: #6c757d,
+  background-color: #212529
+);
+
+$light-theme: (
+  primary-color: #f8f9fa,
+  secondary-color: #b11d38,
+  background-color: #ffffff
+);
+
+
+//ADD STYLE
+
+@mixin apply-theme($theme) {
+  $primary-color: map-get($theme, primary-color);
+  $secondary-color: map-get($theme, secondary-color);
+  $background-color: map-get($theme, background-color);
+
+  .primary-color {
+    color: $primary-color !important;
+  }
+
+  .secondary-color {
+    color: $secondary-color !important;
+  }
+
+  .background {
+    background-color: $background-color !important;
+  }
+}
+
+// Apply themes
+body.default-theme {
+  @include apply-theme($default-theme);
+}
+
+body.dark-theme {
+  @include apply-theme($dark-theme);
+}
+
+body.light-theme {
+  @include apply-theme($light-theme);
+}

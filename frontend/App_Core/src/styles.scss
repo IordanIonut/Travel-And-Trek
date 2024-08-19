@@ -1,6 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import "@angular/material/prebuilt-themes/azure-blue.css";
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-@import "@angular/material/prebuilt-themes/azure-blue.css";
-
+@import 'app/_theme/themes';

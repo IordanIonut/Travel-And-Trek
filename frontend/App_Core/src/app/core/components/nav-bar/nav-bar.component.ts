@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  ViewEncapsulation,
+} from '@angular/core';
+import { SetThemeService } from '../../../_theme/set-theme.service';
+import { isPlatformBrowser, NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [],
+  imports: [NgFor],
+  providers: [SetThemeService,],
   templateUrl: './nav-bar.component.html',
-  styleUrl: './nav-bar.component.scss'
+  styleUrls: ['./nav-bar.component.scss'],
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit {
+  constructor(){}
 
+  ngOnInit() {
+    
+  }
 }
