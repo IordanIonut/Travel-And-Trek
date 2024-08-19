@@ -1,13 +1,9 @@
 import {
-  AfterViewInit,
   Component,
-  Inject,
   OnInit,
-  PLATFORM_ID,
-  ViewEncapsulation,
 } from '@angular/core';
 import { SetThemeService } from '../../../_theme/set-theme.service';
-import { isPlatformBrowser, NgFor } from '@angular/common';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-nav-bar',
