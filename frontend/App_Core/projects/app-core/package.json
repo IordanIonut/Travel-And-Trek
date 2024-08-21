@@ -1,12 +1,18 @@
 {
-  "name": "app-core",
-  "version": "0.0.1",
+  "name": "travel-and-trek-app-core",
+  "version": "0.0.8",
   "peerDependencies": {
-    "@angular/common": "^18.1.0",
-    "@angular/core": "^18.1.0"
+    "@angular/common": "^18.2.0",
+    "@angular/core": "^18.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "main": "./bundles/travel-and-trek-app-core.umd.js",
+  "module": "./esm2020/travel-and-trek-app-core.mjs",
+  "es2015": "./fesm2015/travel-and-trek-app-core.mjs",
+  "esm2020": "./esm2020/travel-and-trek-app-core.mjs",
+  "types": "./public-api.d.ts",
+  "metadata": "./public-api.metadata.json"
 }
