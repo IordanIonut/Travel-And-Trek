@@ -1,106 +1,35 @@
 <div class="page">
-  <div
-    class="rounded-[33px] pt-5 pr-2.5 pb-10 pl-2.5 flex flex-col gap-2.5 items-center justify-start self-stretch shrink-0 relative w-16"
-  >
-    <div class="self-stretch shrink-0 h-[50px] relative">
-      <div
-        class="second-color text-center font-['Inter-Regular',_sans-serif] text-base font-normal absolute right-[5px] left-[5px] top-[5px] h-10 flex items-center justify-center"
-      >
-        LOGO
-      </div>
-    </div>
-  </div>
 
-  <div
-    class="flex flex-col items-center justify-between self-stretch flex-1 relative"
-  >
     <div
       class="flex flex-row gap-2.5 items-center justify-center self-stretch flex-1 relative"
     >
       <div
-        class="card rounded p-[30px] flex flex-col gap-[30px] items-center justify-center shrink-0 relative"
+        class="card rounded-2xl p-[30px] flex flex-col gap-[30px] items-center justify-center shrink-0 relative"
       >
         <div
-          class="primary-color text-center font-['Inter-Regular',_sans-serif] text-[21px] font-normal relative flex items-center justify-center"
+          class="primary-color text-2xl text-center font-['Inter-Regular',_sans-serif] font-normal relative flex items-center justify-center"
         >
           Logo
-          <br />
         </div>
+
         <div
           class="flex flex-row gap-5 items-center justify-center shrink-0 relative"
         >
-          <div
-            class="bg-[#000000] rounded-[37px] pt-2.5 pr-[15px] pb-2.5 pl-[15px] flex flex-row gap-0 items-start justify-center shrink-0 relative"
-          >
-            <div
-              class="rounded-[45px] flex flex-row gap-0 items-center justify-center shrink-0 relative"
-            >
-              <div
-                class="bg-[#004f4f] rounded-[50%] shrink-0 w-[55px] h-[55px] absolute left-[72px] top-[-7px]"
-                style="
-                  transform-origin: 0 0;
-                  transform: rotate(0deg) scale(1, 1);
-                "
-              ></div>
-              <div class="line">
-                <img
-                  class="shrink-0 w-[30px] h-[30px] relative overflow-visible"
-                  src="home0.svg"
-                />
-              </div>
-              <div
-                class="bg-[#006868] shrink-0 w-[15px] h-10 relative"
-                style="transform: rotate(90deg) scale(1, 1)"
-              ></div>
-              <div class="line">
-                <img
-                  class="shrink-0 w-[30px] h-[30px] relative overflow-visible"
-                  src="home1.svg"
-                />
-              </div>
-              <div
-                class="bg-[#006868] shrink-0 w-[15px] h-10 relative"
-                style="
-                  transform-origin: 0 0;
-                  transform: rotate(-90deg) scale(1, 1);
-                "
-              ></div>
-              <div class="line">
-                <img
-                  class="shrink-0 w-[30px] h-[30px] relative overflow-visible"
-                  src="home2.svg"
-                />
-              </div>
-            </div>
-          </div>
         </div>
         <div
           class="flex flex-col gap-2.5 items-center justify-center self-stretch shrink-0 h-[216.67px] relative"
         >
-          <div
-            class="primary-color text-center font-['Inter-Regular',_sans-serif] text-[21px] font-normal relative flex items-center justify-center"
-          >
-            Logo
-            <br />
-          </div>
-          <div
-            class="primary-color text-center font-['Inter-Regular',_sans-serif] text-[21px] font-normal relative flex items-center justify-center"
-          >
-            Logo
-            <br />
-          </div>
-          <div
-            class="primary-color text-center font-['Inter-Regular',_sans-serif] text-[21px] font-normal relative flex items-center justify-center"
-          >
-            Logo
-            <br />
-          </div>
-          <div
-            class="primary-color text-center font-['Inter-Regular',_sans-serif] text-[21px] font-normal relative flex items-center justify-center"
-          >
-            Logo
-            <br />
-          </div>
+<!-- Using TailwindCSS for spacing and color -->
+<div class="p-custom-padding bg-customPrimary text-white">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>First Name</mat-label>
+    <input matInput placeholder="Enter your first name" class="text-customSecondary">
+  </mat-form-field>
+</div>
+
+        
+        
+
         </div>
         <div
           class="flex flex-col gap-2.5 items-center justify-center self-stretch shrink-0 relative"
@@ -114,42 +43,4 @@
       </div>
     </div>
 
-    <div
-      class="rounded-15 p-4 flex flex-row gap-7 items-center justify-center shrink-0 relative"
-    >
-      <div
-        class="bg-[#000000] rounded-[37px] pt-2.5 pr-[15px] pb-2.5 pl-[15px] flex flex-row gap-0 items-start justify-center shrink-0 relative"
-      >
-        <div
-          class="rounded-[45px] flex flex-row gap-0 items-center justify-center shrink-0 relative"
-        ></div>
-<!--
-        <div
-          *ngFor="let page of pages; let i = index"
-          class="flex flex-row items-center"
-        >
-          <div class="nav-bar">
-            <mat-icon>{{ page.icon }}</mat-icon>
-          </div>
-          <div *ngIf="i < pages.length - 1" class="line"></div>
-        </div>
-        <div class="center-circle"></div>
-      -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-      </div>
-    </div>
-  </div>
 </div>

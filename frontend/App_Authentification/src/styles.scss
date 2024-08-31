@@ -1,8 +1,24 @@
 @import "../../App_Core/projects/app-core/src/lib/style.scss";
+@import './theme.scss';
 
+:root {
+  --nav-bar-width: 70px;
+}
 
-.page{
-    @apply h-screen w-full flex background-primary;
+.app-logo {
+  @apply text-center text-base font-normal relative h-16 flex items-center justify-center;
+}
+
+.nav-bar {
+  @apply bg-[#434343] rounded-3xl h-fit w-fit pt-2.5 pr-4 pb-2.5 pl-4 flex flex-row gap-0 items-start justify-center shrink-0 relative;
+  width: var(--nav-bar-width);
+}
+
+.page {
+  @apply h-full flex background-primary overflow-y-auto;
+  width: calc(100vw - var(--nav-bar-width));
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
 }
 
 .line {
@@ -17,12 +33,58 @@
   height: 2.5rem; 
 }
 
-.center-circle{
-  @apply bg-red-50 rounded-full shrink-0 w-12 h-12 absolute;
+.center-circle {
+  @apply bg-red-50 rounded-full w-12 h-12 absolute;
   transition: left 0.3s ease, top 0.3s ease;
+  pointer-events: none;
 }
 
+.element{
+  @apply card rounded-2xl p-1.5 flex flex-row gap-2.5 items-start justify-start shrink-0 relative;
+}
 
 
 html, body { height: 100%;  width: 100%; background-color:black}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+
+.mat-form-field {
+  width: 100%;
+
+  .mat-form-field-label {
+    color: red !important;
+    background-color: yellow !important;
+    font-weight: bold !important;
+  }
+
+  .mat-form-field-outline {
+    color: red !important; // Outline color
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    border-color: red !important; // Outline border color
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+    background-color: yellow !important; // Outline gap background color
+  }
+
+  .mat-input-element {
+    color: green !important; // Input text color
+  }
+}
+
+// Custom Tailwind overrides
+@layer components {
+  .btn-custom {
+    @apply bg-red-500 text-white font-bold py-2 px-4 rounded;
+  }
+}
+
+@layer utilities {
+  .text-custom {
+    color: #00DDDD;
+  }
+}

@@ -34,7 +34,7 @@ export class AppComponent {
     { icon: 'search', route: '/authentification/register' },
     { icon: 'notifications', route: '/authentification/forgot-password' },
   ];
-  style: boolean = true;
+  style: boolean = false;
   selectedIndex: number = 0;
 
   @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
@@ -73,42 +73,47 @@ export class AppComponent {
 
   private updateCenterCirclePosition() {
     if (!this.navItems || !this.navItems.length) {
-      console.log('No navItems available.');
-      return;
+        //console.log('No navItems available.');
+        return;
     }
 
-    if (
-      this.selectedIndex === null ||
-      this.selectedIndex >= this.navItems.length
-    ) {
-      console.log('Selected index is out of bounds.');
-      this.selectedIndex = 0;
+    if (this.selectedIndex === null || this.selectedIndex >= this.navItems.length) {
+        //console.log('Selected index is out of bounds.');
+        this.selectedIndex = 0;
     }
 
     const navItemsArray = this.navItems.toArray();
     const navItem = navItemsArray[this.selectedIndex]?.nativeElement;
-
+    //console.log(navItemsArray[this.selectedIndex]);
     if (navItem instanceof HTMLElement) {
-      try {
-        const rect = navItem.getBoundingClientRect();
-        const centerCircle = document.querySelector(
-          '.center-circle'
-        ) as HTMLElement;
+        try {
+            const centerCircle = document.querySelector('.center-circle') as HTMLElement;
+            if (centerCircle) {
+                const centerX = navItem.offsetLeft + 34;
+                const centerY = navItem.offsetTop + 28;
+                centerCircle.style.position = 'absolute';
+                centerCircle.style.left = `${centerX}px`;
+                centerCircle.style.top = `${centerY}px`;
+                centerCircle.style.transform = 'translate(-50%, -50%)';
 
-        if (centerCircle) {
-          centerCircle.style.left = `${rect.left + rect.width / 2 -14}px`;
-          centerCircle.style.top = `${rect.top + rect.height / 2 - 10}px`;
-          centerCircle.style.transform = 'translate(-50%, -50%)';
-        } else {
-          console.log('Center circle element not found.');
+                // Log for debugging
+                //console.log(`Rect: ${JSON.stringify(rect)}`);
+                //console.log(`Container Rect: ${JSON.stringify(containerRect)}`);
+                //console.log(`Center Circle Position - Left: ${centerX}px, Top: ${centerY}px`);
+            } else {
+                //console.log('Center circle element not found.');
+            }
+        } catch (e) {
+            console.error('Error getting bounding rect:', e);
         }
-      } catch (e) {
-        console.error('Error getting bounding rect:', e);
-      }
     } else {
-      console.log('navItem is not an HTMLElement:', navItem);
+        console.log('navItem is not an HTMLElement:', navItem);
     }
-  }
+}
+
+
+
+
 
   onPageClick(index: number) {
     this.selectedIndex = index;

@@ -1,0 +1,35 @@
+@use '@angular/material' as mat;
+
+
+// Define your custom color palettes
+$custom-primary: mat.define-palette(mat.$blue-grey-palette, 800, 500, 900);
+$custom-accent: mat.define-palette(mat.$amber-palette, 500, 300, 800);
+
+// Create a custom theme using the palettes
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: mat.$red-palette
+  ),
+  typography: mat.define-typography-config(),
+  density: 4
+));
+
+// Include Angular Material theme styles
+@include mat.all-component-themes($custom-theme);
+
+// Apply additional global styles
+body {
+  background-color: #f0f0f0;
+}
+
+.mat-form-field {
+  .mat-form-field-label {
+    color: #ff5722 !important; // Custom label color
+  }
+
+  .mat-form-field-underline {
+    background-color: #ff5722 !important; // Custom underline color
+  }
+}
