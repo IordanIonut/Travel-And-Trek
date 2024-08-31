@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
 
-
 // Define your custom color palettes
 $custom-primary: mat.define-palette(mat.$blue-grey-palette, 800, 500, 900);
 $custom-accent: mat.define-palette(mat.$amber-palette, 500, 300, 800);
