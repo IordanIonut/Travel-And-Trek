@@ -7,7 +7,8 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "travel-and-trek-app-core": ["./node_modules/travel-and-trek-app-core"]
+      "travel-and-trek-app-core": ["./node_modules/travel-and-trek-app-core"],
+      "travel-and-trek-app-core/*": ["node_modules/travel-and-trek-app-core/*"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

@@ -1,20 +1,20 @@
 // Define your themes
 $default-theme: (
-  primary-color: #007bff,
-  secondary-color: #278634,
-  background-color: #f8f9fa
+  primary-color: #00DDDD,
+  background-primary: #191C1C,
+  card: #006868,
 );
 
 $dark-theme: (
-  primary-color: red,
-  secondary-color: #6c757d,
-  background-color: #212529
+  primary-color: #00DDDD,
+  background-primary: #191C1C,
+  card: #006868,
 );
 
 $light-theme: (
-  primary-color: #f8f9fa,
-  secondary-color: #b11d38,
-  background-color: #ffffff
+  primary-color: #00DDDD,
+  background-primary: #191C1C,
+  card: #006868,
 );
 
 
@@ -22,19 +22,19 @@ $light-theme: (
 
 @mixin apply-theme($theme) {
   $primary-color: map-get($theme, primary-color);
-  $secondary-color: map-get($theme, secondary-color);
-  $background-color: map-get($theme, background-color);
+  $background-primary: map-get($theme, background-primary);
+  $card: map-get($theme, card);
 
   .primary-color {
     color: $primary-color !important;
   }
 
-  .secondary-color {
-    color: $secondary-color !important;
+  .background-primary {
+    background-color: $background-primary !important;
   }
 
-  .background {
-    background-color: $background-color !important;
+  .card {
+    background-color: $card !important;
   }
 }
 

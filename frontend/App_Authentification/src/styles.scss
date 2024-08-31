@@ -1,0 +1,28 @@
+@import "../../App_Core/projects/app-core/src/lib/style.scss";
+
+
+.page{
+    @apply h-screen w-full flex background-primary;
+}
+
+.line {
+  @apply card rounded-[4px] shrink-0 relative flex;
+  width: 2.5rem; 
+  height: 1rem;  
+}
+
+.rotate-line {
+  transform: rotate(180deg);
+  width: 1rem;   
+  height: 2.5rem; 
+}
+
+.center-circle{
+  @apply bg-red-50 rounded-full shrink-0 w-12 h-12 absolute;
+  transition: left 0.3s ease, top 0.3s ease;
+}
+
+
+
+html, body { height: 100%;  width: 100%; background-color:black}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -12,7 +12,6 @@
   "main": "./bundles/travel-and-trek-app-core.umd.js",
   "module": "./esm2020/travel-and-trek-app-core.mjs",
   "es2015": "./fesm2015/travel-and-trek-app-core.mjs",
-  "esm2020": "./esm2020/travel-and-trek-app-core.mjs",
-  "types": "./public-api.d.ts",
-  "metadata": "./public-api.metadata.json"
+  "esm2020": "./esm2020/travel-and-trek-app-core.mjs"
+
 }

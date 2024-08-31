@@ -1,1 +1,65 @@
-<span class="secondary-color text-3xl">asdasdsadsadad</span>
+<!--
+<div class="navbar-container">
+  <div class="center-circle"></div>
+
+  <div *ngFor="let page of pages; let i = index" class="flex flex-row items-center">
+    <a 
+      #navItem
+      [routerLink]="page.route" 
+      routerLinkActive="active" 
+      (click)="onPageClick(i)" 
+      class="nav-bar"
+    >
+      <mat-icon>{{ page.icon }}</mat-icon>
+    </a>
+    <div *ngIf="i < pages.length - 1" class="line"></div>
+  </div>
+</div>
+-->
+<div
+  class="bg-[#434343] rounded-[37px] pt-2.5 pr-4 pb-2.5 pl-4 flex flex-row gap-0 items-start justify-center shrink-0 relative"
+  [ngClass]="{
+
+
+  'w-16': style === false,
+}"
+>
+  <div
+    class="relative flex items-center"
+    [ngClass]="{
+      'flex-col': style === false,
+      'items-start': style === false,
+      null: style !== false
+    }"
+  >
+    <div class="center-circle"></div>
+
+    <div
+      *ngFor="let page of pages; let i = index"
+      class="flex flex-row items-center"
+      [ngClass]="{
+        'flex-col': style === false,
+        null: style !== false
+      }"
+    >
+      <a
+        #navItem
+        [routerLink]="page.route"
+        routerLinkActive="active"
+        (click)="onPageClick(i)"
+        class="card rounded-2xl p-1.5 flex flex-row gap-2.5 items-start justify-start shrink-0 relative"
+      >
+        <mat-icon>{{ page.icon }}</mat-icon>
+      </a>
+      <div
+        *ngIf="i < pages.length - 1"
+        class="line"
+        [ngClass]="{
+          'rotate-line': style === false
+        }"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
