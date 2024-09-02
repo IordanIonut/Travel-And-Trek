@@ -2,9 +2,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
 import { MaterialModule } from '../material.module';
-import { Page } from '../types/page';
-import { NavigationEnd, RouterLink, RouterModule } from '@angular/router';
-import { Router } from 'express';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',

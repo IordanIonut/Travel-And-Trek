@@ -1,34 +1,40 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
-// Define your custom color palettes
-$custom-primary: mat.define-palette(mat.$blue-grey-palette, 800, 500, 900);
-$custom-accent: mat.define-palette(mat.$amber-palette, 500, 300, 800);
-
-// Create a custom theme using the palettes
-$custom-theme: mat.define-light-theme((
-  color: (
-    primary: $custom-primary,
-    accent: $custom-accent,
-    warn: mat.$red-palette
-  ),
-  typography: mat.define-typography-config(),
-  density: 4
-));
-
-// Include Angular Material theme styles
-@include mat.all-component-themes($custom-theme);
-
-// Apply additional global styles
-body {
-  background-color: #f0f0f0;
-}
-
-.mat-form-field {
-  .mat-form-field-label {
-    color: #ff5722 !important; // Custom label color
+.auth-style-input {
+  .mat-mdc-form-field {
+    @apply card w-24;
   }
 
-  .mat-form-field-underline {
-    background-color: #ff5722 !important; // Custom underline color
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+    .mdc-floating-label {
+    @apply text-[#DFE2E1];
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-text-field__input {
+      //text input
+    @apply caret-[#DFE2E1] text-[#DFE2E1];
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    @apply bg-[#4C5554] w-80;
+  }
+
+  .mdc-text-field--filled {
+    @apply rounded-md border-2 border-[var(--primary-color)] ;
+  }
+
+  .mat-label{
+    @apply text-black;
+  }
+/*
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before{
+    @apply border-2 border-[var(--primary-color)] 
+  }
+  
+*/
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-line-ripple::after {
+    @apply border-b-[var(--primary-color)];
   }
 }

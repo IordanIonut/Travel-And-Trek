@@ -1,52 +1,83 @@
 // Define your themes
-$default-theme: (
-  primary-color: #00DDDD,
-  background-primary: #191C1C,
-  card: #006868,
+$cyan-theme: (
+  bgPrimary: #101414,
+  // Background primary color
+  bgSecond: #004f4f,
+  // Background secondary color
+  bgCard: #3f4948,
+  // Background color for cards
+  bgCom: #4c5554,
+  // Background color for components
+  clPrimary: #101414,
+  // Primary color
+  clSecond: #004f4f,
+  // Secondary color
+  clCard: #3f4948,
+  // Color for cards
+  clCom: #4c5554,
+  // Color for components
+  textCl: #e0e3e2,
+  // Text color
+  textCom: #ced2d1 // Text color for components,,
 );
-
-$dark-theme: (
-  primary-color: #00DDDD,
-  background-primary: #191C1C,
-  card: #006868,
-);
-
-$light-theme: (
-  primary-color: #00DDDD,
-  background-primary: #191C1C,
-  card: #006868,
-);
-
 
 //ADD STYLE
-
 @mixin apply-theme($theme) {
-  $primary-color: map-get($theme, primary-color);
-  $background-primary: map-get($theme, background-primary);
-  $card: map-get($theme, card);
+  $bgPrimary: map-get($theme, bgPrimary);
+  $bgSecond: map-get($theme, bgSecond);
+  $bgCard: map-get($theme, bgCard);
+  $bgCom: map-get($theme, bgCom);
+  $clPrimary: map-get($theme, clPrimary);
+  $clSecond: map-get($theme, clSecond);
+  $clCard: map-get($theme, clCard);
+  $clCom: map-get($theme, clCom);
+  $textCl: map-get($theme, textCl);
+  $textCom: map-get($theme, textCom);
 
-  .primary-color {
-    color: $primary-color !important;
+  --bgPrimary: #{bgPrimary};
+  --bgSecond: #{bgSecond};
+  --bgCard: #{bgCard};
+  --bgCom: #{bgCom};
+  --clPrimary: #{clPrimary};
+  --clSecond: #{clSecond};
+  --clCard: #{clCard};
+  --clCom: #{clCom};
+  --textCl: #{textCl};
+  --textCom: #{textCom};
+
+  .bgPrimary {
+    background-color: $bgPrimary !important;
   }
-
-  .background-primary {
-    background-color: $background-primary !important;
+  .bgSecond {
+    background-color: $bgSecond !important;
   }
-
-  .card {
-    background-color: $card !important;
+  .bgCard {
+    background-color: $bgCard !important;
+  }
+  .bgCom {
+    background-color: $bgCom !important;
+  }
+  .clPrimary {
+    color: $clPrimary !important;
+  }
+  .clSecond {
+    color: $clSecond !important;
+  }
+  .clCard {
+    color: $clCard !important;
+  }
+  .clCom {
+    color: $clCom !important;
+  }
+  .textCl {
+    color: $textCl !important;
+  }
+  .textCom {
+    columns: $textCom !important;
   }
 }
 
 // Apply themes
-body.default-theme {
-  @include apply-theme($default-theme);
-}
-
-body.dark-theme {
-  @include apply-theme($dark-theme);
-}
-
-body.light-theme {
-  @include apply-theme($light-theme);
+body.cyan-theme {
+  @include apply-theme($cyan-theme);
 }
