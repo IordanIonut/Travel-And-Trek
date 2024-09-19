@@ -1,0 +1,54 @@
+@use "@angular/material" as mat;
+
+.auth-style-input {
+  .mat-mdc-form-field {
+    @apply bgEfec w-24;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+    .mdc-floating-label {
+    @apply textPrimary;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-text-field__input {
+    @apply caret-efec textCom;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    @apply bgCom w-32 sm:w-80;
+  }
+
+  .mdc-text-field--filled {
+    @apply border-2 border-com;
+  }
+
+  .mat-label {
+    @apply textCom;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-line-ripple::before {
+    @apply border-card-input;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-line-ripple::after {
+    @apply border-efec;
+  }
+}
+
+.auth-style-button {
+  .mdc-button__label {
+    @apply textPrimary text-lg;
+  }
+
+  .mat-mdc-outlined-button .mat-mdc-button-ripple,
+  .mat-mdc-outlined-button .mdc-button__ripple {
+    @apply border-card;
+  }
+
+  .mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before {
+    @apply bgEfec;
+  }
+}

@@ -8,6 +8,15 @@
       "root": "projects/app-core",
       "sourceRoot": "projects/app-core/src",
       "prefix": "lib",
+      "assets": [
+        "src/favicon.ico",
+        "src/assets",
+        {
+          "glob": "**/*",
+          "input": "node_modules/app-core/src/lib/assets",
+          "output": "./assets/"
+        }
+      ],
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

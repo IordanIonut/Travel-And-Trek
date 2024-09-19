@@ -14,24 +14,22 @@ import { NavbarComponent } from 'travel-and-trek-app-core/dist/app-core';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
+  imports: [RouterOutlet,
     CommonModule,
     MaterialModule,
     NavbarComponent,
     RouterLink,
-    RouterModule,
-  ],
+    RouterModule],
+    providers: [SetThemeService],
+    encapsulation: ViewEncapsulation.None,
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  providers: [SetThemeService],
-  encapsulation: ViewEncapsulation.None
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   pages: Page[] = [
-    { icon: 'home', route: '/authentification/login' },
-    { icon: 'search', route: '/authentification/register' },
-    { icon: 'notifications', route: '/authentification/forgot-password' },
+    { icon: 'home', route: '' },
+    { icon: 'search', route: '' },
+    { icon: 'notifications', route: '' },
   ];
   style: boolean = false;
   selectedIndex: number = 0;

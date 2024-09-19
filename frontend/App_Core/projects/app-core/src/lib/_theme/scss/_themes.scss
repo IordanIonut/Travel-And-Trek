@@ -1,25 +1,32 @@
-// Define your themes
+//https://material.angular.io
 $cyan-theme: (
   bgPrimary: #101414,
-  // Background primary color
   bgSecond: #004f4f,
-  // Background secondary color
   bgCard: #3f4948,
-  // Background color for cards
   bgCom: #4c5554,
-  // Background color for components
+  bgEfec: #00dddd,
   clPrimary: #101414,
-  // Primary color
   clSecond: #004f4f,
-  // Secondary color
   clCard: #3f4948,
-  // Color for cards
   clCom: #4c5554,
-  // Color for components
+  clEfec: #00dddd,
+  textPrimary: #00fbfb,
+  textSecond: #ce93d8,
   textCl: #e0e3e2,
-  // Text color
-  textCom: #ced2d1 // Text color for components,,
+  textCom: #ced2d1,
 );
+
+$magenta-theme: ();
+$azure-theme: ();
+$rose-theme: ();
+$purple-theme: ();
+$pink-theme: ();
+$indigo-theme: ();
+$deep-blue-theme: ();
+$red-theme: ();
+$blue-theme: ();
+$deep-magenta-theme: ();
+$deep-rose-theme: ();
 
 //ADD STYLE
 @mixin apply-theme($theme) {
@@ -27,23 +34,46 @@ $cyan-theme: (
   $bgSecond: map-get($theme, bgSecond);
   $bgCard: map-get($theme, bgCard);
   $bgCom: map-get($theme, bgCom);
+  $bgEfec: map-get($theme, bgEfec);
   $clPrimary: map-get($theme, clPrimary);
   $clSecond: map-get($theme, clSecond);
   $clCard: map-get($theme, clCard);
   $clCom: map-get($theme, clCom);
+  $clEfec: map-get($theme, clEfec);
+  $textPrimary: map-get($theme, textPrimary);
+  $textSecond: map-get($theme, textSecond);
   $textCl: map-get($theme, textCl);
   $textCom: map-get($theme, textCom);
 
-  --bgPrimary: #{bgPrimary};
-  --bgSecond: #{bgSecond};
-  --bgCard: #{bgCard};
-  --bgCom: #{bgCom};
-  --clPrimary: #{clPrimary};
-  --clSecond: #{clSecond};
-  --clCard: #{clCard};
-  --clCom: #{clCom};
+  --primary: #{bgPrimary};
+  --second: #{bgSecond};
+  --card: #{bgCard};
+  --com: #{bgCom};
+  --efec: #{bgEfec};
+  --textPrimary: #{textPrimary};
+  --textSecond: #{textSecond};
   --textCl: #{textCl};
   --textCom: #{textCom};
+
+  .border-card{
+    border-color: $clCard;
+    border-width: 2px;
+  }
+  .border-card-input{
+    border-color: $clCard;
+  }
+  .caret-efec{
+    caret-color: $clEfec;
+  }
+  .border-efec{
+    border-color: $bgEfec;
+    border-width: 2px;
+  }
+
+  .border-com{
+    border-color: $clCom;
+    border-width: 2px;
+  }
 
   .bgPrimary {
     background-color: $bgPrimary !important;
@@ -57,6 +87,9 @@ $cyan-theme: (
   .bgCom {
     background-color: $bgCom !important;
   }
+  .bgEfec {
+    background-color: $bgEfec !important;
+  }
   .clPrimary {
     color: $clPrimary !important;
   }
@@ -69,11 +102,20 @@ $cyan-theme: (
   .clCom {
     color: $clCom !important;
   }
+  .clEfec {
+    color: $clEfec !important;
+  }
+  .textPrimary {
+    color: $textPrimary !important;
+  }
+  .textSecond {
+    color: $textSecond !important;
+  }
   .textCl {
     color: $textCl !important;
   }
   .textCom {
-    columns: $textCom !important;
+    color: $textCom !important;
   }
 }
 

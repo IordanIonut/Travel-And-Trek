@@ -1,0 +1,48 @@
+<div class="flex h-screen">
+  <div class="bgPrimary flex flex-col justify-between py-5 pr-4 items-center">
+    <div class="self-stretch shrink-0 flex justify-center relative">
+      <img alt="logo" src="./favicon.ico" class="app-logo" />
+    </div>
+    <div
+      class="nav-bar relative h-fit m-2 sm:m-4"
+      [ngClass]="style ? 'nav-bar-true' : 'nav-bar-false'"
+    >
+      <div class="center-circle" #centerCircle></div>
+      <div
+        class="relative flex items-center"
+        [ngClass]="{
+          'flex-col': style === false,
+          'items-start': style === false,
+          null: style !== false
+        }"
+      >
+        <div
+          *ngFor="let page of pages; let i = index"
+          class="flex flex-row items-center"
+          [ngClass]="{
+            'flex-col': style === false,
+            null: style !== false
+          }"
+        >
+          <a
+            #navItem
+            [routerLink]="page.route"
+            routerLinkActive="active"
+            (click)="onPageClick(i)"
+            class="element"
+          >
+            <mat-icon class="clEfec">{{ page.icon }}</mat-icon>
+          </a>
+          <div
+            *ngIf="i < pages.length - 1"
+            class="line"
+            [ngClass]="{
+              'rotate-line': style === false
+            }"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <div></div>
+  </div>
+</div>
