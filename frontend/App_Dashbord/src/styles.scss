@@ -1,2 +1,111 @@
 @import "@angular/material/prebuilt-themes/azure-blue.css";
 @import "../../App_Core/projects/app-core/src/lib/style.scss";
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.icons {
+  @apply rounded-3xl p-2 flex flex-col gap-2.5 items-start justify-start shrink-0 relative;
+}
+
+.story {
+  @apply rounded-[45px] shrink-0 w-[50px] h-[50px] relative;
+}
+
+.story-body {
+  @apply rounded-[50px] border-solid p-0.5 flex flex-row gap-2.5 items-center justify-start shrink-0 relative;
+  border-width: 5px !important;
+}
+
+.story-header {
+  @apply p-1.5 flex flex-col gap-px items-center justify-center shrink-0 relative;
+}
+.story-body-name {
+  @apply pr-2.5 pl-2.5 flex flex-row gap-[15px] items-center justify-start self-stretch shrink-0 relative;
+}
+.story-name {
+  @apply textCom text-left text-base truncate w-[50px] font-normal relative flex items-center justify-start;
+}
+
+.dash-style-input {
+  .mat-mdc-form-field {
+    @apply bgEfec;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+    .mdc-floating-label {
+    @apply textCl;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-text-field__input {
+    @apply caret-efec textCom;
+  }
+
+  mat-label {
+    @apply textPrimary;
+  }
+
+  .mdc-text-field--filled {
+    @apply border-2 border-com rounded-[15px] bgCard;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-line-ripple::before {
+    @apply border-card-input;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+    .mdc-line-ripple::after {
+    @apply border-efec;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+    .mdc-floating-label {
+    @apply textPrimary;
+  }
+
+  .mat-mdc-form-field:not(.mat-form-field-disabled)
+    .mat-mdc-floating-label.mdc-floating-label {
+    @apply textPrimary;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label {
+    @apply textCom;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper,
+  .mat-mdc-form-field-bottom-align::before {
+    @apply hidden;
+  }
+}
+
+.dash-style-toogle {
+  .mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+    @apply bgCom;
+  }
+  .mat-button-toggle-label-content {
+    @apply textCom;
+  }
+}
+
+.dash-style-button {
+  .mdc-button__label {
+    @apply textPrimary text-lg;
+  }
+
+  .mat-mdc-outlined-button .mat-mdc-button-ripple,
+  .mat-mdc-outlined-button .mdc-button__ripple {
+    @apply border-card;
+  }
+
+  .mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before {
+    @apply bgEfec;
+  }
+}

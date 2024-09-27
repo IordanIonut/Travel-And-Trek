@@ -1,28 +1,35 @@
 <div
-  class="bg-[#004f4f] rounded-[15px] p-2.5 flex flex-row gap-2.5 items-center justify-start self-stretch shrink-0 relative overflow-hidden"
+  class="bgSecond rounded-[15px] p-2.5 flex flex-row gap-2.5 items-center justify-start self-stretch w-4/5 shrink-0 relative overflow-hidden mb-3"
 >
-  <img
-    class="flex flex-col gap-0.5 items-center justify-start self-stretch shrink-0 w-14 h-14 relative overflow-visible"
-    src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  />
+  <div class="flex flex-col justify-start items-center self-stretch">
+    <img
+      class="rounded-full w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch shrink-0"
+      src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    />
+    <div
+      class="bgEfec w-2 h-full rounded-[4px] relative flex"
+      style="margin-top: -3px"
+    ></div>
+  </div>
+
   <div
-    class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative"
+    class="flex flex-col gap-2.5 items-start justify-start self-stretch w-3/6 relative"
   >
     <div
-      class="bg-[#006868] rounded-[15px] p-2.5 flex flex-col gap-1 items-start justify-start self-stretch shrink-0 relative"
+      class="bgCom rounded-[15px] p-2.5 flex flex-col gap-1 items-start justify-start self-stretch shrink-0 relative"
     >
       <div
-        class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-2xl font-normal relative self-stretch flex items-center justify-start"
+        class="textCl text-left text-2xl font-normal relative self-stretch flex items-center justify-start"
       >
         Name
       </div>
       <div
-        class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
       >
         Description adssadczasd gjdsahj dwkndbasdasdasd
       </div>
       <div
-        class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
       >
         Hastag #####
       </div>
@@ -51,154 +58,62 @@
           class="rounded-[5px] self-stretch flex-1 relative"
           style="object-fit: cover"
           src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          />
+        />
       </div>
     </div>
   </div>
+
   <div
     class="pt-5 pb-5 flex flex-col items-center justify-between self-stretch shrink-0 w-[30px] relative"
   >
     <div
-      class="bg-[#006868] rounded-[50%] shrink-0 w-10 h-10 absolute left-[-5px] top-[87px]"
+      class="bgEfec rounded-[50%] shrink-0 w-10 h-10 absolute left-[-5px] top-[87px]"
     ></div>
-    <div
-      class="bg-[#006868] rounded-[15px] p-[5px] flex flex-col gap-2.5 items-start justify-start shrink-0 relative"
-    >
-      <img
-        class="shrink-0 w-5 h-5 relative overflow-visible"
-        src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
+    <div class="bgCom icons">
+      <mat-icon>share</mat-icon>
     </div>
-    <div
-      class="bg-[#006868] rounded-[15px] p-[5px] flex flex-col gap-2.5 items-start justify-start shrink-0 relative"
-    >
-      <img
-        class="shrink-0 w-5 h-5 relative overflow-visible"
-        src="comment0.svg"
-      />
+    <div class="bgCom icons">
+      <mat-icon>comment</mat-icon>
     </div>
-    <div
-      class="bg-[#006868] rounded-[15px] p-[5px] flex flex-col gap-2.5 items-start justify-start shrink-0 relative"
-    >
-      <img class="shrink-0 w-5 h-5 relative overflow-visible" src="like0.svg" />
+    <div class="bgCom icons">
+      <mat-icon>favorite</mat-icon>
     </div>
-    <div
-      class="bg-[#006868] rounded-[15px] p-[5px] flex flex-col gap-2.5 items-start justify-start shrink-0 relative"
-    >
-      <img class="shrink-0 w-5 h-5 relative overflow-visible" src="save0.svg" />
+    <div class="bgCom icons">
+      <mat-icon>bookmark</mat-icon>
     </div>
   </div>
+  
   <div
-    class="bg-[#006868] rounded-[15px] flex flex-col gap-[5px] items-start justify-start flex-1 relative"
-  >
-    <div
-      class="p-[5px] flex flex-col gap-[5px] items-start justify-start self-stretch shrink-0 h-[250.33px] relative"
-    >
-      <div
-        class="flex flex-row gap-px items-start justify-start self-stretch shrink-0 relative"
-      >
-        <img
-          class="rounded-[45px] shrink-0 w-10 h-10 relative"
-          style="object-fit: cover"
-          src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          />
-        <div
-          class="p-2.5 flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative"
-        >
-          <div
-            class="flex flex-row items-start justify-between self-stretch shrink-0 relative"
-          >
-            <div
-              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-2xl font-normal relative flex items-center justify-start"
-            >
-              Name
-            </div>
-            <div
-              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-2xl font-normal relative flex items-center justify-start"
-            >
-              Time
-            </div>
+  class="bgCom rounded-[15px] flex flex-col gap-2.5 items-start justify-between self-stretch w-5/12 relative"
+>
+  <div class="p-[5px] flex flex-col gap-[5px] items-start justify-start w-full relative">
+    <div class="flex flex-row gap-[2px] items-start justify-start w-full relative">
+      <img
+        class="rounded-full w-10 h-10 object-cover"
+        src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="User Image"
+      />
+      <div class="p-2.5 flex flex-col gap-2.5 items-start justify-start w-full relative">
+        <div class="flex flex-row items-start justify-between w-full relative">
+          <div class="textCl text-left text-xl font-normal flex items-center">
+            Name
           </div>
-          <div
-            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
-          >
-            Coments asdasdasd .,,,
+          <div class="textCl text-left text-xl font-normal flex items-center">
+            Time
           </div>
         </div>
-      </div>
-      <div
-        class="flex flex-row gap-px items-start justify-start self-stretch shrink-0 relative"
-      >
-        <img
-          class="rounded-[45px] shrink-0 w-10 h-10 relative"
-          style="object-fit: cover"
-          src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          />
-        <div
-          class="p-2.5 flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative"
-        >
-          <div
-            class="flex flex-row items-start justify-between self-stretch shrink-0 relative"
-          >
-            <div
-              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-2xl font-normal relative flex items-center justify-start"
-            >
-              Name
-            </div>
-            <div
-              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-2xl font-normal relative flex items-center justify-start"
-            >
-              Time
-            </div>
-          </div>
-          <div
-            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
-          >
-            Coments asdasdasd .,,,
-          </div>
+        <div class="textCl text-left text-sm font-normal flex items-center">
+          Comments asdasdasd .,,,
         </div>
-      </div>
-      <div
-        class="flex flex-row gap-px items-start justify-start self-stretch shrink-0 relative"
-      >
-        <img
-          class="rounded-[45px] shrink-0 w-10 h-10 relative"
-          style="object-fit: cover"
-          src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          />
-        <div
-          class="p-2.5 flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative"
-        >
-          <div
-            class="flex flex-row items-start justify-between self-stretch shrink-0 relative"
-          >
-            <div
-              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-2xl font-normal relative flex items-center justify-start"
-            >
-              Name
-            </div>
-            <div
-              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-2xl font-normal relative flex items-center justify-start"
-            >
-              Time
-            </div>
-          </div>
-          <div
-            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
-          >
-            Coments asdasdasd .,,,
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="p-[5px] flex flex-col gap-[5px] items-center justify-start self-stretch shrink-0 relative"
-    >
-      <div
-        class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
-      >
-        ADD COMMENT
       </div>
     </div>
   </div>
+  <div class="p-[5px] flex flex-col gap-[5px] items-center justify-start w-full relative">
+    <div class="textCl text-left text-sm font-normal">
+      ADD COMMENT
+    </div>
+  </div>
+</div>
+
+  
 </div>

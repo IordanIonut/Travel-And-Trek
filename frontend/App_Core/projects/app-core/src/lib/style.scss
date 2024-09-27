@@ -55,7 +55,7 @@ body {
 }
 
 .page {
-  @apply h-full flex bgPrimary overflow-y-auto;
+  @apply h-max flex bgPrimary overflow-y-auto px-3 flex-col;
   width: calc(100vw - var(--nav-bar-width));
   scrollbar-width: none; 
   -ms-overflow-style: none; 

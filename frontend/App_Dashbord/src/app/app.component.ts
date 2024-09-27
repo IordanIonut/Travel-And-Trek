@@ -27,9 +27,10 @@ import { NavbarComponent } from 'travel-and-trek-app-core/dist/app-core';
 })
 export class AppComponent {
   pages: Page[] = [
-    { icon: 'home', route: '' },
-    { icon: 'search', route: '' },
-    { icon: 'notifications', route: '' },
+    { icon: 'home', route: '/dashbord/home' },
+    { icon: 'search', route: '/dashbord/search' },
+    { icon: 'add', route: '/dashbord/create-post' },
+    { icon: 'movie', route: '/dashbord/reel' },
   ];
   style: boolean = false;
   selectedIndex: number = 0;

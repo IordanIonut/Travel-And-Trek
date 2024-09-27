@@ -16,6 +16,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSliderModule } from '@angular/material/slider';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 //AD TO CORE
 @NgModule({
@@ -37,6 +38,7 @@ import { MatSliderModule } from '@angular/material/slider';
     MatPaginatorModule,
     MatSortModule,
     MatSliderModule,
+    MatButtonToggleModule,
   ],
   exports: [
     MatButtonModule,
@@ -55,6 +57,7 @@ import { MatSliderModule } from '@angular/material/slider';
     MatPaginatorModule,
     MatSortModule,
     MatSliderModule,
+    MatButtonToggleModule,
   ]
 })
 export class MaterialModule {}

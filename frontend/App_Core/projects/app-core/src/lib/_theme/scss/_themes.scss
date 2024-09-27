@@ -45,77 +45,80 @@ $deep-rose-theme: ();
   $textCl: map-get($theme, textCl);
   $textCom: map-get($theme, textCom);
 
-  --primary: #{bgPrimary};
-  --second: #{bgSecond};
-  --card: #{bgCard};
-  --com: #{bgCom};
-  --efec: #{bgEfec};
-  --textPrimary: #{textPrimary};
-  --textSecond: #{textSecond};
-  --textCl: #{textCl};
-  --textCom: #{textCom};
+  :root {
+    --primary: #{bgPrimary};
+    --second: #{bgSecond};
+    --card: #{bgCard};
+    --com: #{bgCom};
+    --efec: #{bgEfec};
+    --textPrimary: #{textPrimary};
+    --textSecond: #{textSecond};
+    --textCl: #{textCl};
+    --textCom: #{textCom};
+  }
+  @layer utilities {
+    .border-card {
+      border-color: $clCard;
+      border-width: 2px;
+    }
+    .border-card-input {
+      border-color: $clCard;
+    }
+    .caret-efec {
+      caret-color: $clEfec;
+    }
+    .border-efec {
+      border-color: $bgEfec;
+      border-width: 2px;
+    }
 
-  .border-card{
-    border-color: $clCard;
-    border-width: 2px;
-  }
-  .border-card-input{
-    border-color: $clCard;
-  }
-  .caret-efec{
-    caret-color: $clEfec;
-  }
-  .border-efec{
-    border-color: $bgEfec;
-    border-width: 2px;
-  }
+    .border-com {
+      border-color: $clCom;
+      border-width: 2px;
+    }
 
-  .border-com{
-    border-color: $clCom;
-    border-width: 2px;
-  }
-
-  .bgPrimary {
-    background-color: $bgPrimary !important;
-  }
-  .bgSecond {
-    background-color: $bgSecond !important;
-  }
-  .bgCard {
-    background-color: $bgCard !important;
-  }
-  .bgCom {
-    background-color: $bgCom !important;
-  }
-  .bgEfec {
-    background-color: $bgEfec !important;
-  }
-  .clPrimary {
-    color: $clPrimary !important;
-  }
-  .clSecond {
-    color: $clSecond !important;
-  }
-  .clCard {
-    color: $clCard !important;
-  }
-  .clCom {
-    color: $clCom !important;
-  }
-  .clEfec {
-    color: $clEfec !important;
-  }
-  .textPrimary {
-    color: $textPrimary !important;
-  }
-  .textSecond {
-    color: $textSecond !important;
-  }
-  .textCl {
-    color: $textCl !important;
-  }
-  .textCom {
-    color: $textCom !important;
+    .bgPrimary {
+      background-color: $bgPrimary !important;
+    }
+    .bgSecond {
+      background-color: $bgSecond !important;
+    }
+    .bgCard {
+      background-color: $bgCard !important;
+    }
+    .bgCom {
+      background-color: $bgCom !important;
+    }
+    .bgEfec {
+      background-color: $bgEfec !important;
+    }
+    .clPrimary {
+      color: $clPrimary !important;
+    }
+    .clSecond {
+      color: $clSecond !important;
+    }
+    .clCard {
+      color: $clCard !important;
+    }
+    .clCom {
+      color: $clCom !important;
+    }
+    .clEfec {
+      color: $clEfec !important;
+    }
+    .textPrimary {
+      color: $textPrimary !important;
+    }
+    .textSecond {
+      color: $textSecond !important;
+    }
+    .textCl {
+      color: $textCl !important;
+    }
+    .textCom {
+      color: $textCom !important;
+    }
   }
 }
 

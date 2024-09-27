@@ -2,13 +2,12 @@ import { Component } from '@angular/core';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
-  selector: 'app-post',
+  selector: 'app-group',
   standalone: true,
   imports: [MaterialModule],
-  templateUrl: './post.component.html',
-  styleUrl: './post.component.scss'
-  
+  templateUrl: './group.component.html',
+  styleUrl: './group.component.scss'
 })
-export class PostComponent {
+export class GroupComponent {
 
 }
