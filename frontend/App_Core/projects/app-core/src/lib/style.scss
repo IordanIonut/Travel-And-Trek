@@ -55,10 +55,34 @@ body {
 }
 
 .page {
-  @apply h-max flex bgPrimary overflow-y-auto px-3 flex-col;
-  width: calc(100vw - var(--nav-bar-width));
+  @apply w-full flex bgPrimary overflow-y-auto px-3 flex-col;
+ // width: calc(100vw - var(--nav-bar-width));
+  height: 100vh; 
+  overflow-y: scroll; 
+  overflow-x: hidden; 
   scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+
+.page::-webkit-scrollbar {
+  width: 0px; 
+  display: none; 
+}
+
+.page-dialog {
+  @apply h-max flex bgPrimary overflow-y-auto p-3 flex-col;
+  max-height: 80vh;
+  overflow-y: scroll; 
+  overflow-x: hidden; 
   -ms-overflow-style: none; 
+}
+
+.page-dialog::-webkit-scrollbar {
+  width: 0;
+}
+
+.page-dialog::-webkit-scrollbar-thumb {
+  background-color: transparent; 
 }
 
 .line {
@@ -84,6 +108,6 @@ body {
 }
 
 .mat-icon{
-  @apply clEfec ;
+  @apply clEfec;
 }
 

@@ -1,7 +1,7 @@
 <div class="page">
   <app-masthead></app-masthead>
   <!-- Multiple select toggle-->
-  <mat-button-toggle-group class="dash-style-toogle w-fit h-auto" multiple name="fontStyle" aria-label="Font Style">
+  <mat-button-toggle-group class="dash-style-toogle w-fit h-auto" style="overflow: visible;" multiple>
     <mat-button-toggle *ngFor="let item of filters" [value]="item.value">
       <mat-icon>{{ item.icon }}</mat-icon> {{ item.name }}
     </mat-button-toggle>

@@ -10,6 +10,7 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
 import { Page } from 'travel-and-trek-app-core/dist/app-core';
 import { NavbarComponent } from 'travel-and-trek-app-core/dist/app-core';
+import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 
 @Component({
   selector: 'app-root',
@@ -34,8 +35,7 @@ export class AppComponent {
   ];
   style: boolean = false;
   selectedIndex: number = 0;
-  centerX: number = 38; 
-  centerY: number = 28;
+  position: Position = {pos_x: 38, pos_y: 28};
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

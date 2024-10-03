@@ -15,6 +15,7 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { Page } from '../../_types/public-api';
 import { SetThemeService } from '../../_theme/public-api';
 import { MaterialModule } from '../../_materials/material.module';
+import { Position } from '../../_types/_frontend/position';
 
 @Component({
   selector: 'lib-navbar',
@@ -33,8 +34,7 @@ export class NavbarComponent {
   @Input() pages!: Page[];
   @Input() style!: boolean;
   @Input() selectedIndex!: number;
-  @Input() centerX!: number;
-  @Input() centerY!: number;
+  @Input() position!: Position;
 
   @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
   @ViewChild('centerCircle') centerCircle!: ElementRef;
@@ -97,19 +97,13 @@ export class NavbarComponent {
       try {
         const centerCircle = this.centerCircle.nativeElement;
         if (centerCircle) {
-          const centerX = navItem.offsetLeft + this.centerX;
-          const centerY = navItem.offsetTop + this.centerY;
+          const centerX = navItem.offsetLeft + this.position.pos_x;
+          const centerY = navItem.offsetTop + this.position.pos_y;
           centerCircle.style.position = 'absolute';
           centerCircle.style.left = `${centerX}px`;
           centerCircle.style.top = `${centerY}px`;
           centerCircle.style.transform = 'translate(-50%, -50%)';
 
-          // Log for debugging
-          //console.log(`Rect: ${JSON.stringify(rect)}`);
-          //console.log(`Container Rect: ${JSON.stringify(containerRect)}`);
-          //console.log(`Center Circle Position - Left: ${centerX}px, Top: ${centerY}px`);
-        } else {
-          //console.log('Center circle element not found.');
         }
       } catch (e) {
         console.error('Error getting bounding rect:', e);

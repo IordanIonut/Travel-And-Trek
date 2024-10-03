@@ -1,0 +1,124 @@
+<div
+  class="page-dialog flex flex-col items-center justify-start shrink-0 relative gap-2 h-max"
+>
+  <div
+    class="flex flex-col gap-2.5 items-center justify-start self-stretch shrink-0 relative"
+  >
+    <div
+      class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
+    >
+      <button class="border-efec story-body">
+        <img
+          class="story"
+          style="object-fit: cover"
+          src="https://images.pexels.com/photos/26692187/pexels-photo-26692187/free-photo-of-moda-costum-femeie-albastru.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+        />
+      </button>
+    </div>
+  </div>
+  <div
+    class="flex flex-col gap-[15px] items-center justify-start shrink-0 relative"
+  >
+    <div
+      class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
+    >
+      Your name
+    </div>
+    <div
+      class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
+    >
+      nicke_name
+    </div>
+  </div>
+  <div
+    class="flex flex-row gap-[15px] justify-center shrink-0 relative h-[70px]"
+  >
+    <div
+      class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
+    >
+      <div
+        class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
+      >
+        <div
+          class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+        >
+          1232
+        </div>
+        <div
+          class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+        >
+          Photo
+        </div>
+      </div>
+      <div class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"></div>
+    </div>
+    <div
+      class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
+    >
+      <div
+        class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
+      >
+        <div
+          class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+        >
+          12321321
+        </div>
+        <div
+          class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+        >
+          Falowers
+        </div>
+      </div>
+      <div class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"></div>
+    </div>
+    <div
+      class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
+    >
+      <div
+        class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
+      >
+        <div
+          class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+        >
+          1232131
+        </div>
+        <div
+          class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+        >
+          Falowind
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex flex-col gap-2.5 items-start justify-start self-stretch shrink-0 relative"
+  >
+    <div
+      class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+    >
+      Description
+    </div>
+    <div
+      class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+    >
+      Description
+    </div>
+  </div>
+  <div
+    class="p-[5px] flex flex-row gap-2.5 items-center justify-around self-stretch shrink-0 relative"
+  >
+    <div class="nav-bar relative h-fit m-2 sm:m-4">
+      <div class="relative flex items-center">
+        <div
+          *ngFor="let item of elemnts; let i = index"
+          class="flex flex-row items-center"
+        >
+          <div class="element">
+            <mat-icon class="clEfec">{{ item }}</mat-icon>
+          </div>
+          <div *ngIf="i < elemnts.length - 1" class="line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
