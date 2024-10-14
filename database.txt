@@ -1,0 +1,153 @@
+	users
+id primary key
+name
+email
+password
+location foreing key
+bio
+date_create
+profile_picture
+date_of_birth
+date_last_update
+
+	posts
+id primary key
+id_user foreign key 
+description
+media
+type (text, photo, video)
+create_at
+update_at
+
+
+	stories
+id primary key
+id_user foreign key
+meidia
+create_at
+expiration_time
+
+	shares
+id primary key
+id_user
+id_user_shared
+description
+
+	comments
+id primary key
+id_post foreign key
+id_user foreign key
+message
+create_at
+
+	likes
+id primary key
+id_post foreign key 
+id_user
+create_at
+type (like, love ...)
+content (likes, comment)
+
+
+	fallowers
+id primary key
+id_user foring key
+id_user_fallow
+create_at
+status (pending, accepted)
+
+	messages
+id primary key
+id_user foreign key id_sender 
+id_user foreign key  id_receiver 
+massage 
+media
+created_at
+
+
+	notifications
+id primary key
+id_user  foreign key
+messaje
+read_status (unread/read)
+type (like, comment, follow)
+id_related (post/comment)
+type (post /comment)
+created_at
+
+	groups
+id primary key
+name
+description
+created_by
+created_at
+
+	group_membership
+id primary key
+id_group foreing key
+id+user foreign key
+joined_ad
+
+	tags
+id primary key
+id_post foreing key
+tag_content
+created_at
+	
+	shares
+id
+id_user
+id_post
+creadet_ad
+shared_with (user,  groups)
+messaje
+
+	reactions
+id
+id_user
+id
+conentent 
+reaction_type
+created_at 
+
+	direct_messages
+id
+id_conversation
+id_sender
+id_receiver
+message
+media
+sent_at
+
+	saved_posts
+id
+id_user
+id_post
+saved_at
+
+	user_settings
+id
+id_user
+setting_type
+value
+update_at
+
+	location
+id
+id_post
+lat
+lon
+name
+	events
+id
+event_name
+description
+created_by
+event_date
+location
+
+	event_participation
+id
+id_event
+id_user
+status

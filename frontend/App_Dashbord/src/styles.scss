@@ -110,3 +110,33 @@
     @apply bgEfec;
   }
 }
+
+.dash-style-tab-group {
+  .mat-mdc-tab {
+    .mdc-tab__text-label {
+      @apply textCom;
+    }
+  }
+
+  .mat-mdc-tab-label-container {
+    border-bottom-width: 0px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mat-mdc-tab .mdc-tab-indicator__content--underline {
+    @apply border-efec;
+  }
+
+  .mat-mdc-tab-body-content {
+    overflow: visible !important;
+  }
+
+  .mat-mdc-tab-body.mat-mdc-tab-body-active {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

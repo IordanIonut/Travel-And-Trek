@@ -1,8 +1,8 @@
 import { NgIf } from '@angular/common';
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DialogService } from 'src/app/_service/dialog.service';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import { DialogService } from 'src/app/_service/dialog/dialog.service';
 
 @Component({
   selector: 'app-masthead',

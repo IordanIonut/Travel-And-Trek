@@ -10,5 +10,5 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
   styleUrl: './story.component.scss'
 })
 export class StoryComponent {
-  items= Array(10);
+  items= Array(30);
 }

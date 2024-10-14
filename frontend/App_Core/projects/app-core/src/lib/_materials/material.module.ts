@@ -17,6 +17,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSliderModule } from '@angular/material/slider';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatTabsModule} from '@angular/material/tabs';
 
 //AD TO CORE
 @NgModule({
@@ -37,6 +38,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatSnackBarModule,
     MatPaginatorModule,
     MatSortModule,
+    MatTabsModule,
     MatSliderModule,
     MatButtonToggleModule,
   ],
@@ -46,6 +48,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTabsModule,
     MatToolbarModule,
     MatCardModule,
     MatSidenavModule,
