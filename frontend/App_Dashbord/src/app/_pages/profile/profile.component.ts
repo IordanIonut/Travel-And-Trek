@@ -10,6 +10,7 @@ import { PersonComponent } from '../../_components/person/person.component';
 import { VideoComponent } from '../../_components/video/video.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
+import { FilterSeach } from 'src/app/_type/filter';
 
 @Component({
   selector: 'app-profile',
@@ -33,12 +34,48 @@ import { DialogService } from 'src/app/_service/dialog/dialog.service';
 })
 export class ProfileComponent {
   elemnts: string[] = ['settings', 'qr_code', 'logout'];
+  filters: FilterSeach[] = [
+    {
+      value: '1',
+      icon: 'person',
+      name: "Fallowing"
+    },
+    {
+      value: '1',
+      icon: 'person',
+      name: "Fallowing"
+    }
+  ];
+  
+  isPhoto!: boolean;
+  isFollowrs!: boolean;
+  isFollowing!: boolean;
 
   items = Array(10);
 
-  constructor(private dialog: DialogService){};
+  constructor(private dialog: DialogService){
+    this.isPhoto = true;
+  };
 
   onOpenPhote(){
     this.dialog.openDialogPhote();
+  }
+
+  onIsPhoto(){
+    this.isPhoto = true;
+    this.isFollowrs = false;
+    this.isFollowing = false;
+  }
+
+  onIsFollowrs(){
+    this.isPhoto = false;
+    this.isFollowrs = true;
+    this.isFollowing = false;
+  }
+
+  onIsFollowing(){
+    this.isPhoto = false;
+    this.isFollowrs = false;
+    this.isFollowing = true;
   }
 }

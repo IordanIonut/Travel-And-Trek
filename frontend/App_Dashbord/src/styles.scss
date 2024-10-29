@@ -94,6 +94,14 @@
   .mat-button-toggle-label-content {
     @apply textCom;
   }
+  .mat-button-toggle:first-child {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+  .mat-button-toggle:last-child {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
 }
 
 .dash-style-button {
