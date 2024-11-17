@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "HASHTAG")
+@Table(name = "HASHTAGS")
 public class Hashtag {
     @Id
     @Column(name = "ID")

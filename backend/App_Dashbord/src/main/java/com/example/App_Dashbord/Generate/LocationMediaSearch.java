@@ -14,17 +14,6 @@ public class LocationMediaSearch {
     private static final String UNSPLASH_API_KEY = "duEcheMS4D8ACro9BV7n97oUggd6Yc8jFXt87fekr8Q";
     private static final String PIXABAY_API_KEY = "rTas8YOUDxP5LU27cDt9Met2gGngApbsNUDZR3a2PgN0XZmbr3jYcTDh";
 
-    //    public static void main(String[] args) {
-//        double[] coordinates = GenLatLot.generateRandomLandCoordinates();
-//        double latitude = coordinates[0];
-//        double longitude = coordinates[1];
-//
-//        //String locationName = geocode(latitude, longitude);
-//        //System.out.println("Location: " + locationName);
-//        //fetchUnsplashImages(locationName);
-//       // fetchPixabayVideos(locationName);
-//    }
-
     public JsonObject geocode(double latitude, double longitude) {
         String urlString = String.format("https://api.opencagedata.com/geocode/v1/json?q=%f+%f&key=%s", latitude, longitude, OPENCAGE_API_KEY);
         OkHttpClient client = new OkHttpClient();
@@ -53,49 +42,31 @@ public class LocationMediaSearch {
         }
     }
 
-    public static void fetchUnsplashImages(String locationName) {
-        String urlString = String.format("https://api.unsplash.com/search/photos?query=%s&client_id=%s", locationName, UNSPLASH_API_KEY);
+    public static JsonObject fetchPixabayPhotos(String locationName) {
+        String urlString = String.format("https://api.pexels.com/v1/search?&query=%s&per_page=30", locationName);
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(urlString).build();
+        Request request = new Request.Builder().url(urlString).addHeader("Authorization", PIXABAY_API_KEY).build();
         try (Response response = client.newCall(request).execute()) {
+            String jsonResponse = response.body() != null ? response.body().string() : "No response body";
             if (response.isSuccessful()) {
-                String jsonResponse = response.body().string();
                 JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-                JsonArray results = jsonObject.getAsJsonArray("results");
-
-                // Print the URLs of the images
-                for (int i = 0; i < results.size(); i++) {
-                    JsonObject photo = results.get(i).getAsJsonObject();
-                    String photoUrl = photo.get("urls").getAsJsonObject().get("regular").getAsString();
-                    System.out.println("Image URL: " + photoUrl);
+                JsonArray results = jsonObject.getAsJsonArray("photos");
+                if (results.size() > 0) {
+                    return jsonObject;
+                } else {
+                    JsonObject errorResponse = new JsonObject();
+                    errorResponse.addProperty("error", "No results found for the given coordinates.");
+                    return errorResponse;
                 }
             } else {
-                System.out.println("Request failed: " + response.message());
+                JsonObject errorResponse = new JsonObject();
+                errorResponse.addProperty("error", "OpenCage API error: " + jsonResponse);
+                return errorResponse;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void fetchPixabayVideos(String locationName) {
-        String urlString = String.format("https://pixabay.com/api/videos/?key=%s&query=%s&per_page=30", PIXABAY_API_KEY, locationName);
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(urlString).build();
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                String jsonResponse = response.body().string();
-                JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-                JsonArray hits = jsonObject.getAsJsonArray("hits");
-                for (int i = 0; i < hits.size(); i++) {
-                    JsonObject video = hits.get(i).getAsJsonObject();
-                    String videoUrl = video.get("videos").getAsJsonObject().get("large").getAsString();
-                    System.out.println("Video URL: " + videoUrl);
-                }
-            } else {
-                System.out.println("Request failed: " + response.message());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            JsonObject errorResponse = new JsonObject();
+            errorResponse.addProperty("error", "An unexpected error occurred: " + e.getMessage());
+            return errorResponse;
         }
     }
 }

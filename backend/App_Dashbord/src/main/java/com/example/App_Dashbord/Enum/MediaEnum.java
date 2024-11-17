@@ -1,5 +1,5 @@
 package com.example.App_Dashbord.Enum;
 
-public enum MediaType {
+public enum MediaEnum {
     VIDEO, PHOTO;
 }

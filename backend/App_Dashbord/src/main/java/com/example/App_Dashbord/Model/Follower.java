@@ -1,8 +1,12 @@
 package com.example.App_Dashbord.Model;
 
+import com.example.App_Dashbord.Embedded.FollowerId;
+import com.example.App_Dashbord.Enum.FollowerStatusEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,18 +14,25 @@ import java.time.LocalDate;
 @Setter
 @Data
 @Entity
-@Table(name = "FOLLOWERS")
+@Table(name = "FOLLOWERS", indexes = {
+        @Index(name = "index_follower_id", columnList = "ID, STATUS"),
+        @Index(name = "index_follower_user", columnList = "USER_ID"),
+        @Index(name = "index_follower_user_id", columnList = "USER_ID_FOLLOWER")
+})
 public class Follower {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-    @Column(name = "USER_ID", nullable = false)
-    private Long user_id;
-    @Column(name = "USER_ID_FOLLOWER", nullable = false)
-    private Long user_id_follower;
-    @Column(name = "STATUS", nullable = false)
-    private Long status;
+    @EmbeddedId
+    private FollowerId id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private User follower_user_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID_FOLLOWER", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private User follower_user_id_follower;
+
     @Column(name = "CREATE_AT", nullable = false)
-    private LocalDate created_at;
+    private LocalDateTime created_at;
 }

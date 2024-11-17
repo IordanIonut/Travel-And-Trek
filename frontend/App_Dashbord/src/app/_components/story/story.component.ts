@@ -1,5 +1,6 @@
 import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
@@ -11,4 +12,17 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 })
 export class StoryComponent {
   items= Array(30);
+  @Input() highlight: any[] = [];
+
+  constructor(private dialog: DialogService){
+  }
+
+  ngOnInit(): void {
+    // console.log(this.highlight);
+  }
+
+  open(){
+    this.dialog.openDialogHighlight();
+
+  }
 }

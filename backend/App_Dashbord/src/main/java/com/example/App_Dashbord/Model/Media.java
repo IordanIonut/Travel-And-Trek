@@ -1,9 +1,14 @@
 package com.example.App_Dashbord.Model;
 
+import com.example.App_Dashbord.Embedded.MediaId;
+import com.example.App_Dashbord.Enum.MediaEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,18 +16,22 @@ import java.time.LocalDate;
 @Setter
 @Data
 @Entity
-@Table(name = "MEDIA")
+@Table(name = "MEDIA", indexes = {
+        @Index(name = "index_media_id", columnList = "ID, TYPE"),
+        @Index(name = "index_media_user", columnList = "USER_ID")
+})
 public class Media {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
-    @Column(name = "USER_ID", nullable = false)
-    private Long user_id;
+    @EmbeddedId
+    private MediaId id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private User media_user_id;
+
     @Column(name = "URL", nullable = false)
     private String url;
-    @Column(name = "TYPE", nullable = false)
-    private String type;
+
     @Column(name = "CREATE_AT", nullable = false)
-    private LocalDate create_at;
+    private LocalDateTime create_at;
 }

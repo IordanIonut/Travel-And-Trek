@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatComponent } from 'src/app/_dialogs/chat/chat.component';
+import { HighlightComponent } from 'src/app/_dialogs/highlight/highlight.component';
 import { NotificationComponent } from 'src/app/_dialogs/notification/notification.component';
 import { PhotoComponent } from 'src/app/_dialogs/photo/photo.component';
 import { ProfileComponent } from 'src/app/_dialogs/profile/profile.component';
@@ -53,11 +54,20 @@ export class DialogService {
     dialogRef.afterClosed().subscribe();
   }
 
-  openDialogPhote():void{
+  openDialogPhote(image: string):void{
     const dialogRef = this.dialog.open(PhotoComponent, {
-      width: '40rem',
-      height: '40rem',
-      data: { message: 'Hello, this is a dialog!' },
+      width: 'auto',
+      height: 'auto',
+      data: { image },
+    });
+    dialogRef.afterClosed().subscribe();
+  }
+
+  openDialogHighlight():void{
+    const dialogRef = this.dialog.open(HighlightComponent, {
+      width: 'auto',
+      height: 'auto',
+      data: { },
     });
     dialogRef.afterClosed().subscribe();
   }

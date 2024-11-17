@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import ColorThief from 'colorthief';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-photo',
@@ -13,7 +14,7 @@ import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 export class PhotoComponent {
   colorThief: ColorThief = new ColorThief();
 
-  constructor(private elementRef: ElementRef, private shadow: ShadowService) {
+  constructor(private elementRef: ElementRef, private shadow: ShadowService, @Inject(MAT_DIALOG_DATA) public data: { image: string }) {
   }
 
   ngAfterViewInit(): void {
@@ -21,6 +22,5 @@ export class PhotoComponent {
 
   onImageLoad(img: HTMLImageElement): void {
     this.shadow.applyShadow(img);
-    //console.log('Image loaded:', img);
   }
 }

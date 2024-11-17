@@ -1,6 +1,12 @@
 @import "@angular/material/prebuilt-themes/azure-blue.css";
 @import "../../App_Core/projects/app-core/src/lib/style.scss";
 
+// Apply themes
+body.cyan-theme {
+  @include apply-theme($cyan-theme);
+}
+
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -147,4 +153,14 @@
       display: none;
     }
   }
+}
+
+.hashtag {
+  @apply border rounded-lg;
+  border-color: var(--clPrimary); 
+  color: var(--nav-bar-width);
+}
+
+.icon.mat-icon {
+  @apply clSecond;
 }

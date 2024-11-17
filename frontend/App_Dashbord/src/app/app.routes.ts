@@ -9,12 +9,12 @@ export const routes: Routes = [
   {
     path: 'dashbord',
     children: [
-      { path: 'home', component: HomeComponent },
+      { path: 'feet', component: HomeComponent },
       { path: 'search', component: SearchComponent },
       { path: 'reel', component: ReelComponent },
       { path: 'create-post', component: CreatePostComponent },
       { path: 'profile', component: ProfileComponent },
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', redirectTo: 'feet', pathMatch: 'full' },
     ],
   },
 ];

@@ -3,8 +3,9 @@
       <img
         id="dynamicImage"
         #dynamicImage
+        style=" object-fit: cover;"
         class="max-w-full max-h-full w-full h-full"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpjRkfdV2CW7Sg2sT7e3zRmUyUUIOh5IW0bw&s"
+        src={{data.image}}
         crossorigin="anonymous"
         alt="Image for box shadow"
         (load)="onImageLoad(dynamicImage)"

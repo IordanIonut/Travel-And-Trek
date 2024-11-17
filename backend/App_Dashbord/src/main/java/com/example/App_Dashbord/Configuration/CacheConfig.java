@@ -1,3 +1,5 @@
+package com.example.App_Dashbord.Configuration;
+
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -9,15 +11,15 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableCaching
-public class CaffeineConfig {
+public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("userCache", "mediaCache", "storyCache", "shareCache", "postCache", "likeCache", "followerCache", "commentCache", "highlightCache");
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .maximumSize(100) // Maximum cache size
-                .expireAfterWrite(10, TimeUnit.MINUTES) // Expire entries after 10 minutes
-                .weakKeys()); // Optionally allow weak keys for garbage collection
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .maximumSize(1000));
         return cacheManager;
     }
 }
+

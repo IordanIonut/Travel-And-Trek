@@ -1,29 +1,34 @@
 package com.example.App_Dashbord.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Data
-@Table(name = "HIGHLIGHTS")
+@Table(name = "HIGHLIGHTS", indexes = {
+        @Index(name = "index_highlight_id", columnList = "ID"),
+        @Index(name = "index_highlight_user", columnList = "USER_ID"),
+        @Index(name = "index_highlight_medias", columnList = "MEDIA_ID_MEDIA, MEDIA_TYPE_MEDIA")
+})
 public class Highlight {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private Long id;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private User user_id;
+    @JsonIgnore
+    private User highlight_user_id;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -34,6 +39,21 @@ public class Highlight {
                     @JoinColumn(name = "MEDIA_TYPE_MEDIA", referencedColumnName = "type")
             }
     )
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private List<Media> medias;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media_user_id"})
+    private List<Media> highlight_medias;
+
+    @Column(name = "NAME", nullable = false)
+    private String name;
+
+    @Column(name = "IMAGE", nullable = false)
+    private String image;
+
+    @Column(name = "VISIBILITY", nullable = false)
+    private Boolean visibility;
+
+    @Column(name = "CREATE_AT", nullable = false)
+    private LocalDateTime created_at;
+
+    @Column(name = "UPDATE_AT", nullable = false)
+    private LocalDateTime updated_at;
 }

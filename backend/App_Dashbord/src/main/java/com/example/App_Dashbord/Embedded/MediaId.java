@@ -1,6 +1,6 @@
-package com.example.App_Dashbord.Model;
+package com.example.App_Dashbord.Embedded;
 
-import com.example.App_Dashbord.Enum.MediaType;
+import com.example.App_Dashbord.Enum.MediaEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -22,7 +22,7 @@ public class MediaId implements Serializable {
     private Long id;
     @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
-    private MediaType type;
+    private MediaEnum type;
 
     @Override
     public boolean equals(Object o) {

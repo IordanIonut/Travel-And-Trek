@@ -20,8 +20,8 @@ public class DatabaseCleanupRunner implements CommandLineRunner {
     public void run(String... args) {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE IF EXISTS `users`");
-            System.out.println("Cleaned up old users table.");
+            statement.execute("DROP TABLE IF EXISTS flyway_schema_history");
+            System.out.println("Cleaned up old tables.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,7 @@ export class ShadowService {
 
     if (overlayPane instanceof HTMLElement) {
       overlayPane.style.boxShadow = `0px 0px 25px 20px ${shadowColor}`;
-      console.log('Box shadow applied:', shadowColor);
+      // console.log('Box shadow applied:', shadowColor);
     } else {
       console.error('Overlay pane not found or is not an HTMLElement');
     }

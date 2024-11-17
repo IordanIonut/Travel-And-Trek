@@ -1,7 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MastheadComponent } from 'src/app/_components/masthead/masthead.component';
-import { FilterSeach } from 'src/app/_type/filter';
+import { FilterSeach } from 'src/app/_type/filters/filter';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { PersonComponent } from "../../_components/person/person.component";
 import { GroupComponent } from "../../_components/group/group.component";
