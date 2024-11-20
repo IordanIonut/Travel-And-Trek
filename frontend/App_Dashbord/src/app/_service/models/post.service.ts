@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { Post } from 'src/app/_type/models/post';
 import { environment } from 'src/app/environments/environment';
 
@@ -12,14 +13,24 @@ export class PostService {
 
   constructor(private http: HttpClient) {}
 
-  getPostByProfile(
+  getPostByProfileType(
     name: string,
-    type: string,
+    type: PostEnum,
     index: number,
     number: number
   ): Observable<Post[]> {
     return this.http.get<Post[]>(
-      `${this.apiUrl}/find?name=${name}&type=${type}&index=${index}&number=${number}`
+      `${this.apiUrl}/find/type?name=${name}&type=${type}&index=${index}&number=${number}`
+    );
+  }
+
+  getPostByProfile(
+    name: string,
+    index: number,
+    number: number
+  ): Observable<Post[]> {
+    return this.http.get<Post[]>(
+      `${this.apiUrl}/find?name=${name}&index=${index}&number=${number}`
     );
   }
 }

@@ -36,8 +36,14 @@ public class PostService {
     }
 
     @Cacheable(value = "postCache", key = "'findAllPostsByUser::'+#name+'type::'+#type+'index::'+#index+'number::'+#number")
-    public List<Post> findAllPostsByUser(String name, PostEnum type , int index, int number){
+    public List<Post> findAllPostsByUserType(String name, PostEnum type , int index, int number){
         Pageable pageable = PageRequest.of(index, number);
-        return postRepository.findAllPostsByUser(name, type, pageable);
+        return postRepository.findAllPostsByUserType(name, type, pageable);
+    }
+
+    @Cacheable(value = "postCache", key = "'findAllPostsByUser::'+#name+'index::'+#index+'number::'+#number")
+    public List<Post> findAllPostsByUserWithoutType(String name , int index, int number){
+        Pageable pageable = PageRequest.of(index, number);
+        return postRepository.findAllPostsByUserWithoutType(name, pageable);
     }
 }

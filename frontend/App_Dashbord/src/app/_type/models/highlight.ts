@@ -6,6 +6,6 @@ export interface Highlight{
     name: string
     image: string
     visibility: boolean
-    created_at: string
-    updated_at: string
+    created_at: Date
+    updated_at: Date
 }

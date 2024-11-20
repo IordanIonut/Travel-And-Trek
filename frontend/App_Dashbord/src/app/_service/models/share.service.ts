@@ -1,5 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { Share } from "src/app/_type/models/share";
 import { environment } from "src/app/environments/environment";
 
 @Injectable({
@@ -11,4 +13,13 @@ export class ShareService{
 
     constructor(private http: HttpClient) {}
   
+    getPostByProfile(
+      name: string,
+      index: number,
+      number: number
+    ): Observable<Share[]> {
+      return this.http.get<Share[]>(
+        `${this.apiUrl}/find?name=${name}&index=${index}&number=${number}`
+      );
+    }
 }

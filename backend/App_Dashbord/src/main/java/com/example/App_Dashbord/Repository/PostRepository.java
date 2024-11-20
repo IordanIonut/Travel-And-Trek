@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 
 @Repository
@@ -26,7 +27,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT COUNT(DISTINCT p.id) FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name AND p.visible = true")
     Long countPostsByUserName(@Param("name") final String name);
-
+    //add visibility condition
     @Query("SELECT p FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name AND p.id.type = :type ORDER BY p.update_at DESC, p.create_at DESC")
-    List<Post> findAllPostsByUser(@Param("name") final String name, @Param("type") final PostEnum type, Pageable pageable);
+    List<Post> findAllPostsByUserType(@Param("name") final String name, @Param("type") final PostEnum type, Pageable pageable);
+    //add visibility condition
+    @Query("SELECT p FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name  ORDER BY p.update_at DESC, p.create_at DESC")
+    List<Post> findAllPostsByUserWithoutType(@Param("name") final String name, Pageable pageable);
 }

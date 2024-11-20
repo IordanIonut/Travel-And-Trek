@@ -10,8 +10,8 @@ export interface Post{
     tagged_users: User[]
     description: string
     visible: boolean
-    create_at: string
-    update_at: string
+    create_at: Date
+    update_at: Date
 }
 
 export interface PostId{

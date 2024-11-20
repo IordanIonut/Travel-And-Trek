@@ -7,6 +7,7 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
   selector: 'app-story',
   standalone: true,
   imports: [NgFor, MaterialModule],
+  providers: [DialogService],
   templateUrl: './story.component.html',
   styleUrl: './story.component.scss'
 })
@@ -21,8 +22,7 @@ export class StoryComponent {
     // console.log(this.highlight);
   }
 
-  open(){
-    this.dialog.openDialogHighlight();
-
+  openDiaglog(position: number){
+    this.dialog.openDialogHighlight(this.highlight, position);
   }
 }

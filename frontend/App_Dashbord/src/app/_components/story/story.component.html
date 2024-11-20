@@ -18,9 +18,10 @@
   </div>
 
   <!-- Firiend Story-->
-  <div (click)="open()" *ngFor="let item of highlight" class="story-header">
-    <button class="border-efec story-body" (click)="open()">
-      <img
+  <div *ngFor="let item of highlight; let k = index" class="story-header">
+    <button class="border-efec story-body" (click)="openDiaglog(k)">
+      <img       draggable="false"
+
         class="story"
         style="object-fit: cover"
         src={{item?.image}}

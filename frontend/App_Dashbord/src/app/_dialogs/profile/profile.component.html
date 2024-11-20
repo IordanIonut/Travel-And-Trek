@@ -8,7 +8,8 @@
       class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
     >
       <button class="border-efec story-body" (click)="onProfilePage()">
-        <img 
+        <img        draggable="false"
+
           class="story"
           style="object-fit: cover"
           src={{userDTO?.user?.profile_picture}}

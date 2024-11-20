@@ -1,14 +1,14 @@
 <div class="page overflow-visible" style="overflow: visible !important">
   <app-masthead></app-masthead>
 
-  <div class="flex flex-row h-full justify-between mr-1.5">
-    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-4/5">
-      <div class="flex-col w-full flex">
-        <app-story [highlight]="userDTO?.highlights || []"></app-story>
+  <app-story [highlight]="userDTO?.highlights || []"></app-story>
 
+  <div class="flex flex-row h-full justify-between mr-1.5 relative">
+    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-4/5 relative">
+      <div class="flex-col w-full flex relative">
         <mat-tab-group
           animationDuration="2ms"
-          class="h-full dash-style-tab-group"
+          class="h-[72%] dash-style-tab-group"
           (selectedTabChange)="onTabChange($event)"
         >
           <mat-tab class="w-full h-full">
@@ -16,7 +16,7 @@
               <mat-icon class="icon">apps</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let item of items"></app-post>
+              <app-post *ngFor="let post of postsAll" [post]="post"></app-post>
             </div>
           </mat-tab>
 
@@ -25,7 +25,7 @@
               <mat-icon class="icon">play_circle</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-3 justify-between w-full h-fit">
-              <app-person *ngFor="let item of items"></app-person>
+              <app-post *ngFor="let post of postsReel" [post]="post"></app-post>
             </div>
           </mat-tab>
 
@@ -34,7 +34,7 @@
               <mat-icon class="icon">description</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let item of items"></app-post>
+              <app-post *ngFor="let post of postsText" [post]="post"></app-post>
             </div>
           </mat-tab>
 
@@ -52,14 +52,10 @@
               <mat-icon class="icon">sell</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-1 justify-between w-full h-max">
-              <app-video
-                class="w-3/12 h-3/12"
-                *ngFor="let item of items"
-              ></app-video>
+              <app-post *ngFor="let post of postsReel" [post]="post"></app-post>
             </div>
           </mat-tab>
         </mat-tab-group>
-
       </div>
     </div>
 
@@ -91,7 +87,7 @@
       </div>
     </div>
 
-    <div class="flex items-center align-middle -mt-[6%]">
+    <div class="flex items-center align-middle -mt-[10%]">
       <div class="flex flex-col items-center justify-between relative gap-2">
         <mat-form-field
           *ngIf="isFollowrs || isFollowing"
@@ -111,6 +107,7 @@
           >
             <button class="border-efec story-body" (click)="onOpenPhote()">
               <img
+                draggable="false"
                 class="story"
                 style="object-fit: cover; width: 6rem; height: 6rem"
                 src="{{ userDTO?.user?.profile_picture }}"
@@ -127,7 +124,10 @@
             {{ userDTO?.user?.name }}
           </div>
         </div>
-        <div class="flex-row gap-2 overflow-x-auto justify-between" style="display: ruby;">
+        <div
+          class="flex-row gap-2 overflow-x-auto justify-between"
+          style="display: ruby"
+        >
           <div
             *ngFor="let item of userDTO?.user?.user_hashtag_id"
             class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"

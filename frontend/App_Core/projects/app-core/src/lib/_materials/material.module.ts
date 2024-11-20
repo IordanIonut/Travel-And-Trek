@@ -15,15 +15,17 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import { MatSliderModule } from '@angular/material/slider';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatSliderModule} from '@angular/material/slider';
 
 //AD TO CORE
 @NgModule({
   imports: [
     CommonModule,
     MatButtonModule,
+    MatProgressBarModule,
     MatIconModule,
     MatTableModule,
     MatFormFieldModule,

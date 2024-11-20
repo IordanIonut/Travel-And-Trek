@@ -35,13 +35,28 @@ public class PostController {
         }
     }
 
-    @GetMapping("/find")
-    public ResponseEntity<List<Post>> findAllPostsByUser(@RequestParam("name") final String name,
+    @GetMapping("/find/type")
+    public ResponseEntity<List<Post>> findAllPostsByUserType(@RequestParam("name") final String name,
                                                          @RequestParam("type") final PostEnum type,
                                                          @RequestParam("index") final int index,
                                                          @RequestParam("number") final int number) {
         try {
-            List<Post> list = postService.findAllPostsByUser(name, type, index, number);
+            List<Post> list = postService.findAllPostsByUserType(name, type, index, number);
+            LOG.info("findAllPostsByUser()- user - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<List<Post>> findAllPostsByUserWithoutType(@RequestParam("name") final String name,
+                                                             @RequestParam("index") final int index,
+                                                             @RequestParam("number") final int number) {
+        try {
+            List<Post> list = postService.findAllPostsByUserWithoutType(name, index, number);
             LOG.info("findAllPostsByUser()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {

@@ -63,11 +63,11 @@ export class DialogService {
     dialogRef.afterClosed().subscribe();
   }
 
-  openDialogHighlight():void{
+  openDialogHighlight(highlight: Highlight[], position: number):void{
     const dialogRef = this.dialog.open(HighlightComponent, {
       width: 'auto',
       height: 'auto',
-      data: { },
+      data: { data: highlight, index: position},
     });
     dialogRef.afterClosed().subscribe();
   }
