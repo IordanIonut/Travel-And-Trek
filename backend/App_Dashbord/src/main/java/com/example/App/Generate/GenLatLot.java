@@ -1,4 +1,4 @@
-package com.example.App_Dashbord.Generate;
+package com.example.App.Generate;
 
 import java.util.Random;
 

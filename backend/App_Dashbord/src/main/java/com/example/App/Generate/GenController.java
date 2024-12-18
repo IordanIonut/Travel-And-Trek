@@ -1,24 +1,14 @@
-package com.example.App_Dashbord.Generate;
+package com.example.App.Generate;
 
-import com.example.App_Dashbord.Controller.CommentController;
-import com.example.App_Dashbord.Model.User;
-import com.example.App_Dashbord.Repository.UserRepository;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import com.example.App.Dashbord.Controller.CommentController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -193,11 +183,98 @@ public class GenController {
         }
     }
 
+    @PostMapping("/groups")
+    public ResponseEntity<Void> postGroup(@RequestParam(value = "num", defaultValue = "1") final int number){
+        try {
+            genService.generateFakeGroup(number / 2);
+            LOG.info("postGroup() - location - Successful");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }catch (Exception e){
+            LOG.error("Error posting group "+ e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/group/memberships")
+    public ResponseEntity<Void> postGroupMembership(@RequestParam(value = "num", defaultValue = "1") final int number){
+        try {
+            genService.generateFakeGroupMembers(number / 2);
+            LOG.info("postGroupMembership() - location - Successful");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }catch (Exception e){
+            LOG.error("Error posting group membership "+ e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/messages")
+    public ResponseEntity<Void> postMessage(@RequestParam(value = "num", defaultValue = "1")final int number){
+        try {
+            genService.generateFakeMessage(number);
+            LOG.info("postMessage() - location - Successful");
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            LOG.error("Error posting message "+ e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/message/read/status")
+    public ResponseEntity<Void> postMessageReadStatus(@RequestParam(value = "num", defaultValue = "1")final int number){
+        try {
+            genService.generateFakeMessageReadStatus(number);
+            LOG.info("postMessageReadStatus() - location - Successful");
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            LOG.error("Error posting message "+ e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/hobby")
+    public ResponseEntity<Void> postHobby(@RequestParam(value = "num", defaultValue = "1") final int number){
+        try {
+            genService.generateFakeHobby(number);
+            LOG.info("postHobby() - location - Successful");
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            LOG.error("Error posting message "+ e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/journal")
+    public ResponseEntity<Void> postJournal(@RequestParam(value = "num", defaultValue = "1") final int number){
+        try {
+            genService.generateFakeJournal(number);
+            LOG.info("postJournal() - location - Successful");
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            LOG.error("Error posting message "+ e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/travel/destination")
+    public ResponseEntity<Void> postTravelDestination(@RequestParam(value = "num", defaultValue = "1") final int number){
+        try {
+            genService.generateFakeTravelDestination(number);
+            LOG.info("postTravelDestination() - location - Successful");
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e){
+            LOG.error("Error posting message "+ e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PostMapping("/all")
     public ResponseEntity<Void> postAll(@RequestParam(value = "num", defaultValue = "1") final int number) {
         try {
             genService.generateFakeTag(number / 10);
-            genService.generateFakeUser(number / 50);
+            genService.generateFakeUser(number / 30);
+            genService.generateFakeHobby(number);
+            genService.generateFakeTravelDestination(number);
+            genService.generateFakeJournal(number);
             genService.generateFakeMedia(number);
             genService.generateFakeStory(number);
             genService.generateFakePost(number);
@@ -206,6 +283,10 @@ public class GenController {
             genService.generateFakeFollower(number);
             genService.generateFakeLike(number);
             genService.generateFakeHighlight(number);
+            genService.generateFakeGroup(number);
+            genService.generateFakeMessage(number);
+            genService.generateFakeMessageReadStatus(number);
+            genService.generateFakeGroupMembers(number);
             LOG.info("All()- location - Successful.");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {

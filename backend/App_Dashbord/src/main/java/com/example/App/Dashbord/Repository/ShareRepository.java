@@ -1,6 +1,7 @@
-package com.example.App.Repository;
+package com.example.App.Dashbord.Repository;
 
-import com.example.App.Model.Share;
+import com.example.App.Dashbord.Embedded.ShareId;
+import com.example.App.Dashbord.Model.Share;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ShareRepository extends JpaRepository<Share, Long> {
+public interface ShareRepository extends JpaRepository<Share, ShareId> {
     @Query(value = "SELECT MAX(s.id) FROM SHARES s WHERE s.type = :type", nativeQuery = true)
     Long findLastIdByType(@Param("type") String type);
 

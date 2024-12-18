@@ -1,7 +1,7 @@
-package com.example.App.Service;
+package com.example.App.Dashbord.Service;
 
-import com.example.App.Model.Like;
-import com.example.App.Repository.LikeRepository;
+import com.example.App.Dashbord.Repository.LikeRepository;
+import com.example.App.Dashbord.Model.Like;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

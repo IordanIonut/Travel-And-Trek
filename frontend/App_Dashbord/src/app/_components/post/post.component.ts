@@ -11,7 +11,10 @@ import ColorThief from 'colorthief';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
+import { ShareEnum } from 'src/app/_type/enum/share.enum';
 import { Post } from 'src/app/_type/models/post';
+import { Share } from 'src/app/_type/models/share';
+import { User } from 'src/app/_type/models/user';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
 
@@ -24,7 +27,10 @@ import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_ty
   encapsulation: ViewEncapsulation.None,
 })
 export class PostComponent {
-  @Input() post!: Post;
+  @Input() data!: Post | Share;
+
+  PostEnum = PostEnum;
+  ShareEnum = ShareEnum;
 
   buttonPosition!: Position;
   @ViewChild('postElement') postElement!: ElementRef;
@@ -34,7 +40,14 @@ export class PostComponent {
   @ViewChild('postContainer', { static: false })
   postContainer!: ElementRef<HTMLDivElement>;
 
-  PostEnum = PostEnum;
+  isPost(data: Post | Share): data is Post {
+    return (data as Post).post_medias_id !== undefined;
+  }
+
+  isShare(data: Post | Share): data is Share {
+    return (data as Share).share_media_id !== undefined;
+  }
+
 
   constructor(
     private dialogService: DialogService,
@@ -74,5 +87,14 @@ export class PostComponent {
       };
       this.dialogService.openDialogProfile(this.buttonPosition);
     }
+  }
+
+  protected getTaggedUsers(data: Post | Share): User[] {
+    if (this.isPost(data)) {
+      return data.post_hashtag_id ? data.tagged_users : []; 
+    } else if (this.isShare(data)) {
+      return data.share_post_id ? data.share_post_id.tagged_users : [];
+    }
+    return [];
   }
 }

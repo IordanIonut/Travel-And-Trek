@@ -33,4 +33,14 @@ export class PostService {
       `${this.apiUrl}/find?name=${name}&index=${index}&number=${number}`
     );
   }
+
+  getPostByUserTag(
+    name: string,
+    index: number,
+    number: number
+  ): Observable<Post[]> {
+    return this.http.get<Post[]>(
+      `${this.apiUrl}/find/tags?name=${name}&index=${index}&number=${number}`
+    );
+  }
 }

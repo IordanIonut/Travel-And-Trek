@@ -1,4 +1,4 @@
-package com.example.App.Model;
+package com.example.App.Dashbord.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

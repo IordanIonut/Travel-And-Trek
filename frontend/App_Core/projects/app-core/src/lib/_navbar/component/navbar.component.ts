@@ -69,7 +69,7 @@ export class NavbarComponent {
     if (index >= 0 && index < this.pages.length) {
       this.selectedIndex = index;
     } else {
-      console.error('Selected index is out of bounds or URL not found:', url);
+      // console.error('Selected index is out of bounds or URL not found:', url);
       this.selectedIndex = 0;
     }
 

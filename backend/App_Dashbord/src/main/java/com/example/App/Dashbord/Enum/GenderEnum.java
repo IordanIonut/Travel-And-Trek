@@ -1,4 +1,4 @@
-package com.example.App.Enum;
+package com.example.App.Dashbord.Enum;
 
 public enum GenderEnum {
     M, F;

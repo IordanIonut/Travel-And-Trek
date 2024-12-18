@@ -1,6 +1,6 @@
-package com.example.App.Model;
+package com.example.App.Dashbord.Model;
 
-import com.example.App.Embedded.MediaId;
+import com.example.App.Dashbord.Embedded.MediaId;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +28,12 @@ public class Media {
 
     @Column(name = "URL", nullable = false)
     private String url;
+
+    @Column(name = "LATITUDE", nullable = false)
+    private double latitude;
+
+    @Column(name = "LONGITUDE", nullable = false)
+    private double longitude;
 
     @Column(name = "CREATE_AT", nullable = false)
     private LocalDateTime create_at;

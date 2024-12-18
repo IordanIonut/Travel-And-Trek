@@ -1,7 +1,7 @@
-package com.example.App.Embedded;
+package com.example.App.Dashbord.Embedded;
 
-import com.example.App.Enum.LikeContentEnum;
-import com.example.App.Enum.LikeEnum;
+import com.example.App.Dashbord.Enum.LikeContentEnum;
+import com.example.App.Dashbord.Enum.LikeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 

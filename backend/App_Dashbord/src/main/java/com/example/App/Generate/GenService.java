@@ -1,10 +1,28 @@
-package com.example.App_Dashbord.Generate;
+package com.example.App.Generate;
 
-import com.example.App_Dashbord.Embedded.*;
-import com.example.App_Dashbord.Enum.*;
-import com.example.App_Dashbord.Model.*;
-import com.example.App_Dashbord.Repository.*;
-import com.example.App_Dashbord.Service.FollowerService;
+import com.example.App.Dashbord.Embedded.*;
+import com.example.App.Dashbord.Enum.*;
+import com.example.App.Dashbord.Model.*;
+import com.example.App.Dashbord.Repository.*;
+import com.example.App.Dashbord.Service.FollowerService;
+import com.example.App.Journal.Model.Hobby;
+import com.example.App.Journal.Model.Journal;
+import com.example.App.Journal.Model.TravelDestination;
+import com.example.App.Journal.Repository.HobbyRepository;
+import com.example.App.Journal.Repository.JournalRepository;
+import com.example.App.Journal.Repository.TravelDestionationRepository;
+import com.example.App.Messenger.Embedded.GroupMembershipId;
+import com.example.App.Messenger.Embedded.MessagesId;
+import com.example.App.Messenger.Enum.MessageEnum;
+import com.example.App.Messenger.Enum.Role;
+import com.example.App.Messenger.Model.Group;
+import com.example.App.Messenger.Model.GroupMembership;
+import com.example.App.Messenger.Model.Message;
+import com.example.App.Messenger.Model.MessageReadStatus;
+import com.example.App.Messenger.Repository.GroupMembershipRepository;
+import com.example.App.Messenger.Repository.GroupRepository;
+import com.example.App.Messenger.Repository.MessageReadStatusRepository;
+import com.example.App.Messenger.Repository.MessageRepository;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -46,6 +64,20 @@ public class GenService {
     private HighlightRepository highlightRepository;
     @Autowired
     private HashtagRepository hashtagRepository;
+    @Autowired
+    private GroupRepository groupRepository;
+    @Autowired
+    private GroupMembershipRepository groupMembershipRepository;
+    @Autowired
+    private MessageRepository messageRepository;
+    @Autowired
+    private MessageReadStatusRepository messageReadStatusRepository;
+    @Autowired
+    private HobbyRepository hobbyRepository;
+    @Autowired
+    private TravelDestionationRepository travelDestionationRepository;
+    @Autowired
+    private JournalRepository journalRepository;
 
     private static final Faker faker = new Faker();
     private static final Random random = new Random();
@@ -187,7 +219,6 @@ public class GenService {
         }
     }
 
-
     @Transactional
     public void generateFakeMedia(int number) {
         try {
@@ -218,7 +249,9 @@ public class GenService {
                 String uniqueImageUrl = "https://picsum.photos/600/600?random=" + UUID.randomUUID();
                 media.setUrl(uniqueImageUrl);
                 media.setCreate_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-
+                double[] val = GenLatLot.generateRandomLandCoordinates();
+                media.setLongitude(val[1]);
+                media.setLatitude(val[0]);
                 //System.out.println("Media: " + media);
                 mediaBatch.add(media);
             }
@@ -229,6 +262,7 @@ public class GenService {
         }
     }
 
+    @Transactional
     public void generateFakeHighlight(int number) {
         try {
             List<Long> listUsersMedia = mediaRepository.findAllUserIdMedia();
@@ -316,6 +350,7 @@ public class GenService {
         }
     }
 
+    @Transactional
     public void generateFakePost(int number) {
         try {
             List<Long> listUsersMedia = mediaRepository.findAllUserIdMedia();
@@ -412,7 +447,6 @@ public class GenService {
         }
     }
 
-
     @Transactional
     public void generateFakeComment(int number) {
         try {
@@ -433,11 +467,13 @@ public class GenService {
                 Long randomUserId = listUsersMedia.get(random.nextInt(listUsersMedia.size()));
                 List<Media> userMediaList = mediaRepository.findAllMediaByUserId(randomUserId);
                 List<Post> userPosts = postRepository.findAllPostByUserId(randomUserId);
+                List<Journal> userJournal = journalRepository.findAllJournalByUser(randomUserId);
 
-                if (userMediaList.isEmpty() || userPosts.isEmpty()) continue;
+                if (userMediaList.isEmpty() || userPosts.isEmpty() || userJournal.isEmpty()) continue;
 
                 Media selectedMedia = userMediaList.get(random.nextInt(userMediaList.size()));
                 Post selectedPost = userPosts.get(random.nextInt(userPosts.size()));
+                Journal selectJournal = userJournal.get(random.nextInt(userJournal.size()));
 
                 Comment comment = new Comment();
                 CommnetEnum[] commentTypes = CommnetEnum.values();
@@ -454,6 +490,7 @@ public class GenService {
                 comment.setComment_user_id(user);
                 comment.setComment_post_id(randomType == CommnetEnum.POST ? selectedPost : null);
                 comment.setComment_media_id(randomType == CommnetEnum.MEDIA ? selectedMedia : null);
+                comment.setComment_journal_id(randomType == CommnetEnum.JOURNAL ? selectJournal : null);
                 comment.setMessage(faker.lorem().sentence());
                 comment.setCreate_at(LocalDateTime.now());
 
@@ -675,6 +712,161 @@ public class GenService {
         } catch (Exception e) {
             LOG.error("Error generating shares: " + e.getMessage(), e);
         }
+    }
+
+    @Transactional
+    public void generateFakeGroup(int number) {
+        List<Group> groups = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            Group group = new Group();
+            group.setId(generateId());
+            group.setName(faker.superhero().name());
+            group.setUpdated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            group.setCreate_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            group.setDescription(faker.superhero().descriptor());
+
+            groups.add(group);
+        }
+        groupRepository.saveAll(groups);
+    }
+
+    @Transactional
+    public void generateFakeGroupMembers(int number) {
+        List<GroupMembership> groupMemberships = new ArrayList<>();
+        Role[] roles = Role.values();
+        List<User> users = userRepository.findAll();
+        List<Group> groups = groupRepository.findAll();
+
+        Set<String> existingMemberships = groupMembershipRepository.findAll().stream().map(m -> m.getUser_id().getId() + "_" + m.getGroup_id().getId()).collect(Collectors.toSet());
+        for (int i = 0; i < number; i++) {
+            User user = users.get(random.nextInt(users.size()));
+            Group group = groups.get(random.nextInt(groups.size()));
+
+            String membershipKey = user.getId() + "_" + group.getId();
+            if (existingMemberships.contains(membershipKey)) {
+                continue;
+            }
+
+            GroupMembershipId groupMembershipId = new GroupMembershipId();
+            groupMembershipId.setId(generateId());
+            groupMembershipId.setRole(roles[random.nextInt(roles.length)]);
+
+            GroupMembership groupMembership = new GroupMembership();
+            groupMembership.setId(groupMembershipId);
+            groupMembership.setJoined_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            groupMembership.setUser_id(user);
+            groupMembership.setGroup_id(group);
+
+            groupMemberships.add(groupMembership);
+            existingMemberships.add(membershipKey);
+        }
+        groupMembershipRepository.saveAll(groupMemberships);
+    }
+
+    @Transactional
+    public void generateFakeMessage(int number) {
+        List<Message> messages = new ArrayList<>();
+        MessageEnum[] messageEnums = MessageEnum.values();
+
+        List<User> users = userRepository.findAll();
+        List<Post> posts = postRepository.findAll();
+        List<Story> stories = storyRepository.findAll();
+        List<Group> groups = groupRepository.findAll();
+        for (int i = 0; i < number; i++) {
+            MessagesId messagesId = new MessagesId();
+            messagesId.setId(generateId());
+            MessageEnum m = messageEnums[random.nextInt(messageEnums.length)];
+            messagesId.setType(m);
+
+            Message message = new Message();
+            message.setId(messagesId);
+            message.setContent(faker.lorem().paragraph(2));
+            message.setCreated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            message.setUpdated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+
+            message.setGroup_id(faker.random().nextBoolean() ? groups.get(random.nextInt(groups.size())) : null);
+            message.setPost_id(m == MessageEnum.POST ? posts.get(random.nextInt(posts.size())) : null);
+            message.setStory_id(m == MessageEnum.STORY ? stories.get(random.nextInt(stories.size())) : null);
+            message.setSender_id(users.get(random.nextInt(users.size())));
+            message.setRecipient_id(users.get(random.nextInt(users.size())));
+
+            messages.add(message);
+        }
+        messageRepository.saveAll(messages);
+    }
+
+    @Transactional
+    public void generateFakeMessageReadStatus(int number) {
+        List<MessageReadStatus> messageReadStatuses = new ArrayList<>();
+        List<Message> messages = messageRepository.findAll();
+        for (int i = 0; i < number; i++) {
+            MessageReadStatus message = new MessageReadStatus();
+            message.setId(generateId());
+            message.setIs_read(faker.random().nextBoolean());
+            message.setRead_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+
+            Message m = messages.get(random.nextInt(messages.size()));
+            message.setMessage_id(m);
+            message.setUser_id(faker.random().nextBoolean() ? m.getRecipient_id() : m.getSender_id());
+
+            messageReadStatuses.add(message);
+        }
+        messageReadStatusRepository.saveAll(messageReadStatuses);
+    }
+
+    @Transactional
+    public void generateFakeHobby(int number) {
+        List<Hobby> hobbies = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            Hobby hobby = new Hobby();
+            hobby.setId(generateId());
+            hobby.setName(faker.funnyName().name());
+            hobby.setDescription(faker.lorem().sentence());
+
+            hobbies.add(hobby);
+        }
+        hobbyRepository.saveAll(hobbies);
+    }
+
+    @Transactional
+    public void generateFakeTravelDestination(int number) {
+        List<TravelDestination> travelDestinations = new ArrayList<TravelDestination>();
+        for (int i = 0; i < number; i++) {
+            TravelDestination travelDestination = new TravelDestination();
+            travelDestination.setId(generateId());
+            travelDestination.setName(faker.funnyName().name());
+            travelDestination.setCountry(faker.country().name());
+            travelDestination.setDescription(faker.lorem().sentence());
+
+            travelDestinations.add(travelDestination);
+        }
+        travelDestionationRepository.saveAll(travelDestinations);
+    }
+
+    @Transactional
+    public void generateFakeJournal(int number) {
+        List<Journal> journals = new ArrayList<>();
+        List<User> users = userRepository.findAll();
+        List<Hobby> hobbies = hobbyRepository.findAll();
+        List<TravelDestination> travelDestinations = travelDestionationRepository.findAll();
+        for (int i = 0; i < number; i++) {
+
+            List<Hobby> selectHobby = hobbies.stream().limit(Math.min(random.nextInt(6), 5)).collect(Collectors.toList());
+            List<TravelDestination> selectTravelDestination = travelDestinations.stream().limit(Math.min(random.nextInt(6), 5)).collect(Collectors.toList());
+
+            Journal journal = new Journal();
+            journal.setId(generateId());
+            journal.setTittle(faker.dune().title());
+            journal.setContent(faker.lorem().sentence());
+            journal.setCreate_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            journal.setUpdate_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            journal.setUser_id(users.get(random.nextInt(users.size())));
+            journal.setHobby_ids(selectHobby);
+            journal.setTravel_destination_ids(selectTravelDestination);
+
+            journals.add(journal);
+        }
+        journalRepository.saveAll(journals);
     }
 
     public Long generateId() {

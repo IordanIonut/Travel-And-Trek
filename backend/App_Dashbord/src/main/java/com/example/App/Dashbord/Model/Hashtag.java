@@ -1,4 +1,4 @@
-package com.example.App.Model;
+package com.example.App.Dashbord.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

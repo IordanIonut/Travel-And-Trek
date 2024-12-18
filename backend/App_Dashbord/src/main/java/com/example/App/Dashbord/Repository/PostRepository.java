@@ -1,7 +1,8 @@
-package com.example.App.Repository;
+package com.example.App.Dashbord.Repository;
 
-import com.example.App.Enum.PostEnum;
-import com.example.App.Model.Post;
+import com.example.App.Dashbord.Embedded.PostId;
+import com.example.App.Dashbord.Enum.PostEnum;
+import com.example.App.Dashbord.Model.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +13,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, PostId> {
     @Query(value = "SELECT MAX(p.id) FROM POSTS p WHERE p.type = :type", nativeQuery = true)
     Long findLastIdByType(@Param("type") String type);
 

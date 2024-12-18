@@ -1,8 +1,8 @@
-package com.example.App.Controller;
+package com.example.App.Dashbord.Controller;
 
-import com.example.App.Enum.PostEnum;
-import com.example.App.Model.Post;
-import com.example.App.Service.PostService;
+import com.example.App.Dashbord.Enum.PostEnum;
+import com.example.App.Dashbord.Model.Post;
+import com.example.App.Dashbord.Service.PostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

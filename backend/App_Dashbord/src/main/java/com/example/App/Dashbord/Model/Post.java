@@ -1,6 +1,6 @@
-package com.example.App.Model;
+package com.example.App.Dashbord.Model;
 
-import com.example.App.Embedded.PostId;
+import com.example.App.Dashbord.Embedded.PostId;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;

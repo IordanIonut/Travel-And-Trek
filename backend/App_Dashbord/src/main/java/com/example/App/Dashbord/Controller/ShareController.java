@@ -1,7 +1,7 @@
-package com.example.App.Controller;
+package com.example.App.Dashbord.Controller;
 
-import com.example.App.Model.Share;
-import com.example.App.Service.ShareService;
+import com.example.App.Dashbord.Model.Share;
+import com.example.App.Dashbord.Service.ShareService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

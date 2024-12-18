@@ -1,6 +1,6 @@
-package com.example.App.Embedded;
+package com.example.App.Dashbord.Embedded;
 
-import com.example.App.Enum.FollowerStatusEnum;
+import com.example.App.Dashbord.Enum.FollowerStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;

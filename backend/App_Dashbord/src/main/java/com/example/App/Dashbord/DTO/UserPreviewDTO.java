@@ -1,6 +1,6 @@
-package com.example.App.DTO;
+package com.example.App.Dashbord.DTO;
 
-import com.example.App.Model.User;
+import com.example.App.Dashbord.Model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

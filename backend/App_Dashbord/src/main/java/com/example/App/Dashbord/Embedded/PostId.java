@@ -1,6 +1,6 @@
-package com.example.App.Embedded;
+package com.example.App.Dashbord.Embedded;
 
-import com.example.App.Enum.PostEnum;
+import com.example.App.Dashbord.Enum.PostEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

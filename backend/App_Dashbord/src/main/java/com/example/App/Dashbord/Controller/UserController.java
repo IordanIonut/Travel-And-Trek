@@ -1,11 +1,11 @@
-package com.example.App.Controller;
+package com.example.App.Dashbord.Controller;
 
-import com.example.App.DTO.UserProfileDTO;
-import com.example.App.Model.User;
-import com.example.App.Repository.HighlightRepository;
-import com.example.App.Service.FollowerService;
-import com.example.App.Service.PostService;
-import com.example.App.Service.UserService;
+import com.example.App.Dashbord.DTO.UserProfileDTO;
+import com.example.App.Dashbord.Repository.HighlightRepository;
+import com.example.App.Dashbord.Model.User;
+import com.example.App.Dashbord.Service.FollowerService;
+import com.example.App.Dashbord.Service.PostService;
+import com.example.App.Dashbord.Service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

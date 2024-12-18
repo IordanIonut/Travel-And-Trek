@@ -1,13 +1,14 @@
-package com.example.App.Repository;
+package com.example.App.Dashbord.Repository;
 
-import com.example.App.Model.Follower;
+import com.example.App.Dashbord.Embedded.FollowerId;
+import com.example.App.Dashbord.Model.Follower;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FollowerRepository extends JpaRepository<Follower, Long> {
+public interface FollowerRepository extends JpaRepository<Follower, FollowerId> {
     @Query(value = "SELECT MAX(f.id) FROM FOLLOWERS f WHERE f.status = :type", nativeQuery = true)
     Long findLastIdByStatus(@Param("type") String type);
 

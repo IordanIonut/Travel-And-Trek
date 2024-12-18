@@ -1,5 +1,5 @@
-package com.example.App.Enum;
+package com.example.App.Dashbord.Enum;
 
 public enum CommnetEnum {
-    MEDIA, POST;
+    MEDIA, POST, JOURNAL;
 }

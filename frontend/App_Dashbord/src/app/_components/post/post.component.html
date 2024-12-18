@@ -6,25 +6,43 @@
     <img
       draggable="false"
       class="rounded-full w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch"
-      src="{{ post!.post_user_id!.profile_picture }}"
+      src="{{
+        (isPost(data) && data!.post_user_id!.profile_picture) ||
+          (isShare(data) && data!.share_user_id!.profile_picture)
+      }}"
+    />
+    <div
+      *ngIf="isShare(data)"
+      class="bgEfec w-2 h-8 rounded-[4px] relative flex mb-3"
+      style="margin-top: -3px"
+    ></div>
+    <img
+      *ngIf="isShare(data)"
+      draggable="false"
+      class="rounded-full w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch"
+      src="{{ data!.share_user_id_sharled!.profile_picture }}"
     />
     <div
       class="bgEfec w-2 h-full rounded-[4px] relative flex mb-3"
       style="margin-top: -3px"
     ></div>
-    <div *ngFor="let item of post?.tagged_users; let k = index">
-      <button (click)="onOpenProfile($event)">
-        <img
-          draggable="false"
-          [ngStyle]="
-            k !== post!.tagged_users!.length - 1
-              ? { marginBottom: '-10px' }
-              : {}
-          "
-          class="rounded-full w-14 h-14 object-cover justify-start flex flex-col self-stretch"
-          src="{{ item?.profile_picture }}"
-        />
-      </button>
+    <div *ngIf="isPost(data) || isShare(data)">
+      <div *ngFor="let item of getTaggedUsers(data); let k = index">
+        <button (click)="onOpenProfile($event)">
+          <img
+            draggable="false"
+            [ngStyle]="
+              (isPost(data) && k !== data!.tagged_users!.length - 1) ||
+              (isShare(data) &&
+                k !== data!.share_post_id!.tagged_users!.length - 1)
+                ? { marginBottom: '-10px' }
+                : {}
+            "
+            class="rounded-full w-14 h-14 object-cover justify-start flex flex-col self-stretch"
+            src="{{ item?.profile_picture }}"
+          />
+        </button>
+      </div>
     </div>
   </div>
 
@@ -37,12 +55,15 @@
       <div
         class="textCl text-left text-2xl font-normal relative self-stretch flex items-center justify-start"
       >
-        {{ post!.post_user_id!.name }}
+        {{
+          (isPost(data) && data!.post_user_id!.name) ||
+            (isShare(data) && data!.share_user_id!.name)
+        }}
       </div>
       <div
         class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
       >
-        {{ post!.description }}
+        {{ data!.description }}
       </div>
       <div
         class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
@@ -51,11 +72,46 @@
           class="flex-row gap-2 overflow-x-auto justify-between"
           style="display: ruby"
         >
-          <div
-            *ngFor="let item of post?.post_hashtag_id"
-            class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
-          >
-            #{{ item?.name }}
+          <div *ngIf="isPost(data)">
+            <div
+              *ngFor="let item of data.post_hashtag_id"
+              class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
+            >
+              #{{ item?.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="isShare(data) && data!.shareId!.type === ShareEnum.POST"
+      class="bgCom rounded-[15px] p-2.5 flex flex-col gap-1 items-start justify-start self-stretch shrink-0 relative"
+    >
+      <div
+        class="textCl text-left text-2xl font-normal relative self-stretch flex items-center justify-start"
+      >
+        {{ data!.share_user_id_sharled!.name }}
+      </div>
+      <div
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
+      >
+        {{ data!.description }}
+      </div>
+      <div
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
+      >
+        <div
+          class="flex-row gap-2 overflow-x-auto justify-between"
+          style="display: ruby"
+        >
+          <div *ngIf="isPost(data)">
+            <div
+              *ngFor="let item of data.post_hashtag_id"
+              class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
+            >
+              #{{ item?.name }}
+            </div>
           </div>
         </div>
       </div>
@@ -63,7 +119,10 @@
     <!-- POST -->
     <div
       class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
-      *ngIf="post.id.type === PostEnum.POST"
+      *ngIf="
+        (isPost(data) && data?.id?.type === PostEnum.POST && data!.post_medias_id!.length > 0) ||
+        (isShare(data) && data?.shareId?.type === ShareEnum.POST && data!.share_post_id!.post_medias_id!.length > 0)  
+      "
     >
       <div
         #postContainer
@@ -76,42 +135,61 @@
           id="postImage"
           #postImage
           crossorigin="anonymous"
-          src="{{ post!.post_medias_id[0]!.url }}"
+          src="{{
+            (isPost(data) && data!.post_medias_id![0]!.url) ||
+              (isShare(data) && data!.share_post_id!.post_medias_id![0]!.url)
+          }}"
+          alt="image"
         />
       </div>
       <div
-        *ngIf="post!.post_medias_id!.length === 2"
+        *ngIf="
+          (isPost(data) && data!.post_medias_id!.length === 2) ||
+          (isShare(data) && data!.share_post_id!.post_medias_id!.length === 2)
+        "
         class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative"
       >
         <img
           draggable="false"
           class="rounded-[5px] self-stretch flex-1 relative"
           style="object-fit: cover"
-          src="{{ post!.post_medias_id[1]!.url }}"
+          src="{{
+            (isPost(data) && data!.post_medias_id![1]!.url) ||
+              (isShare(data) && data!.share_post_id!.post_medias_id![1]!.url)
+          }}"
         />
       </div>
       <div
-        *ngIf="post!.post_medias_id!.length >= 3"
+        *ngIf="
+          (isPost(data) && data!.post_medias_id!.length >= 3) ||
+          (isShare(data) && data!.share_post_id!.post_medias_id!.length >= 3)
+        "
         class="flex flex-col gap-2.5 items-start justify-center self-stretch flex-1 relative"
       >
         <img
           draggable="false"
           class="rounded-[5px] self-stretch flex-1 relative"
           style="object-fit: cover"
-          src="{{ post!.post_medias_id[1]!.url }}"
+          src="{{
+            (isPost(data) && data!.post_medias_id![1]!.url) ||
+              (isShare(data) && data!.share_post_id!.post_medias_id![1]!.url)
+          }}"
         />
         <img
           draggable="false"
           class="rounded-[5px] self-stretch flex-1 relative"
           style="object-fit: cover"
-          src="{{ post!.post_medias_id[2]!.url }}"
+          src="{{
+            (isPost(data) && data!.post_medias_id![2]!.url) ||
+              (isShare(data) && data!.share_post_id!.post_medias_id![2]!.url)
+          }}"
         />
       </div>
     </div>
     <!-- REEL -->
     <div
       class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
-      *ngIf="post.id.type === PostEnum.REEL"
+      *ngIf="isPost(data) && data!.id!.type === PostEnum.REEL"
     >
       <div
         class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
@@ -136,24 +214,62 @@
         </video>
       </div>
     </div>
-    <!-- TEXT -->
-
-    
-    </div>
+    <!-- MEDIA -->
     <div
-      class="pt-5 pb-5 flex flex-col items-center justify-between self-stretch shrink-0 w-[3.5rem] relative"
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
+      *ngIf="isShare(data) && data?.shareId?.type === ShareEnum.MEDIA"
     >
-      <div class="bgCom icons">
-        <mat-icon>share</mat-icon>
-      </div>
-      <div class="bgCom icons">
-        <mat-icon>comment</mat-icon>
-      </div>
-      <div class="bgCom icons">
-        <mat-icon>favorite</mat-icon>
-      </div>
-      <div class="bgCom icons">
-        <mat-icon>bookmark</mat-icon>
+      <div
+        #postContainer
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
+      >
+        <img
+          draggable="false"
+          class="rounded-[5px] self-stretch flex-1 relative"
+          style="object-fit: cover"
+          id="postImage"
+          #postImage
+          crossorigin="anonymous"
+          src="{{ isShare(data) && data!.share_media_id.url }}"
+        />
       </div>
     </div>
+    <!-- Story -->
+    <div
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
+      *ngIf="isShare(data) && data?.shareId?.type === ShareEnum.STORY"
+    >
+      <div
+        #postContainer
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
+      >
+        <img
+          draggable="false"
+          class="rounded-[5px] self-stretch flex-1 relative"
+          style="object-fit: cover"
+          id="postImage"
+          #postImage
+          crossorigin="anonymous"
+          src="{{ data!.share_story_id!.story_media_id!.url }}"
+        />
+      </div>
+    </div>
+    <!-- TEXT -->
+  </div>
+  <div
+    class="pt-5 pb-5 flex flex-col items-center justify-between self-stretch shrink-0 w-[3.5rem] relative"
+  >
+    <div class="bgCom icons">
+      <mat-icon>share</mat-icon>
+    </div>
+    <div class="bgCom icons">
+      <mat-icon>comment</mat-icon>
+    </div>
+    <div class="bgCom icons">
+      <mat-icon>favorite</mat-icon>
+    </div>
+    <div class="bgCom icons">
+      <mat-icon>bookmark</mat-icon>
+    </div>
+  </div>
 </div>

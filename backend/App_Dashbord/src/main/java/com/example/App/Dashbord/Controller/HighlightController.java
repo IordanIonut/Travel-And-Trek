@@ -1,7 +1,7 @@
-package com.example.App.Controller;
+package com.example.App.Dashbord.Controller;
 
-import com.example.App.Model.Highlight;
-import com.example.App.Service.HighlightService;
+import com.example.App.Dashbord.Model.Highlight;
+import com.example.App.Dashbord.Service.HighlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

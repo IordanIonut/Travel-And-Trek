@@ -1,3 +1,5 @@
-export enum ShareEnum{
-    STORY, POST, MEDIA
+export enum ShareEnum {
+  STORY = 'STORY',
+  POST = 'POST',
+  MEDIA = 'MEDIA',
 }

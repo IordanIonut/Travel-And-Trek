@@ -1,7 +1,7 @@
-package com.example.App.Controller;
+package com.example.App.Dashbord.Controller;
 
-import com.example.App.Model.Story;
-import com.example.App.Service.StoryService;
+import com.example.App.Dashbord.Model.Story;
+import com.example.App.Dashbord.Service.StoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

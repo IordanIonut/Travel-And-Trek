@@ -1,7 +1,7 @@
-package com.example.App.Service;
+package com.example.App.Dashbord.Service;
 
-import com.example.App.Model.Media;
-import com.example.App.Repository.MediaRepository;
+import com.example.App.Dashbord.Repository.MediaRepository;
+import com.example.App.Dashbord.Model.Media;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

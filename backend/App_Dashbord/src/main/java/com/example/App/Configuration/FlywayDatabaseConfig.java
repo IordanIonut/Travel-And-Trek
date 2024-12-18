@@ -1,4 +1,4 @@
-package com.example.App_Dashbord.Configuration;
+package com.example.App.Configuration;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.autoconfigure.flyway.FlywayProperties;

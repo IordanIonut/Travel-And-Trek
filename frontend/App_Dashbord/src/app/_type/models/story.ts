@@ -3,9 +3,9 @@ import { User } from './user';
 
 export interface Story {
   id: number;
-  storyUserId: User;
-  storyMediaId: Media;
-  createAt: Date;
-  expirationTime: string;
+  story_user_id: User;
+  story_media_id: Media;
+  create_at: Date;
+  expiration_time: string;
   expiration: boolean;
 }

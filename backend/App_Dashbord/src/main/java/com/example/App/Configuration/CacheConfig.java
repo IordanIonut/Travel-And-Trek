@@ -1,4 +1,4 @@
-package com.example.App_Dashbord.Configuration;
+package com.example.App.Configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;
@@ -15,7 +15,22 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("userCache", "mediaCache", "storyCache", "shareCache", "postCache", "likeCache", "followerCache", "commentCache", "highlightCache");
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("userCache",
+                "mediaCache",
+                "storyCache",
+                "shareCache",
+                "postCache",
+                "likeCache",
+                "followerCache",
+                "commentCache",
+                "highlightCache",
+                "groupMembershipCache",
+                "groupCache",
+                "messageCache",
+                "messageCache",
+                "hobbyCache",
+                "journalCache",
+                "travelDestinationCache");
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .expireAfterWrite(10, TimeUnit.MINUTES)
                 .maximumSize(1000));

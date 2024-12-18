@@ -1,6 +1,5 @@
-package com.example.App_Dashbord.Configuration;
+package com.example.App.Configuration;
 
-import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

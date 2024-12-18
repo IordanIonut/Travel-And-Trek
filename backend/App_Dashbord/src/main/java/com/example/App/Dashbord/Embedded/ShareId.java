@@ -1,4 +1,4 @@
-package com.example.App.Embedded;
+package com.example.App.Dashbord.Embedded;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -7,7 +7,7 @@ import { DialogService } from 'src/app/_service/dialog/dialog.service';
 @Component({
   selector: 'app-masthead',
   standalone: true,
-  imports: [MaterialModule, NgIf],
+  imports: [MaterialModule],
   templateUrl: './masthead.component.html',
   styleUrl: './masthead.component.scss',
   encapsulation: ViewEncapsulation.None,

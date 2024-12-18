@@ -1,6 +1,6 @@
-package com.example.App.Embedded;
+package com.example.App.Dashbord.Embedded;
 
-import com.example.App.Enum.MediaEnum;
+import com.example.App.Dashbord.Enum.MediaEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

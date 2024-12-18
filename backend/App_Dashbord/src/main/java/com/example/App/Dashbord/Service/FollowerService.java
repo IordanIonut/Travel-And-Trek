@@ -1,7 +1,7 @@
-package com.example.App.Service;
+package com.example.App.Dashbord.Service;
 
-import com.example.App.Model.Follower;
-import com.example.App.Repository.FollowerRepository;
+import com.example.App.Dashbord.Repository.FollowerRepository;
+import com.example.App.Dashbord.Model.Follower;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

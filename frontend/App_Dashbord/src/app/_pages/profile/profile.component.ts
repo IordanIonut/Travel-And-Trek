@@ -47,12 +47,17 @@ import { Share } from 'src/app/_type/models/share';
 })
 export class ProfileComponent {
   userDTO?: UserDTO;
+
   postsAll!: Post[];
   postsReel!: Post[];
   postsText!: Post[];
+  postMedia!: Post[];
+  shareAll!: Share[];
+  postTag!: Post[];
+
 
   indexPost = 0;
-  indexRee = 0;
+  indexReel = 0;
   indexShare = 0;
   indexTag = 0;
 
@@ -82,7 +87,7 @@ export class ProfileComponent {
     private dialog: DialogService,
     private userService: UserService,
     private postService: PostService,
-    private shareService: ShareService,
+    private shareService: ShareService
   ) {
     this.isPhoto = true;
 
@@ -150,6 +155,24 @@ export class ProfileComponent {
         this.postService
           .getPostByProfileType(
             environment.user,
+            PostEnum.POST,
+            this.indexPost,
+            this.number
+          )
+          .subscribe({
+            next: (data: Post[]) => {
+              this.postMedia = data;
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+        break;
+      }
+      case 2: {
+        this.postService
+          .getPostByProfileType(
+            environment.user,
             PostEnum.REEL,
             this.indexPost,
             this.number
@@ -164,7 +187,7 @@ export class ProfileComponent {
           });
         break;
       }
-      case 2: {
+      case 3: {
         this.postService
           .getPostByProfileType(
             environment.user,
@@ -182,16 +205,32 @@ export class ProfileComponent {
           });
         break;
       }
-      case 3: {
-          this.shareService.getPostByProfile(environment.user, this.indexShare, this.number).subscribe({
+      case 4: {
+        this.shareService
+          .getPostByProfile(environment.user, this.indexShare, this.number)
+          .subscribe({
             next: (data: Share[]) => {
-                console.log(data);
+              // console.log(data);
+              this.shareAll = data;
             },
             error: (error) => {
               console.log(error);
             },
-          })
+          });
         break;
+      }
+      case 5: {
+        this.postService
+          .getPostByUserTag(environment.user, this.indexTag, this.number)
+          .subscribe({
+            next: (data: Post[]) => {
+              // console.log(data);
+              this.postTag = data;
+            },
+            error: (error) => {
+              console.log(error);
+            },
+          });
       }
     }
   }

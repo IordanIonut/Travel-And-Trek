@@ -1,7 +1,7 @@
-package com.example.App.Service;
+package com.example.App.Dashbord.Service;
 
-import com.example.App.Model.User;
-import com.example.App.Repository.UserRepository;
+import com.example.App.Dashbord.Repository.UserRepository;
+import com.example.App.Dashbord.Model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

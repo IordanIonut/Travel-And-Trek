@@ -1,6 +1,6 @@
-package com.example.App.Service;
+package com.example.App.Dashbord.Service;
 
-import com.example.App.Repository.HashtagRepository;
+import com.example.App.Dashbord.Repository.HashtagRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,7 +7,7 @@
     <div *ngIf="isPhoto" class="flex flex-row gap-3 w-4/5 relative">
       <div class="flex-col w-full flex relative">
         <mat-tab-group
-          animationDuration="2ms"
+          animationDuration="12ms"
           class="h-[72%] dash-style-tab-group"
           (selectedTabChange)="onTabChange($event)"
         >
@@ -16,7 +16,16 @@
               <mat-icon class="icon">apps</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let post of postsAll" [post]="post"></app-post>
+              <app-post *ngFor="let post of postsAll" [data]="post"></app-post>
+            </div>
+          </mat-tab>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">newspaper</mat-icon>
+            </ng-template>
+            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+              <app-post *ngFor="let post of postMedia" [data]="post"></app-post>
             </div>
           </mat-tab>
 
@@ -25,7 +34,7 @@
               <mat-icon class="icon">play_circle</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-3 justify-between w-full h-fit">
-              <app-post *ngFor="let post of postsReel" [post]="post"></app-post>
+              <app-post *ngFor="let post of postsReel" [data]="post"></app-post>
             </div>
           </mat-tab>
 
@@ -34,7 +43,7 @@
               <mat-icon class="icon">description</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let post of postsText" [post]="post"></app-post>
+              <app-post *ngFor="let post of postsText" [data]="post"></app-post>
             </div>
           </mat-tab>
 
@@ -43,7 +52,7 @@
               <mat-icon class="icon">reply_all</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-3 justify-between w-full h-fit">
-              <app-place *ngFor="let item of items"></app-place>
+              <app-post *ngFor="let item of shareAll" [data]="item"></app-post>
             </div>
           </mat-tab>
 
@@ -52,7 +61,7 @@
               <mat-icon class="icon">sell</mat-icon>
             </ng-template>
             <div class="flex flex-wrap gap-1 justify-between w-full h-max">
-              <app-post *ngFor="let post of postsReel" [post]="post"></app-post>
+              <app-post *ngFor="let post of postTag" [data]="post"></app-post>
             </div>
           </mat-tab>
         </mat-tab-group>
