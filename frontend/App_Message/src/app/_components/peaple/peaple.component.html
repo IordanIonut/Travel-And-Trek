@@ -1,0 +1,43 @@
+<div
+  class="rounded-[15px] p-2 flex flex-row gap-1 items-baseline justify-start relative hover:bg-slate-600"
+>
+  <div class="flex flex-col justify-start items-center self-stretch pl-2">
+    <img
+      draggable="false"
+      class="rounded-full max-w-max w-14 h-14 object-cover justify-start flex flex-col self-stretch"
+      [src]="getContactProperty('url')"
+    />
+  </div>
+  <div class="flex ml-2 w-full justify-between">
+    <div class="flex-col w-full gap-2">
+      <div class="flex flex-row justify-between">
+        <div
+          class="textCl text-left truncate-text w-[20vh] text-base font-normal relative self-stretch flex items-center justify-start"
+        >
+          {{ getContactProperty("name") }}
+        </div>
+        <div
+          class="textCl text-left text-xs font-normal relative self-stretch flex items-center justify-start"
+        >
+        {{ getContactProperty("date")}}
+      </div>
+      </div>
+      <div class="flex flex-row justify-between">
+        <div
+          class="textCl truncate-text w-[22vh] text-left text-base font-normal relative self-stretch flex items-center justify-start"
+        >
+          {{ getContactProperty("content") }}
+        </div>
+        <div class="flex flex-col">
+          <mat-icon>{{
+            getContactProperty("read") ? "reply" : "reply_all"
+          }}</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="index === selected"
+    class="bgEfec w-2 h-[80%] rounded-[4px] mr-2 flex absolute"
+  ></div>
+</div>

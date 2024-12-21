@@ -10,7 +10,6 @@ import { environment } from 'src/app/environments/environment';
 })
 export class PostService {
   private apiUrl = environment.baseUrl + '/post';
-
   constructor(private http: HttpClient) {}
 
   getPostByProfileType(

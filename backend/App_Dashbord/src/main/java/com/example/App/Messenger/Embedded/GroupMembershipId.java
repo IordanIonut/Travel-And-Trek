@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Embeddable
 public class GroupMembershipId implements Serializable {
     @Column(name = "ID")
-    private Long id;
+    private String  id;
     @Column(name = "ROLE")
     @Enumerated(EnumType.STRING)
     private Role role;

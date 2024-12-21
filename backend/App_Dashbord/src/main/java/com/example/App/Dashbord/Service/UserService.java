@@ -50,7 +50,7 @@ public class UserService {
     }
 
     @Cacheable(value = "userCache", key = "'allUsersIds'")
-    public List<Long> allUsers() {
+    public List<String> allUsers() {
         return userRepository.allUsers();
     }
 

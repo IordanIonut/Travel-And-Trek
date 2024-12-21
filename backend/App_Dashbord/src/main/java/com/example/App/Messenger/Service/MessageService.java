@@ -21,4 +21,6 @@ public class MessageService {
     public List<Message> findAllMessage() {
         return messageRepository.findAll();
     }
+
+
 }

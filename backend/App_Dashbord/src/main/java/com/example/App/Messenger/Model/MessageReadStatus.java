@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 })
 public class MessageReadStatus {
     @Id
-    private Long id;
+    @Column(name = "ID", nullable = false)
+    private String  id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({

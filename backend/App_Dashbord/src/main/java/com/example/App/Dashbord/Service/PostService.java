@@ -26,7 +26,7 @@ public class PostService {
     }
 
     @CacheEvict(value = "postCache", allEntries = true)
-    public List<Post> findAllPostByUserId(final Long id) {
+    public List<Post> findAllPostByUserId(final String id) {
         return postRepository.findAllPostByUserId(id);
     }
 

@@ -18,13 +18,13 @@ public interface PostRepository extends JpaRepository<Post, PostId> {
     Long findLastIdByType(@Param("type") String type);
 
     @Query(value = "SELECT * FROM POSTS p WHERE p.user_id = :id", nativeQuery = true)
-    List<Post> findAllPostByUserId(@Param("id") final Long id);
+    List<Post> findAllPostByUserId(@Param("id") final String id);
 
     @Query(value = "SELECT * FROM POSTS p WHERE p.user_id <> 1", nativeQuery = true)
-    List<Post> findAllPostWithoutUserId(@Param("id") final Long id);
+    List<Post> findAllPostWithoutUserId(@Param("id") final String id);
 
     @Query(value = "SELECT COUNT(p.id) FROM POSTS p WHERE p.user_id = :user_id AND (p.id IN :media_ids)", nativeQuery = true)
-    Long countPostsByUserIdAndMediaIds(@Param("user_id") final Long user_id, @Param("media_ids") final List<Long> media_ids);
+    Long countPostsByUserIdAndMediaIds(@Param("user_id") final String user_id, @Param("media_ids") final List<String> media_ids);
 
     @Query("SELECT COUNT(DISTINCT p.id) FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name AND p.visible = true")
     Long countPostsByUserName(@Param("name") final String name);

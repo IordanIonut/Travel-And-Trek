@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class FollowerId implements Serializable {
     @Column(name = "ID")
-    private Long id;
+    private String id;
     @Column(name = "STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private FollowerStatusEnum status;

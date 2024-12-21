@@ -1,10 +1,10 @@
-<div class="page">
-  <div class="w-1/5 gap-3 py-10">
+<div class="page gap-4 flex !flex-row">
+  <div class="w-2/5">
     <!-- SEACTH-->
     <div
       class="flex flex-row gap-2.5 items-center justify-start self-stretch flex-1 relative"
     >
-      <mat-form-field class="dash-style-input w-4/5" appearance="fill">
+      <mat-form-field class="dash-style-input" appearance="fill">
         <mat-icon matPrefix>search</mat-icon>
         <mat-label>Search ...</mat-label>
         <input matInput placeholder="Search" />
@@ -13,15 +13,185 @@
     <!-- ACTIVE-->
     <div>
       <div class="flex flex-row justify-between">
-        <div class="text-xl-custom">Active</div>
-        <div>number</div>
+        <div class="text-custom">Active</div>
+        <div class="number-custom">number</div>
       </div>
     </div>
-    <div class="w-full bg-red-50">
-      <div class="bg-red-700">red</div>
+    <!-- CHAT -->
+    <div>
+      <div class="w-full h-[89vh] flex flex-col">
+        <div class="flex-1 overflow-hidden relative">
+          <div class="scrollable-content h-full overflow-y-auto">
+            <app-peaple
+              *ngFor="let contact of contacts; let k = index"
+              [contact]="contact"
+              [index]="k"
+              [selected]="selected"
+              (click)="onSelectContact(contact, k)"
+              ><!-- contact?.message_id?.group_id === null
+                  ? contact!.user_id!.id !== person!.id
+                    ? onSelectContact(contact, k)
+                    : null
+                  : onSelectContact(contact, k)
+                -->
+            </app-peaple>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="w-1/5">
-      <div class="bg-purple-500">purple</div>
+  </div>
+  <!-- LINE -->
+  <div class="bgEfec w-2 h-[100%] rounded-[4px] flex relative"></div>
+
+  <div class="w-full items-center gap-2">
+    <!-- <header>
+      <div class="flex items-center flex-row justify-between">
+        <div class="flex items-center flex-row">
+          <img
+            draggable="false"
+            class="rounded-full max-w-max w-14 h-14 object-cover justify-start flex flex-col self-stretch"
+            [src]="person!.profile_picture"
+            alt="img"
+          />
+          <div class="pl-5 items-center text-white">{{ person!.name }}</div>
+        </div>
+        <div>
+          <mat-icon>more_vert</mat-icon>
+        </div>
+      </div>
+    </header> -->
+    <!-- <div class="bgEfec w-[100%] h-2 rounded-[4px] flex relative"></div> -->
+    <main>
+      <div class="w-full h-[91vh] flex flex-col">
+        <div class="flex-1 overflow-hidden relative">
+          <div
+            #scrollContainer
+            class="scrollable-content h-full overflow-y-auto"
+          >
+            <app-message-chat
+              *ngFor="let chat of chats; let i = index"
+              [chat]="chat"
+              [prv]="i > 0 ? chats[i - 1] : null"
+              [position]="chat?.user_id?.name === user ? 'right' : 'left'"
+            ></app-message-chat>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="bgEfec w-[100%] h-2 rounded-[4px] flex relative"></div>
+    <footer>
+      <div class="flex flex-row justify-between">
+        <div>
+          <mat-icon>more_vert</mat-icon>
+          <mat-icon>attach_file</mat-icon>
+        </div>
+        <div>
+          <mat-form-field class="dash-style-input" appearance="fill">
+            <mat-icon matPrefix>search</mat-icon>
+            <mat-label>Type your message ...</mat-label>
+            <input matInput placeholder="Type your message" />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-icon>send</mat-icon>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- LINE -->
+  <div class="bgEfec w-2 h-[100%] rounded-[4px] flex relative"></div>
+  <div class="w-2/5 flex flex-col">
+    <div class="flex flex-col">
+      <div class="items-end flex flex-col">
+        <mat-icon class="items-end">more_vert</mat-icon>
+      </div>
+      <div class="flex flex-col items-center">
+        <img
+          draggable="false"
+          class="rounded-full max-w-max w-20 h-20 object-cover justify-start flex flex-col"
+          [src]="getContactProperty('url')"
+          alt="Profile Picture"
+        />
+        <div class="pl-5 items-center text-white">
+          {{ "@" + getContactProperty("name") }}
+        </div>
+
+        <div
+          class="pl-5 items-center text-white"
+          *ngIf="getContactProperty('groupId')"
+        >
+          {{ getContactProperty("description") }}
+        </div>
+      </div>
     </div>
+    <div
+      *ngIf="getContactProperty('groupId')"
+      class="flex flex-row gap-[15px] justify-center shrink-0 relative h-[70px]"
+    >
+      <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
+        <div
+          class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
+        >
+          <div
+            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+          >
+            {{ userDTO?.postsCount }}
+          </div>
+          <div
+            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+          >
+            Photo
+          </div>
+        </div>
+        <div
+          class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"
+        ></div>
+      </div>
+      <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
+        <div
+          class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
+        >
+          <div
+            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+          >
+            {{ userDTO?.followersCount }}
+          </div>
+          <div
+            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+          >
+            Falowers
+          </div>
+        </div>
+        <div
+          class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"
+        ></div>
+      </div>
+      <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
+        <div
+          class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
+        >
+          <div
+            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+          >
+            {{ userDTO?.followingsCount }}
+          </div>
+          <div
+            class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+          >
+            Falowind
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-button-toggle-group
+      class="dash-style-toogle w-fit h-auto mb-2"
+      style="overflow: visible"
+    >
+      <mat-button-toggle *ngFor="let item of filters" [value]="item.value">
+        <mat-icon>{{ item.icon }}</mat-icon> {{ item.name }}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 </div>

@@ -8,11 +8,11 @@
       class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
     >
       <button class="border-efec story-body" (click)="onProfilePage()">
-        <img        draggable="false"
-
-          class="story"
+        <img
+          draggable="false"
+          class="story max-w-max"
           style="object-fit: cover"
-          src={{userDTO?.user?.profile_picture}}
+          src="{{ userDTO?.user?.profile_picture }}"
         />
       </button>
     </div>
@@ -23,22 +23,20 @@
     <div
       class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
     >
-      {{userDTO?.user?.name}}
+      {{ userDTO?.user?.name }}
     </div>
   </div>
   <div
     class="flex flex-row gap-[15px] justify-center shrink-0 relative h-[70px]"
   >
-    <div
-      class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
-    >
+    <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
       <div
         class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
       >
         <div
           class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
         >
-          {{userDTO?.postsCount}}
+          {{ userDTO?.postsCount }}
         </div>
         <div
           class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
@@ -48,16 +46,14 @@
       </div>
       <div class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"></div>
     </div>
-    <div
-      class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
-    >
+    <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
       <div
         class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
       >
         <div
           class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
         >
-          {{userDTO?.followersCount}}
+          {{ userDTO?.followersCount }}
         </div>
         <div
           class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
@@ -67,16 +63,14 @@
       </div>
       <div class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"></div>
     </div>
-    <div
-      class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
-    >
+    <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
       <div
         class="flex flex-col gap-2.5 items-center justify-center shrink-0 relative"
       >
         <div
           class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
         >
-          {{userDTO?.followingsCount}}
+          {{ userDTO?.followingsCount }}
         </div>
         <div
           class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
@@ -92,7 +86,7 @@
     <div
       class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
     >
-      {{userDTO?.user?.bio}}
+      {{ userDTO?.user?.bio }}
     </div>
   </div>
   <div

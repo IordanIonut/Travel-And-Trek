@@ -1,5 +1,5 @@
 export interface Media{
-    id: number,
+    id: string,
     url: string,
     create_at: Date,
 }

@@ -18,7 +18,7 @@ import lombok.Setter;
 @Embeddable
 public class MessagesId {
     @Column(name = "ID")
-    private Long id;
+    private String  id;
     @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
     private MessageEnum type;

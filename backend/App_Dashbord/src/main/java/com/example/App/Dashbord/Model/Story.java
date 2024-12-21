@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Story {
     @Id
     @Column(name = "ID")
-    private Long id;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)

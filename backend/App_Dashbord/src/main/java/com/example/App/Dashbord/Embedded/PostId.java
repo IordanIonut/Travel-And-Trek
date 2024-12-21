@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Embeddable
 public class PostId implements Serializable {
     @Column(name = "ID")
-    private Long id;
+    private String id;
     @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
     private PostEnum type;

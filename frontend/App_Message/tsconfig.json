@@ -3,8 +3,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "noUncheckedIndexedAccess": false,
+    "noImplicitAny": false,
     "outDir": "./dist/out-tsc",
-    "strict": true,
+    "strict": false,
     "baseUrl": "./",
     "paths": {
       "travel-and-trek-app-core": ["./node_modules/travel-and-trek-app-core"],

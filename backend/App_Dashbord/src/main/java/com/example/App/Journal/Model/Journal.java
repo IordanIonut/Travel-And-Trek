@@ -24,7 +24,7 @@ import java.util.List;
 public class Journal {
     @Id
     @Column(name = "ID", nullable = false)
-    private Long id;
+    private String id;
 
     @Column(name = "TITLE", nullable = false)
     private String tittle;

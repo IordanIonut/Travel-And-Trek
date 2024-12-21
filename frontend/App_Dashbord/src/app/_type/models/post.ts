@@ -16,6 +16,6 @@ export interface Post {
 }
 
 export interface PostId {
-  id: number;
+  id: string;
   type: PostEnum;
 }

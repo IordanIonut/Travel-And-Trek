@@ -31,10 +31,10 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
 })
 export class AppComponent {
   pages: Page[] = [
-    { icon: 'chat', route: '/message/chat' },
-    { icon: 'chat', route: '/message/chat' },
-    { icon: 'chat', route: '/message/chat' },
-    { icon: 'chat', route: '/message/chat' },
+    { icon: 'select_all', route: '/message/chat/all'},
+    { icon: 'library_books', route: '/message/chat/peaples' },
+    { icon: 'groups', route: '/message/chat/groups'},
+    { icon: 'library_add', route: '/message/chat/new' },
   ];
   style: boolean = false;
   selectedIndex: number = 0;

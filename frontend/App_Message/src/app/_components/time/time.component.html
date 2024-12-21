@@ -1,0 +1,12 @@
+<div class="flex flex-row items-center justify-between">
+  <div class="bgEfec w-[100%] h-1 rounded-[4px] flex relative"></div>
+  <div class="px-2 w-[55%] text-center text-white">
+    {{
+      (time!.message_id!.created_at > time!.message_id!.updated_at
+        ? time!.message_id!.created_at
+        : time!.message_id!.updated_at
+      ) | date
+    }}
+  </div>
+  <div class="bgEfec w-[100%] h-1 rounded-[4px] flex relative"></div>
+</div>

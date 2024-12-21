@@ -15,11 +15,11 @@ public interface MediaRepository extends JpaRepository<Media, MediaId> {
     Long findLastIdByType(@Param("type") String type);
 
     @Query(value = "SELECT DISTINCT(m.user_id) FROM MEDIA m", nativeQuery = true)
-    List<Long> findAllUserIdMedia();
+    List<String> findAllUserIdMedia();
 
     @Query(value = "SELECT * FROM MEDIA m WHERE m.user_id = :id", nativeQuery = true)
-    List<Media> findAllMediaByUserId(@Param("id") final Long id);
+    List<Media> findAllMediaByUserId(@Param("id") final String id);
 
     @Query(value = "SELECT * FROM MEDIA m WHERE m.user_id <> :id AND m.type = :type ", nativeQuery = true)
-    List<Media> findAllMediaWithoutUserId(@Param("id") final Long id, @Param("type") final String type);
+    List<Media> findAllMediaWithoutUserId(@Param("id") final String id, @Param("type") final String type);
 }

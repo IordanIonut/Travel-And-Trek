@@ -16,7 +16,7 @@ import lombok.*;
 public class Hashtag {
     @Id
     @Column(name = "ID")
-    private Long id;
+    private String id;
 
     @Column(name = "NAME", nullable = false, unique = true)
     private String name;

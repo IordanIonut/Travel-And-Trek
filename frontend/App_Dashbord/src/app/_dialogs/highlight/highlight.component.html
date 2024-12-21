@@ -3,7 +3,7 @@
     <div>
       <img
         draggable="false"
-        class="rounded-full w-10 h-10 mb-3 object-cover"
+        class="rounded-full max-w-max w-10 h-10 mb-3 object-cover"
         src="https://picsum.photos/600/600?random=5d9b16af-b7d3-4649-9357-40a45f7c2019"
         alt="profile"
       />
@@ -31,7 +31,7 @@
       id="dynamicImage"
       #dynamicImage
       style="object-fit: cover"
-      class="max-w-full max-h-full w-full h-full"
+      class="max-w-full  max-h-full w-full h-full"
       [src]="currentImage.url"
       crossorigin="anonymous"
       draggable="false"

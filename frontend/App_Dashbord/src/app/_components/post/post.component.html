@@ -5,7 +5,7 @@
   <div class="flex flex-col justify-start items-center self-stretch w-[3.5rem]">
     <img
       draggable="false"
-      class="rounded-full w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch"
+      class="rounded-full w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch max-w-max"
       src="{{
         (isPost(data) && data!.post_user_id!.profile_picture) ||
           (isShare(data) && data!.share_user_id!.profile_picture)
@@ -19,7 +19,7 @@
     <img
       *ngIf="isShare(data)"
       draggable="false"
-      class="rounded-full w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch"
+      class="rounded-full w-14 mb-3 h-14 object-cover max-w-max justify-start flex flex-col self-stretch max-w-max"
       src="{{ data!.share_user_id_sharled!.profile_picture }}"
     />
     <div
@@ -130,7 +130,7 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
           style="object-fit: cover"
           id="postImage"
           #postImage
@@ -151,7 +151,7 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
           style="object-fit: cover"
           src="{{
             (isPost(data) && data!.post_medias_id![1]!.url) ||
@@ -168,7 +168,7 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] self-stretch flex-1 relative"
+          class="rounded-[5px] self-stretch flex-1 relative max-w-max"
           style="object-fit: cover"
           src="{{
             (isPost(data) && data!.post_medias_id![1]!.url) ||
@@ -177,7 +177,7 @@
         />
         <img
           draggable="false"
-          class="rounded-[5px] self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
           style="object-fit: cover"
           src="{{
             (isPost(data) && data!.post_medias_id![2]!.url) ||
@@ -225,7 +225,7 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
           style="object-fit: cover"
           id="postImage"
           #postImage
@@ -245,7 +245,7 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
           style="object-fit: cover"
           id="postImage"
           #postImage

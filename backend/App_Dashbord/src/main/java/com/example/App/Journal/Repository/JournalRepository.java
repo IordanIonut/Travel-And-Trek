@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface JournalRepository extends JpaRepository<Journal, Long> {
     @Query("SELECT j FROM Journal j WHERE j.user_id.id = :user")
-    List<Journal> findAllJournalByUser(@Param("user") final Long user);
+    List<Journal> findAllJournalByUser(@Param("user") final String user);
 }

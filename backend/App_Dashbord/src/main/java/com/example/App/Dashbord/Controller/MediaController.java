@@ -35,9 +35,9 @@ public class MediaController {
     }
 
     @GetMapping("/all/users")
-    public ResponseEntity<List<Long>> getFindAllUserIdMedia() {
+    public ResponseEntity<List<String>> getFindAllUserIdMedia() {
         try {
-            List<Long> list = mediaService.findAllUserIdMedia();
+            List<String> list = mediaService.findAllUserIdMedia();
             LOG.info("getFindAllUserIdMedia()- media - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class MediaController {
     }
 
     @GetMapping("/all/media/by/user")
-    public ResponseEntity<List<Media>> getFindAllMediaByUserId(@RequestParam("user_id") final Long user_id) {
+    public ResponseEntity<List<Media>> getFindAllMediaByUserId(@RequestParam("user_id") final String user_id) {
         try {
             List<Media> list = mediaService.findAllMediaByUserId(user_id);
             LOG.info("findAllMediaByUserId()- media - Successful.");

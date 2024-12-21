@@ -1,0 +1,60 @@
+<div class="flex flex-row items-center py-2">
+  <div
+    *ngIf="position === 'left'"
+    class="flex flex-col justify-start items-center pr-2"
+  >
+    <img
+      draggable="false"
+      class="rounded-full w-14 h-14 object-cover justify-start flex flex-col max-w-max"
+      [src]="chat!.user_id!.profile_picture"
+    />
+  </div>
+  <div
+    class="flex"
+    [ngClass]="{
+      'justify-start': position === 'left',
+      'justify-end': position === 'right'
+    }"
+  >
+    <div
+      class="chat-bubble max-w-[45%] text-base"
+      [ngClass]="validatePosition(position)"
+    >
+      {{ chat!.message_id!.content }}
+      <div *ngIf="position === 'left'" class="flex flex-row justify-between">
+        <mat-icon>{{ !chat!.is_read ? "reply" : "reply_all" }}</mat-icon>
+        <div class="flex items-end p-1">
+          {{
+            (chat!.message_id!.created_at > chat!.message_id!.updated_at
+              ? chat!.message_id!.created_at
+              : chat!.message_id!.updated_at
+            ) | date : "hh:mm"
+          }}
+        </div>
+      </div>
+      <div *ngIf="position === 'right'" class="flex flex-row justify-between">
+        <div class="flex items-end p-1">
+          {{
+            (chat!.message_id!.created_at > chat!.message_id!.updated_at
+              ? chat!.message_id!.created_at
+              : chat!.message_id!.updated_at
+            ) | date : "hh:mm"
+          }}
+        </div>
+        <mat-icon>{{ !chat!.is_read ? "reply" : "reply_all" }}</mat-icon>
+
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="position === 'right'"
+    class="flex flex-col justify-start items-center pl-2"
+  >
+    <img
+      draggable="false"
+      class="rounded-full w-14 h-14 object-cover justify-start flex flex-col max-w-max"
+      [src]="chat!.user_id!.profile_picture"
+    />
+  </div>
+</div>
+<app-time *ngIf="time" [time]="chat"></app-time>

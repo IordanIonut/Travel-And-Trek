@@ -27,13 +27,13 @@ public class CacheConfig {
                 "groupMembershipCache",
                 "groupCache",
                 "messageCache",
-                "messageCache",
+                "messageReadStatusCache",
                 "hobbyCache",
                 "journalCache",
                 "travelDestinationCache");
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterWrite(10, TimeUnit.MINUTES)
-                .maximumSize(1000));
+                .expireAfterWrite(0, TimeUnit.MINUTES)//10
+                .maximumSize(0));//1000
         return cacheManager;
     }
 }

@@ -1,4 +1,4 @@
 export interface Hastag{
-    id: number
+    id: string
     name: string
 }

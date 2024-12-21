@@ -26,7 +26,7 @@ import java.util.List;
 public class User {
     @Id
     @Column(name = "ID", nullable = false)
-    private Long id;
+    private String id;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

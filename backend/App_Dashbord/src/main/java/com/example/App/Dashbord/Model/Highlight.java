@@ -22,7 +22,7 @@ import java.util.List;
 public class Highlight {
     @Id
     @Column(name = "ID", nullable = false)
-    private Long id;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)

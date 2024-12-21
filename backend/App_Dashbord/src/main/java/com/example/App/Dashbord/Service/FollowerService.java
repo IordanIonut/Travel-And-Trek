@@ -1,10 +1,13 @@
 package com.example.App.Dashbord.Service;
 
+import com.example.App.Dashbord.Enum.FollowerStatusEnum;
+import com.example.App.Dashbord.Model.User;
 import com.example.App.Dashbord.Repository.FollowerRepository;
 import com.example.App.Dashbord.Model.Follower;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ConditionalOnEnabledResourceChain;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +38,10 @@ public class FollowerService {
     @Cacheable(value = "followerCache", key = "'countFollowingByUser::' + #name")
     public Long countFollowingByUser(final String name){
         return followerRepository.countFollowingByUser(name);
+    }
+
+    @Cacheable(value = "followerCache", key = "'findUsersByStatus::'+#name+'::'+#status")
+    public List<User> findUsersByStatus(final String name, final FollowerStatusEnum status){
+        return followerRepository.findUsersByStatus(name, status);
     }
 }

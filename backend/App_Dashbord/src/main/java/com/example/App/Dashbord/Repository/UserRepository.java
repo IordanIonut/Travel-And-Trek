@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Repository;
 
+import com.example.App.Dashbord.Enum.FollowerStatusEnum;
 import com.example.App.Dashbord.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<Long> findCountUsers();
 
     @Query("SELECT u.id FROM User u")
-    List<Long> allUsers();
+    List<String> allUsers();
 
     @Query("SELECT u FROM User u WHERE UPPER(u.name) = UPPER(:name)")
     Optional<User> findByName(@Param("name") final String name);

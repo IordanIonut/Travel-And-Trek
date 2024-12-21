@@ -17,6 +17,6 @@ export interface Share {
 }
 
 export interface ShareId {
-  id: number;
+  id: string;
   type: ShareEnum;
 }

@@ -163,3 +163,21 @@ body.cyan-theme {
 .icon.mat-icon {
   @apply clSecond;
 }
+
+
+
+
+///////
+.text-custom {
+  @apply text-xl textPrimary;
+}
+
+.number-custom{
+  @apply text-base textSecond;
+}
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}

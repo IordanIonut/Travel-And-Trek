@@ -1,7 +1,7 @@
 import { Media } from "./media"
 
 export interface Highlight{
-    id: number
+    id: string
     highlight_medias: Media[],
     name: string
     image: string

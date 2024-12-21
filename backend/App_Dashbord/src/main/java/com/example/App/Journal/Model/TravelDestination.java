@@ -17,7 +17,7 @@ import java.util.List;
 public class TravelDestination {
     @Id
     @Column(name = "ID", nullable = false)
-    private Long id;
+    private String id;
 
     @Column(name = "NAME", nullable = false)
     private String name;

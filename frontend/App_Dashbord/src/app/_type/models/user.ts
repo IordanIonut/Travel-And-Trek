@@ -2,7 +2,7 @@ import { GenderEnum } from "../enum/gender.enum"
 import { Hastag } from "./hashtag"
 
 export interface User {
-  id: number
+  id: string
   user_hashtag_id: Hastag[]
   name: string
   email: string

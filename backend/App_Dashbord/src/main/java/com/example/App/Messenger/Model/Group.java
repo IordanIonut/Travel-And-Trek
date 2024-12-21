@@ -18,13 +18,16 @@ import java.time.LocalDateTime;
 public class Group {
     @Id
     @Column(name = "ID", nullable = false)
-    private Long id;
+    private String  id;
 
     @Column(name = "NAME", nullable = false)
     private String name;
 
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
+
+    @Column(name = "URL", nullable = false)
+    private String url;
 
     @Column(name = "CREATE_AT", nullable = false)
     private LocalDateTime create_at;

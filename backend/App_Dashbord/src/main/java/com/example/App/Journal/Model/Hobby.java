@@ -16,7 +16,7 @@ import lombok.*;
 public class Hobby {
     @Id
     @Column(name = "ID", nullable = false)
-    private Long id;
+    private String id;
 
     @Column(name = "NAME", nullable = false)
     private String name;

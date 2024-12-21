@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Embeddable
 public class LikeId implements Serializable {
     @Column(name = "ID")
-    private Long id;
+    private String id;
     @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
     private LikeEnum type;

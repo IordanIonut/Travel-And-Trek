@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Embeddable
 public class ShareId implements Serializable {
     @Column(name = "ID")
-    private Long id;
+    private String id;
     @Column(name = "TYPE")
     private String type;
 
