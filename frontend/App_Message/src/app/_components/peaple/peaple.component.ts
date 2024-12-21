@@ -1,6 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ValidationModelService } from 'src/app/_services/validation/validation-model.service';
+import { Message } from 'src/app/_type/models/message';
 import { MessageReadStatus } from 'src/app/_type/models/message-read-status';
 import { User } from 'src/app/_type/models/user';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
@@ -20,7 +21,7 @@ export class PeapleComponent {
   constructor(private validationModelService: ValidationModelService) {}
 
   protected getContactProperty(
-    property: 'url' | 'name' | 'date' | 'content' | 'read'
+    property: 'url' | 'name' | 'date' | 'content' | 'read' | 'message'
   ): any {
     if (this.contact !== undefined || this.contact !== null) {
       if (this.validationModelService.isMessageReadStatus(this.contact)) {
@@ -42,16 +43,22 @@ export class PeapleComponent {
             const updatedAt: Date = new Date(
               this.contact!.message_id!.updated_at
             );
-            return this.contact!.message_id!.created_at >
+            const selectedDate =
+              this.contact!.message_id!.created_at >
               this.contact!.message_id!.updated_at
-              ? this.contact!.message_id!.created_at
-              : this.contact!.message_id!.updated_at;
+                ? this.contact!.message_id!.created_at
+                : this.contact!.message_id!.updated_at;
+            const datePipe = new DatePipe('en-US');
+            return datePipe.transform(selectedDate, 'dd/MM/yyyy');
           }
           case 'content': {
             return this.contact!.message_id!.content;
           }
           case 'read': {
             return !this.contact!.is_read;
+          }
+          case 'message': {
+            return true;
           }
         }
       }
@@ -61,7 +68,9 @@ export class PeapleComponent {
             return this.contact?.name;
           }
           case 'content': {
-            return this.contact.name;
+            return this.contact?.user_hashtag_id.map(
+              (hastag: any) => hastag.name + ' '
+            );
           }
           case 'date': {
             return null;
@@ -71,6 +80,9 @@ export class PeapleComponent {
           }
           case 'url': {
             return this.contact?.profile_picture;
+          }
+          case 'message': {
+            return false;
           }
         }
       }

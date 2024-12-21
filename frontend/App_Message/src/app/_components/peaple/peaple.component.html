@@ -19,8 +19,8 @@
         <div
           class="textCl text-left text-xs font-normal relative self-stretch flex items-center justify-start"
         >
-        {{ getContactProperty("date")}}
-      </div>
+          {{ getContactProperty("date") }}
+        </div>
       </div>
       <div class="flex flex-row justify-between">
         <div
@@ -28,7 +28,7 @@
         >
           {{ getContactProperty("content") }}
         </div>
-        <div class="flex flex-col">
+        <div class="flex flex-col" *ngIf="getContactProperty('message')">
           <mat-icon>{{
             getContactProperty("read") ? "reply" : "reply_all"
           }}</mat-icon>
@@ -38,6 +38,6 @@
   </div>
   <div
     *ngIf="index === selected"
-    class="bgEfec w-2 h-[80%] rounded-[4px] mr-2 flex absolute"
+    class="bgEfec w-2 h-[80%] rounded-[4px] ml-[-7px] flex absolute"
   ></div>
 </div>

@@ -104,6 +104,7 @@ export class MessageComponent {
         .subscribe({
           next: (data: User[]) => {
             this.contacts = data;
+            this.onSelectContact(data[0], 0);
           },
           error: (error: Error) => {
             console.log(error);
@@ -155,8 +156,19 @@ export class MessageComponent {
             },
           });
       }
-      this.selected = index;
     }
+    if (this.validationModelService.isUser(contact)) {
+      this.person = contact;
+      this.userService.findUserByName(this.person?.name).subscribe({
+        next: (data: UserDTO) => {
+          this.userDTO = data;
+        },
+        error: (error: Error) => {
+          console.log(error);
+        },
+      });
+    }
+    this.selected = index;
   }
 
   ngAfterViewInit(): void {
@@ -204,7 +216,7 @@ export class MessageComponent {
               : selectedContact.message_id.group_id.url;
           }
           case 'description': {
-            return selectedContact!.message_id.group_id.description;
+            return selectedContact?.message_id?.group_id?.description;
           }
           case 'groupId': {
             return selectedContact!.message_id!.group_id === null;
@@ -218,6 +230,15 @@ export class MessageComponent {
         switch (property) {
           case 'name': {
             return selectedContact.name;
+          }
+          case 'url': {
+            return selectedContact?.profile_picture;
+          }
+          case 'description': {
+            return selectedContact.bio;
+          }
+          case 'groupId': {
+            return true;
           }
         }
       }
