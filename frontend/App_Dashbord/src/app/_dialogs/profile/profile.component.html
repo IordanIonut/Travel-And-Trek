@@ -44,7 +44,7 @@
           Photo
         </div>
       </div>
-      <div class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"></div>
+      <div class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"></div>
     </div>
     <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
       <div
@@ -61,7 +61,7 @@
           Falowers
         </div>
       </div>
-      <div class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"></div>
+      <div class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"></div>
     </div>
     <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
       <div
@@ -89,7 +89,7 @@
       {{ userDTO?.user?.bio }}
     </div>
   </div>
-  <div
+  <div *ngIf="type === 'all'"
     class="p-[5px] flex flex-row gap-2.5 items-center justify-around self-stretch shrink-0 relative"
   >
     <div class="nav-bar relative h-fit m-2 sm:m-4">

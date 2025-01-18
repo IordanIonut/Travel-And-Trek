@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
+import { Hastag } from 'src/app/_type/models/hashtag';
 import { Post } from 'src/app/_type/models/post';
 import { environment } from 'src/app/environments/environment';
 
@@ -41,5 +42,33 @@ export class PostService {
     return this.http.get<Post[]>(
       `${this.apiUrl}/find/tags?name=${name}&index=${index}&number=${number}`
     );
+  }
+
+  getPostBySearch(
+    search: string,
+    index: number,
+    size: number
+  ): Observable<Post[]> {
+    const params = new HttpParams()
+      .append('search', search)
+      .append('index', index)
+      .append('number', size);
+    return this.http.get<Post[]>(`${this.apiUrl}/suggestion`, { params });
+  }
+
+  getPostByUser(
+    name: string,
+    type: PostEnum,
+    hashtags: string[],
+    index: number,
+    number: number
+  ): Observable<Post[]> {
+    const params = new HttpParams()
+      .append('name', name)
+      .append('type', type)
+      .append('hashtags', hashtags.map((item) => item).join(','))
+      .append('index', index)
+      .append('number', number);
+    return this.http.get<Post[]>(`${this.apiUrl}/reel`, { params });
   }
 }

@@ -1,34 +1,44 @@
 <div
   #postElement
-  class="bgSecond rounded-[15px] p-2.5 flex flex-row gap-2.5 items-center justify-start self-stretch relative overflow-hidden mb-3"
+  class="rounded-[15px] p-2.5 flex flex-row gap-2.5 items-center justify-start self-stretch relative overflow-hidden mb-3"
 >
   <div class="flex flex-col justify-start items-center self-stretch w-[3.5rem]">
-    <img
-      draggable="false"
-      class="rounded-full w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch max-w-max"
-      src="{{
-        (isPost(data) && data!.post_user_id!.profile_picture) ||
-          (isShare(data) && data!.share_user_id!.profile_picture)
-      }}"
-    />
+    <button
+      *ngIf="isShare(data) || isPost(data)"
+      (click)="isPost(data) ? onOpenProfile($event, data!.post_user_id!.name) : null"
+      (click)="isShare(data) ? onOpenProfile($event, data!.share_user_id!.name) : null"
+    >
+      <img
+        draggable="false"
+        class="rounded-full mb-3 h-14 object-cover justify-start flex flex-col self-stretch max-w-max w-full"
+        src="{{
+          (isPost(data) && data!.post_user_id!.profile_picture) ||
+            (isShare(data) && data!.share_user_id!.profile_picture)
+        }}"
+      />
+    </button>
     <div
       *ngIf="isShare(data)"
       class="bgEfec w-2 h-8 rounded-[4px] relative flex mb-3"
       style="margin-top: -3px"
     ></div>
-    <img
+    <button
       *ngIf="isShare(data)"
-      draggable="false"
-      class="rounded-full w-14 mb-3 h-14 object-cover max-w-max justify-start flex flex-col self-stretch max-w-max"
-      src="{{ data!.share_user_id_sharled!.profile_picture }}"
-    />
+      (click)="onOpenProfile($event, data!.share_user_id_sharled!.name)"
+    >
+      <img
+        draggable="false"
+        class="rounded-full mb-3 h-14 object-cover max-w-max justify-start flex flex-col self-stretch w-full"
+        src="{{ data!.share_user_id_sharled!.profile_picture }}"
+      />
+    </button>
     <div
-      class="bgEfec w-2 h-full rounded-[4px] relative flex mb-3"
+      class="bgEfec w-1 h-full rounded-[4px] relative flex mb-3"
       style="margin-top: -3px"
     ></div>
     <div *ngIf="isPost(data) || isShare(data)">
       <div *ngFor="let item of getTaggedUsers(data); let k = index">
-        <button (click)="onOpenProfile($event)">
+        <button (click)="onOpenProfile($event, item.name)">
           <img
             draggable="false"
             [ngStyle]="
@@ -38,7 +48,7 @@
                 ? { marginBottom: '-10px' }
                 : {}
             "
-            class="rounded-full w-14 h-14 object-cover justify-start flex flex-col self-stretch"
+            class="rounded-full h-14 object-cover justify-start flex flex-col self-stretch w-full"
             src="{{ item?.profile_picture }}"
           />
         </button>
@@ -72,7 +82,7 @@
           class="flex-row gap-2 overflow-x-auto justify-between"
           style="display: ruby"
         >
-          <div *ngIf="isPost(data)">
+          <div *ngIf="isPost(data)" class="flex flex-row">
             <div
               *ngFor="let item of data.post_hashtag_id"
               class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
@@ -120,8 +130,12 @@
     <div
       class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
       *ngIf="
-        (isPost(data) && data?.id?.type === PostEnum.POST && data!.post_medias_id!.length > 0) ||
-        (isShare(data) && data?.shareId?.type === ShareEnum.POST && data!.share_post_id!.post_medias_id!.length > 0)  
+        (isPost(data) &&
+          data?.id?.type === PostEnum.POST &&
+          data!.post_medias_id!.length > 0) ||
+        (isShare(data) &&
+          data?.shareId?.type === ShareEnum.POST &&
+          data!.share_post_id!.post_medias_id!.length > 0)
       "
     >
       <div
@@ -130,10 +144,10 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full"
           style="object-fit: cover"
-          id="postImage"
-          #postImage
+          id="postImage1"
+          #postImage1
           crossorigin="anonymous"
           src="{{
             (isPost(data) && data!.post_medias_id![0]!.url) ||
@@ -151,8 +165,10 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full"
           style="object-fit: cover"
+          id="postImage2"
+          #postImage2
           src="{{
             (isPost(data) && data!.post_medias_id![1]!.url) ||
               (isShare(data) && data!.share_post_id!.post_medias_id![1]!.url)
@@ -168,8 +184,10 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] self-stretch flex-1 relative max-w-max"
+          class="rounded-[5px] self-stretch flex-1 w-full relative max-w-max"
           style="object-fit: cover"
+          id="postImage2"
+          #postImage2
           src="{{
             (isPost(data) && data!.post_medias_id![1]!.url) ||
               (isShare(data) && data!.share_post_id!.post_medias_id![1]!.url)
@@ -177,8 +195,10 @@
         />
         <img
           draggable="false"
-          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max w-full self-stretch flex-1 relative"
           style="object-fit: cover"
+          id="postImage3"
+          #postImage3
           src="{{
             (isPost(data) && data!.post_medias_id![2]!.url) ||
               (isShare(data) && data!.share_post_id!.post_medias_id![2]!.url)
@@ -198,17 +218,24 @@
         draggable="false"
         class="rounded-[5px] self-stretch flex-1 relative"
         style="object-fit: cover"
-        id="postImage"
-        #postImage
+        id=" postImage1"
+        # postImage1
         crossorigin="anonymous"
         src="{{ post!.post_medias_id[0]!.url }}"
       /> -->
         <video
           class="rounded-[5px] self-stretch flex-1 relative"
-          controls="controls"
+          [controls]="true"
+          [autoplay]="false"
+          [muted]="true"
+          [loop]="true"
+          id="videoPlayer{{ index }}"
+          #videoPlayer
+          (mouseenter)="playVideo(videoPlayer)"
+          (mouseleave)="pauseVideo(videoPlayer)"
         >
           <source
-            src="https://media.geeksforgeeks.org/wp-content/uploads/20231020155223/Full-Stack-Development-_-LIVE-Classes-_-GeeksforGeeks.mp4"
+            src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
             type="video/mp4"
           />
         </video>
@@ -225,10 +252,10 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max w-full self-stretch flex-1 relative"
           style="object-fit: cover"
-          id="postImage"
-          #postImage
+          id="postImage1"
+          #postImage1
           crossorigin="anonymous"
           src="{{ isShare(data) && data!.share_media_id.url }}"
         />
@@ -245,31 +272,30 @@
       >
         <img
           draggable="false"
-          class="rounded-[5px] max-w-max self-stretch flex-1 relative"
+          class="rounded-[5px] max-w-max w-full self-stretch flex-1 relative"
           style="object-fit: cover"
-          id="postImage"
-          #postImage
+          id="postImage1"
+          #postImage1
           crossorigin="anonymous"
           src="{{ data!.share_story_id!.story_media_id!.url }}"
         />
       </div>
     </div>
-    <!-- TEXT -->
-  </div>
-  <div
-    class="pt-5 pb-5 flex flex-col items-center justify-between self-stretch shrink-0 w-[3.5rem] relative"
-  >
-    <div class="bgCom icons">
-      <mat-icon>share</mat-icon>
-    </div>
-    <div class="bgCom icons">
-      <mat-icon>comment</mat-icon>
-    </div>
-    <div class="bgCom icons">
-      <mat-icon>favorite</mat-icon>
-    </div>
-    <div class="bgCom icons">
-      <mat-icon>bookmark</mat-icon>
+    <div
+      class="flex flex-row w-full items-center justify-between self-stretch shrink-0 relative"
+    >
+      <div class="bgCom icons">
+        <mat-icon>share</mat-icon>
+      </div>
+      <div class="bgCom icons">
+        <mat-icon>comment</mat-icon>
+      </div>
+      <div class="bgCom icons">
+        <mat-icon>favorite</mat-icon>
+      </div>
+      <div class="bgCom icons">
+        <mat-icon>bookmark</mat-icon>
+      </div>
     </div>
   </div>
 </div>

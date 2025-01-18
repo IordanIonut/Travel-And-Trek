@@ -46,7 +46,7 @@ export class MessageComponent {
   selected!: number;
   person!: User;
   chats!: MessageReadStatus[];
-  user = environment.user;
+  user = environment.user as string;
   userDTO?: UserDTO;
   type!: string;
   @ViewChild('scrollContainer') scrollContainer: any;

@@ -19,6 +19,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatSliderModule} from '@angular/material/slider';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 //AD TO CORE
 @NgModule({
@@ -41,6 +42,7 @@ import {MatSliderModule} from '@angular/material/slider';
     MatPaginatorModule,
     MatSortModule,
     MatTabsModule,
+    MatAutocompleteModule,
     MatSliderModule,
     MatButtonToggleModule,
   ],
@@ -51,6 +53,7 @@ import {MatSliderModule} from '@angular/material/slider';
     MatFormFieldModule,
     MatInputModule,
     MatTabsModule,
+    MatAutocompleteModule,
     MatToolbarModule,
     MatCardModule,
     MatSidenavModule,

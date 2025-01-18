@@ -1,6 +1,6 @@
 package com.example.App.Messenger.Embedded;
 
-import com.example.App.Messenger.Enum.Role;
+import com.example.App.Messenger.Enum.GroupMembershipEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -18,11 +18,11 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 public class GroupMembershipId implements Serializable {
-    @Column(name = "ID")
+    @Column(name = "ID", nullable = false)
     private String  id;
-    @Column(name = "ROLE")
+    @Column(name = "ROLE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private GroupMembershipEnum role;
 
     @Override
     public boolean equals(Object o) {
@@ -35,6 +35,14 @@ public class GroupMembershipId implements Serializable {
     @Override
     public int hashCode() {
         return 31 * id.hashCode() + role.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("GroupMembershipId {\n" +
+                "  id: %s,\n" +
+                "  role: %s\n" +
+                "}", id, role);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.App.Messenger.Embedded;
 
 import com.example.App.Messenger.Enum.MessageEnum;
-import com.example.App.Messenger.Enum.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

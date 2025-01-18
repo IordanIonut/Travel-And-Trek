@@ -24,6 +24,7 @@ public class CacheConfig {
                 "followerCache",
                 "commentCache",
                 "highlightCache",
+                "hashtagCache",
                 "groupMembershipCache",
                 "groupCache",
                 "messageCache",
@@ -32,8 +33,8 @@ public class CacheConfig {
                 "journalCache",
                 "travelDestinationCache");
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterWrite(0, TimeUnit.MINUTES)//10
-                .maximumSize(0));//1000
+                .expireAfterWrite(10, TimeUnit.MINUTES)//10
+                .maximumSize(1000));//1000
         return cacheManager;
     }
 }

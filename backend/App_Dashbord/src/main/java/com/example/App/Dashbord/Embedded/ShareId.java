@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Embedded;
 
+import com.example.App.Dashbord.Enum.ShareEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,8 @@ public class ShareId implements Serializable {
     @Column(name = "ID")
     private String id;
     @Column(name = "TYPE")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ShareEnum type;
 
     @Override
     public boolean equals(Object o) {

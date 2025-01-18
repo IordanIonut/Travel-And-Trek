@@ -13,8 +13,8 @@ import com.example.App.Journal.Repository.JournalRepository;
 import com.example.App.Journal.Repository.TravelDestionationRepository;
 import com.example.App.Messenger.Embedded.GroupMembershipId;
 import com.example.App.Messenger.Embedded.MessagesId;
+import com.example.App.Messenger.Enum.GroupMembershipEnum;
 import com.example.App.Messenger.Enum.MessageEnum;
-import com.example.App.Messenger.Enum.Role;
 import com.example.App.Messenger.Model.Group;
 import com.example.App.Messenger.Model.GroupMembership;
 import com.example.App.Messenger.Model.Message;
@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.rmi.server.UID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -186,7 +187,7 @@ public class GenService {
                 user.setPassword(faker.internet().password());
                 user.setBio(faker.lorem().sentence());
                 user.setDate_create(LocalDateTime.now());
-                user.setProfile_picture("https://picsum.photos/600/600?random=" + UUID.randomUUID());
+                user.setProfile_picture("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                 user.setGender(random.nextBoolean() ? GenderEnum.M : GenderEnum.F);
                 user.setDate_of_birth(dateOfBirth);
                 user.setDate_last_update(LocalDateTime.now());
@@ -246,8 +247,7 @@ public class GenService {
                 Media media = new Media();
                 media.setId(mediaId);
                 media.setMedia_user_id(user);
-                String uniqueImageUrl = "https://picsum.photos/600/600?random=" + UUID.randomUUID();
-                media.setUrl(uniqueImageUrl);
+                media.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                 media.setCreate_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
                 double[] val = GenLatLot.generateRandomLandCoordinates();
                 media.setLongitude(val[1]);
@@ -290,7 +290,8 @@ public class GenService {
                 highlight.setId(generateId());
                 highlight.setHighlight_user_id(user);
                 highlight.setHighlight_medias(selectedMediaList);
-                highlight.setImage("https://picsum.photos/600/600?random=" + UUID.randomUUID());
+                highlight.setImage("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
+
                 highlight.setName(faker.hipster().word());
                 highlight.setVisibility(faker.random().nextBoolean());
                 highlight.setCreated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
@@ -667,7 +668,7 @@ public class GenService {
 
                 ShareId shareId = new ShareId();
                 shareId.setId(generateId());
-                shareId.setType(randomType.toString());
+                shareId.setType(randomType);
 
                 User user = new User();
                 user.setId(randomUserId);
@@ -718,23 +719,33 @@ public class GenService {
     public void generateFakeGroup(int number) {
         List<Group> groups = new ArrayList<>();
         for (int i = 0; i < number; i++) {
+            String uniqueName;
+            do {
+                uniqueName = faker.superhero().name() + '-' + faker.name().fullName();
+            } while (groupRepository.existsByName(uniqueName).isPresent());
+
             Group group = new Group();
             group.setId(generateId());
-            group.setName(faker.superhero().name());
-            group.setUrl("https://picsum.photos/600/600?random=" + UUID.randomUUID());
-            group.setUpdated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-            group.setCreate_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            group.setName(uniqueName);
+            group.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
+            group.setUpdated_at(faker.date().birthday(18, 65)
+                    .toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDate().atStartOfDay());
+            group.setCreate_at(faker.date().birthday(18, 65)
+                    .toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDate().atStartOfDay());
             group.setDescription(faker.superhero().descriptor());
-
             groups.add(group);
         }
+
         groupRepository.saveAll(groups);
     }
+
 
     @Transactional
     public void generateFakeGroupMembers(int number) {
         List<GroupMembership> groupMemberships = new ArrayList<>();
-        Role[] roles = Role.values();
+        GroupMembershipEnum[] roles = GroupMembershipEnum.values();
         List<User> users = userRepository.findAll();
         List<Group> groups = groupRepository.findAll();
 
@@ -773,13 +784,18 @@ public class GenService {
         List<Post> posts = postRepository.findAll();
         List<Story> stories = storyRepository.findAll();
         List<Group> groups = groupRepository.findAll();
+        List<User> finds;
         for (int i = 0; i < number; i++) {
             MessagesId messagesId = new MessagesId();
             messagesId.setId(generateId());
             MessageEnum m = messageEnums[random.nextInt(messageEnums.length)];
             messagesId.setType(m);
-            User user = users.get(random.nextInt(users.size()));
-            List<User> finds = followerRepository.findUsersByStatus(user.getName(), FollowerStatusEnum.ACCEPTED);
+            User user;
+            do {
+                user = users.get(random.nextInt(users.size()));
+                finds = followerRepository.findUsersByStatus(user.getName(), FollowerStatusEnum.ACCEPTED);
+            }while (finds.size() == 0 || finds.size() == 1);
+
             Message message = new Message();
             message.setId(messagesId);
             message.setContent(faker.lorem().paragraph(2));

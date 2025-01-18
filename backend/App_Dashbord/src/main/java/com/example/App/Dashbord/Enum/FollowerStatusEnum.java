@@ -1,5 +1,5 @@
 package com.example.App.Dashbord.Enum;
 
 public enum FollowerStatusEnum {
-    ACCEPTED, PENDING, BLOCK;
+    ACCEPTED, PENDING, BLOCK, REJECTED;
 }

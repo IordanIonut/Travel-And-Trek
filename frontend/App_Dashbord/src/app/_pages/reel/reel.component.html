@@ -1,6 +1,15 @@
 <div class="page">
   <app-masthead></app-masthead>
-  <div class="flex flex-wrap gap-2 justify-between width-page">
-    <app-post ></app-post>
+  <div class="flex flex-col hide-scrollbar" (scroll)="onScroll($event)" #scrollContainer>
+    <div class="flex flex-wrap gap-2 justify-between width-page">
+      <app-post
+        *ngFor="let post of posts; let k = index"
+        [data]="post"
+        [index]="k"
+        [id]="'post-' + k"
+        [run]="isRun"
+      >
+      </app-post>
+    </div>
   </div>
 </div>

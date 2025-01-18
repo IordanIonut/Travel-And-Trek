@@ -1,4 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
+import { withFetch } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { ValidationModelService } from 'src/app/_services/validation/validation-model.service';
 import { Message } from 'src/app/_type/models/message';
@@ -18,6 +19,7 @@ export class PeapleComponent {
   @Input() contact!: MessageReadStatus | User;
   @Input() index!: number;
   @Input() selected!: number;
+  @Input() person!: string;
   constructor(private validationModelService: ValidationModelService) {}
 
   protected getContactProperty(
@@ -28,12 +30,17 @@ export class PeapleComponent {
         switch (property) {
           case 'url': {
             return this.contact.message_id.group_id === null
-              ? this.contact!.message_id!.recipient_id!.profile_picture
+              ? this.contact!.message_id!.recipient_id!.name ===
+                this.person
+                ? this.contact.message_id.sender_id.profile_picture
+                : this.contact.message_id.recipient_id.profile_picture
               : this.contact!.message_id.group_id!.url;
           }
           case 'name': {
             return this.contact.message_id.group_id === null
-              ? this.contact.message_id.recipient_id.name
+              ? this.contact.message_id.recipient_id.name === this.person
+                ? this.contact.message_id.sender_id.name
+                : this.contact.message_id.recipient_id.name
               : this.contact.message_id.group_id.name;
           }
           case 'date': {

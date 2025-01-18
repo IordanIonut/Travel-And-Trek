@@ -1,10 +1,8 @@
-import { Highlight } from '../models/highlight';
+import { FollowerStatusEnum } from '../enum/follower.status.enum';
 import { User } from '../models/user';
 
 export interface UserDTO {
   user: User;
-  postsCount: number;
-  followersCount: number;
-  followingsCount: number;
-  highlights: Highlight[];
+  friends: User[];
+  state: FollowerStatusEnum;
 }

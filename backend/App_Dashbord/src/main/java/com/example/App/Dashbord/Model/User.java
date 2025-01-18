@@ -23,6 +23,7 @@ import java.util.List;
         @Index(name = "index_user_location", columnList = "LOCATION"),
         @Index(name = "index_user_tag", columnList = "USER_TAGS, USER_ID_POST")
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @Column(name = "ID", nullable = false)

@@ -1,10 +1,10 @@
 import { NgFor, NgIf } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/_service/models/user.service';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
+import { UserProfileDTO } from 'src/app/_type/dto/user-profile.dto';
 import { environment } from 'src/app/environments/environment';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 
@@ -18,17 +18,19 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
   encapsulation: ViewEncapsulation.None,
 })
 export class ProfileComponent {
-  userDTO?: UserDTO;
+  userDTO?: UserProfileDTO;
+  type!: string;
   elemnts: string[] = ['settings', 'qr_code', 'logout'];
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    @Inject(MAT_DIALOG_DATA) public data: { name: string; type: string }
   ) {
-    userService.findUserByName(environment.user).subscribe({
-      next: (data: UserDTO) => {
-        // console.log(data);
+    this.type = data.type;
+    this.userService.findUserByName(data.name).subscribe({
+      next: (data: UserProfileDTO) => {
         this.userDTO = data;
       },
       error: (error) => {
@@ -38,7 +40,17 @@ export class ProfileComponent {
   }
 
   onProfilePage() {
-    this.router.navigate(['dashbord/profile']);
+    this.router.navigate(
+      ['dashbord/profile'],
+      {
+        queryParams: {
+          type: 'user',
+          name: this.userDTO?.user.name === null ? environment.user.name : this.userDTO?.user.name
+        }
+      }
+    ).then(() => {
+      window.location.reload();
+    });
     this.onClose();
   }
 

@@ -1,14 +1,11 @@
 <div class="page overflow-visible" style="overflow: visible !important">
   <app-masthead></app-masthead>
-
-  <app-story [highlight]="userDTO?.highlights || []"></app-story>
-
   <div class="flex flex-row h-full justify-between mr-1.5 relative">
-    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-4/5 relative">
+    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-min relative">
       <div class="flex-col w-full flex relative">
         <mat-tab-group
           animationDuration="12ms"
-          class="h-[72%] dash-style-tab-group"
+          class="h-[100%] dash-style-tab-group"
           (selectedTabChange)="onTabChange($event)"
         >
           <mat-tab class="w-full h-full">
@@ -96,7 +93,7 @@
       </div>
     </div>
 
-    <div class="flex items-center align-middle -mt-[10%]">
+    <div class="flex items-center align-middle">
       <div class="flex flex-col items-center justify-between relative gap-2">
         <mat-form-field
           *ngIf="isFollowrs || isFollowing"
@@ -114,8 +111,9 @@
           <div
             class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
           >
-            <button class="border-efec story-body" (click)="onOpenPhote()">
+            <button #con class="story-body" (click)="onOpenPhote()">
               <img
+              #img
                 draggable="false"
                 class="story max-w-max"
                 style="object-fit: cover; width: 6rem; height: 6rem"
@@ -166,7 +164,7 @@
               </div>
             </div>
             <div
-              class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"
+              class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"
             ></div>
           </div>
           <div
@@ -187,7 +185,7 @@
               </div>
             </div>
             <div
-              class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"
+              class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"
             ></div>
           </div>
           <div
@@ -238,6 +236,10 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div>
+      <app-story [highlight]="userDTO?.highlights || []"> </app-story>
     </div>
   </div>
 </div>

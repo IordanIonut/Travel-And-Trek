@@ -3,11 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MessageReadStatus } from 'src/app/_type/models/message-read-status';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { TimeComponent } from '../time/time.component';
+import { StoryComponent } from '../story/story.component';
 
 @Component({
   selector: 'app-message-chat',
   standalone: true,
-  imports: [MaterialModule, NgClass, NgIf, CommonModule, TimeComponent],
+  imports: [MaterialModule, NgClass, NgIf, CommonModule, TimeComponent, StoryComponent],
   providers: [DatePipe],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',

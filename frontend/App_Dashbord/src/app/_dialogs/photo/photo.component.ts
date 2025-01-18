@@ -21,6 +21,6 @@ export class PhotoComponent {
   }
 
   onImageLoad(img: HTMLImageElement): void {
-    this.shadow.applyShadow(img);
+    this.shadow.applyShadowDialog(img);
   }
 }

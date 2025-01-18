@@ -1,0 +1,17 @@
+<div class="page-dialog">
+  <div class="flex flex-row gap-2" style="display: ruby !important;">
+    <div *ngFor="let item of filters">
+      <button
+        class="rounded-[15px] p-2 gap-2 flex flex-row items-center justify-start m-1"
+        [ngClass]="{
+          'bg-slate-200': item.value === select.value,
+          bgSecond: item.value !== select.value
+        }"
+        (click)="onSelectValue(item)"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <p class="text-base">{{ item.name }}</p>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,42 +1,42 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 import {
-  MaterialModule,
-  SetThemeService,
-} from 'travel-and-trek-app-core/dist/app-core';
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { MastheadComponent } from '../../_components/masthead/masthead.component';
 import { PostComponent } from '../../_components/post/post.component';
 import { StoryComponent } from '../../_components/story/story.component';
-import { ReelComponent } from '../reel/reel.component';
 import { PlaceComponent } from '../../_components/place/place.component';
 import { PersonComponent } from '../../_components/person/person.component';
-import { MatTabsModule } from '@angular/material/tabs';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { FilterSeach } from 'src/app/_type/filters/filter';
 import { UserService } from 'src/app/_service/models/user.service';
 import { HttpClientModule } from '@angular/common/http';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
 import { environment } from 'src/app/environments/environment';
 import { PostService } from 'src/app/_service/models/post.service';
 import { Post } from 'src/app/_type/models/post';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { error } from 'console';
 import { ShareService } from 'src/app/_service/models/share.service';
 import { Share } from 'src/app/_type/models/share';
+import { ShadowService } from 'src/app/_service/shadow/shadow.service';
+import { UserProfileDTO } from 'src/app/_type/dto/user-profile.dto';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
     MaterialModule,
-    MatTabsModule,
     NgFor,
     NgIf,
     MastheadComponent,
     PostComponent,
     StoryComponent,
     HttpClientModule,
-    PlaceComponent,
     PersonComponent,
     PostComponent,
   ],
@@ -46,7 +46,7 @@ import { Share } from 'src/app/_type/models/share';
   encapsulation: ViewEncapsulation.None,
 })
 export class ProfileComponent {
-  userDTO?: UserDTO;
+  userDTO?: UserProfileDTO;
 
   postsAll!: Post[];
   postsReel!: Post[];
@@ -55,13 +55,10 @@ export class ProfileComponent {
   shareAll!: Share[];
   postTag!: Post[];
 
-
   indexPost = 0;
   indexReel = 0;
   indexShare = 0;
   indexTag = 0;
-
-  number = 10;
 
   elemnts: string[] = ['settings', 'qr_code', 'logout'];
   filters: FilterSeach[] = [
@@ -82,16 +79,33 @@ export class ProfileComponent {
   isFollowing!: boolean;
 
   items = Array(10);
+  @ViewChild('con', { static: false })
+  con!: ElementRef<HTMLElement>;
+  @ViewChild('img', { static: false })
+  img!: ElementRef<HTMLImageElement>;
 
+  user!: string;
+  type!: string;
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private dialog: DialogService,
     private userService: UserService,
     private postService: PostService,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private shadow: ShadowService,
+    private cdr: ChangeDetectorRef
   ) {
     this.isPhoto = true;
+    this.route.queryParams.subscribe((params) => {
+      this.user = params['name'];
+      this.type = params['type'];
+    });
+  }
 
-    this.userService.findUserByName(environment.user).subscribe({
+  ngAfterViewInit(): void {
+
+    this.userService.findUserByName(this.user).subscribe({
       next: (data) => {
         this.userDTO = data;
       },
@@ -101,7 +115,7 @@ export class ProfileComponent {
     });
 
     this.postService
-      .getPostByProfile(environment.user, this.indexPost, this.number)
+      .getPostByProfile(this.user, this.indexPost, environment.number)
       .subscribe({
         next: (data: Post[]) => {
           // console.log(data);
@@ -111,6 +125,19 @@ export class ProfileComponent {
           console.error(error);
         },
       });
+
+    if (this.con && this.img) {
+      const image = this.img.nativeElement;
+      const content = this.con.nativeElement;
+      image.crossOrigin = 'anonymous';
+      if (image.complete) {
+        this.shadow?.applyShadowStory(image, content);
+      } else {
+        image.addEventListener('load', () => {
+          this.shadow?.applyShadowStory(image, content);
+        });
+      }
+    }
   }
 
   onOpenPhote() {
@@ -136,11 +163,12 @@ export class ProfileComponent {
   }
 
   onTabChange(event: any) {
+    console.log(event);
     const selectedTabIndex = event.index;
     switch (selectedTabIndex) {
       case 0: {
         this.postService
-          .getPostByProfile(environment.user, this.indexPost, this.number)
+          .getPostByProfile(this.user, this.indexPost, environment.number)
           .subscribe({
             next: (data: Post[]) => {
               this.postsAll = data;
@@ -154,10 +182,10 @@ export class ProfileComponent {
       case 1: {
         this.postService
           .getPostByProfileType(
-            environment.user,
+            this.user,
             PostEnum.POST,
             this.indexPost,
-            this.number
+            environment.number
           )
           .subscribe({
             next: (data: Post[]) => {
@@ -172,10 +200,10 @@ export class ProfileComponent {
       case 2: {
         this.postService
           .getPostByProfileType(
-            environment.user,
+            this.user,
             PostEnum.REEL,
             this.indexPost,
-            this.number
+            environment.number
           )
           .subscribe({
             next: (data: Post[]) => {
@@ -190,10 +218,10 @@ export class ProfileComponent {
       case 3: {
         this.postService
           .getPostByProfileType(
-            environment.user,
+            this.user,
             PostEnum.TEXT,
             this.indexPost,
-            this.number
+            environment.number
           )
           .subscribe({
             next: (data: Post[]) => {
@@ -207,7 +235,7 @@ export class ProfileComponent {
       }
       case 4: {
         this.shareService
-          .getPostByProfile(environment.user, this.indexShare, this.number)
+          .getPostByProfile(this.user, this.indexShare, environment.number)
           .subscribe({
             next: (data: Share[]) => {
               // console.log(data);
@@ -221,7 +249,7 @@ export class ProfileComponent {
       }
       case 5: {
         this.postService
-          .getPostByUserTag(environment.user, this.indexTag, this.number)
+          .getPostByUserTag(this.user, this.indexTag, environment.number)
           .subscribe({
             next: (data: Post[]) => {
               // console.log(data);
@@ -234,4 +262,12 @@ export class ProfileComponent {
       }
     }
   }
+
+  // playVideo(videoElement: HTMLVideoElement): void {
+  //   videoElement.play();
+  // }
+
+  // pauseVideo(videoElement: HTMLVideoElement): void {
+  //   videoElement.pause();
+  // }
 }

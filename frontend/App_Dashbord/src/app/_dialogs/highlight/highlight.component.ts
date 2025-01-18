@@ -67,7 +67,7 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {}
 
   onImageLoad(img: HTMLImageElement): void {
-    this.shadow.applyShadow(img);
+    this.shadow.applyShadowDialog(img);
   }
 
   onPointerDown(event: PointerEvent): void {

@@ -1,0 +1,42 @@
+<div class="progress-container absolute">
+  <div class="flex flex-row justify-between w-full px-4 items-center mt-3">
+    <div>
+      <img
+        draggable="false"
+        class="rounded-full max-w-max w-10 h-10 mb-3 object-cover"
+        src="https://picsum.photos/600/600?random=5d9b16af-b7d3-4649-9357-40a45f7c2019"
+        alt="profile"
+      />
+    </div>
+    <mat-progress-bar
+      *ngFor="let img of images; let i = index"
+      mode="determinate"
+      [value]="i === currentIndex ? progress : i < currentIndex ? 100 : 0"
+      class="progress-bar px-5"
+    ></mat-progress-bar>
+    <div class="w-10 h-10 items-center">
+      <mat-icon>more_vert</mat-icon>
+    </div>
+  </div>
+</div>
+
+<div
+  class="page-dialog"
+  style="padding: 0px; overflow: hidden; max-height: max-content"
+  (pointerdown)="onPointerDown($event)"
+  (pointermove)="onPointerMove($event)"
+>
+  <div class="w-full h-full flex justify-center items-center">
+    <img
+      id="dynamicImage"
+      #dynamicImage
+      style="object-fit: cover"
+      class="max-w-full  max-h-full w-full h-full"
+      [src]="currentImage.url"
+      crossorigin="anonymous"
+      draggable="false"
+      alt="Image for box shadow"
+      (load)="onImageLoad(dynamicImage)"
+    />
+  </div>
+</div>

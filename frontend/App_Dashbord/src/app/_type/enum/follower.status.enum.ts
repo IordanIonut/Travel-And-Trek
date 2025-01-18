@@ -1,3 +1,6 @@
-export enum FollowerStatusEnum{
-    ACCEPTED, PENDING, BLOCK
+export enum FollowerStatusEnum {
+  ACCEPTED = 'ACCEPTED',
+  PENDING = 'PENDING',
+  BLOCK = 'BLOCK',
+  REJECTED = 'REJECTED',
 }

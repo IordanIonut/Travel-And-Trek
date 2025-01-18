@@ -14,9 +14,6 @@ import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, PostId> {
-    @Query(value = "SELECT MAX(p.id) FROM POSTS p WHERE p.type = :type", nativeQuery = true)
-    Long findLastIdByType(@Param("type") String type);
-
     @Query(value = "SELECT * FROM POSTS p WHERE p.user_id = :id", nativeQuery = true)
     List<Post> findAllPostByUserId(@Param("id") final String id);
 
@@ -37,7 +34,34 @@ public interface PostRepository extends JpaRepository<Post, PostId> {
     //add visibility condition
     @Query("SELECT p FROM Post p JOIN p.tagged_users u  WHERE u.name = :name ORDER BY p.update_at DESC, p.create_at DESC")
     List<Post> findPostByUserTags(@Param("name") final String name, Pageable pageable);
-
-//    SELECT p.* FROM post_tags pt JOIN users u ON pt.user_id = u.id JOIN posts p ON p.id = pt.post_id_post WHERE u.name = 'leoma.streich' ORDER BY  p.update_at DESC, p.create_at desc
-
+    //add visibility condition
+    @Query("SELECT DISTINCT p FROM Post p " +
+            "LEFT JOIN p.post_user_id u " +
+            "WHERE u.name LIKE CONCAT(:search, '%') " +
+            "OR EXISTS (SELECT 1 FROM p.tagged_users t WHERE t.name LIKE CONCAT(:search, '%')) " +
+            "ORDER BY p.create_at DESC, p.update_at DESC")
+    List<Post> getPostBySearch(@Param("search") String search, Pageable pageable);
+    //add visibility condition
+    @Query("""
+                SELECT DISTINCT p
+                FROM Post p
+                LEFT JOIN p.post_user_id u
+                LEFT JOIN p.tagged_users pt
+                LEFT JOIN p.post_hashtag_id hs
+                LEFT JOIN Follower f on f.follower_user_id.id = p.post_user_id.id
+                LEFT JOIN u.user_hashtag_id uh
+                WHERE p.id.type = :type
+                  AND (
+                      u.name = :name
+                      OR (
+                          f.follower_user_id.id = u.id
+                          AND f.id.status = 'ACCEPTED'
+                      )
+                      OR pt.id = u.id
+                      OR hs.name IN :hashtags
+                      OR uh.name IN :hashtags
+                  )
+                ORDER BY p.create_at DESC, p.update_at DESC
+            """)
+    List<Post> getPostByUser(@Param("name") String name, @Param("type") PostEnum type, @Param("hashtags") List<String> hashtags, Pageable pageable);
 }

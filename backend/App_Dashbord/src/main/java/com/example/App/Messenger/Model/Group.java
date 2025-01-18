@@ -20,7 +20,7 @@ public class Group {
     @Column(name = "ID", nullable = false)
     private String  id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
     @Column(name = "DESCRIPTION", nullable = false)

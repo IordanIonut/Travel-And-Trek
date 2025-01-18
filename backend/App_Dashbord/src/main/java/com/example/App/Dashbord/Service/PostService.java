@@ -1,17 +1,18 @@
 package com.example.App.Dashbord.Service;
 
 import com.example.App.Dashbord.Enum.PostEnum;
-import com.example.App.Dashbord.Repository.PostRepository;
 import com.example.App.Dashbord.Model.Post;
+import com.example.App.Dashbord.Repository.PostRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PostService {
@@ -51,5 +52,17 @@ public class PostService {
     public List<Post> findPostByUserTags(String name, int index, int number){
         Pageable pageable = PageRequest.of(index, number);
         return postRepository.findPostByUserTags(name, pageable);
+    }
+
+    @Cacheable(value = "postCache", key = "'findPostBySearch::'+#name+'::'+#index+'::'+#number")
+    public List<Post> getPostBySearch(String name, int index, int number) {
+        Pageable pageable = PageRequest.of(index, number);
+        return postRepository.getPostBySearch(name, pageable);
+    }
+
+    @Cacheable(value = "postCache", key = "'getPostForReelByUser::'+#name+'::'+#type+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
+    public List<Post> getPostByUser(String name, PostEnum type, List<String> hashtags, int index, int number) {
+        Pageable pageable = PageRequest.of(index, number);
+        return postRepository.getPostByUser(name, type, hashtags, pageable);
     }
 }

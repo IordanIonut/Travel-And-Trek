@@ -6,20 +6,47 @@
   <div
     class="flex flex-row gap-2.5 items-center justify-start self-stretch flex-1 relative"
   >
-    <mat-form-field class="dash-style-input w-4/5" appearance="fill">
-      <mat-icon matPrefix>search</mat-icon>
-      <mat-label>Seach ...</mat-label>
-      <input matInput placeholder="Search" />
-    </mat-form-field>
-
+    <form [formGroup]="formSearch" class="w-4/5">
+      <mat-form-field class="dash-style-input w-full" appearance="fill">
+        <mat-icon matSuffix>search</mat-icon>
+        <mat-icon matPrefix>{{
+          selectValue ? selectValue.icon : "search"
+        }}</mat-icon>
+        <mat-label>{{ placeholder.name}}</mat-label>
+        <input
+          #input
+          matInput
+          formControlName="search"
+          [matAutocomplete]="auto"
+          (keydown.enter)="onSelectValue(placeholder)"
+          (input)="onInputChange($event)"
+          (dblclick)="onOpenPosibility($event)"
+        />
+        <mat-autocomplete appearance="fill" #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of options"
+            [value]="option"
+            (click)="onSelectValue(option)"
+            (focus)="onWillBeSelect(option)"
+            (mouseenter)="onWillBeSelect(option)"
+            (mouseleave)="
+              onWillBeSelect({
+                name: 'Search...',
+                type: 'Search...',
+                id: 'Search...'
+              })
+            "
+          >
+            <mat-icon>search</mat-icon>{{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
     <!-- Notification-->
     <div
       class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
     >
-      <button
-        class="border-efec story-body"
-        (click)="onOpenNotification($event)"
-      >
+      <button (click)="onOpenNotification($event)">
         <mat-icon class="icon-butoon">notifications</mat-icon>
       </button>
     </div>
@@ -28,7 +55,7 @@
     <div
       class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
     >
-      <button class="border-efec story-body" (click)="onOpenChat($event)">
+      <button (click)="onOpenChat($event)">
         <mat-icon class="icon-butoon">chat</mat-icon>
       </button>
     </div>
@@ -41,10 +68,17 @@
     <div
       class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
     >
-      <button class="border-efec story-body" (click)="onOpenProfile($event)">
+      <button
+        id="con"
+        #con
+        class="border-efec story-body"
+        (click)="onOpenProfile($event,'name')"
+      >
         <img
           draggable="false"
-          class="story max-w-max"
+          id="img"
+          #img
+          class="story"
           style="object-fit: cover"
           src="https://images.pexels.com/photos/26692187/pexels-photo-26692187/free-photo-of-moda-costum-femeie-albastru.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
         />

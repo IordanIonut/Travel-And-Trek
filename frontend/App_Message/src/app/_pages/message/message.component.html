@@ -27,6 +27,7 @@
               [contact]="contact"
               [index]="k"
               [selected]="selected"
+              [person]="user"
               (click)="onSelectContact(contact, k)"
               ><!-- contact?.message_id?.group_id === null
                   ? contact!.user_id!.id !== person!.id
@@ -72,7 +73,11 @@
               *ngFor="let chat of chats; let i = index"
               [chat]="chat"
               [prv]="i > 0 ? chats[i - 1] : null"
-              [position]="chat?.user_id?.name === user ? 'right' : 'left'"
+              [position]="
+                chat?.user_id?.name === user
+                  ? 'right'
+                  : 'left'
+              "
             ></app-message-chat>
           </div>
         </div>
@@ -146,7 +151,7 @@
           </div>
         </div>
         <div
-          class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"
+          class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"
         ></div>
       </div>
       <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">
@@ -165,7 +170,7 @@
           </div>
         </div>
         <div
-          class="bgEfec w-2 h-full rounded-[4px] relative shrink-0 flex"
+          class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"
         ></div>
       </div>
       <div class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]">

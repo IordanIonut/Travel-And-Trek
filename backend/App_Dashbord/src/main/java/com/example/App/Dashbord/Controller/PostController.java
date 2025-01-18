@@ -37,9 +37,9 @@ public class PostController {
 
     @GetMapping("/find/type")
     public ResponseEntity<List<Post>> findAllPostsByUserType(@RequestParam("name") final String name,
-                                                         @RequestParam("type") final PostEnum type,
-                                                         @RequestParam("index") final int index,
-                                                         @RequestParam("number") final int number) {
+                                                             @RequestParam("type") final PostEnum type,
+                                                             @RequestParam("index") final int index,
+                                                             @RequestParam("number") final int number) {
         try {
             List<Post> list = postService.findAllPostsByUserType(name, type, index, number);
             LOG.info("findAllPostsByUser()- user - Successful.");
@@ -53,8 +53,8 @@ public class PostController {
 
     @GetMapping("/find")
     public ResponseEntity<List<Post>> findAllPostsByUserWithoutType(@RequestParam("name") final String name,
-                                                             @RequestParam("index") final int index,
-                                                             @RequestParam("number") final int number) {
+                                                                    @RequestParam("index") final int index,
+                                                                    @RequestParam("number") final int number) {
         try {
             List<Post> list = postService.findAllPostsByUserWithoutType(name, index, number);
             LOG.info("findAllPostsByUserWithoutType()- user - Successful.");
@@ -69,13 +69,45 @@ public class PostController {
     @GetMapping("/find/tags")
     public ResponseEntity<List<Post>> findPostByUserTags(@RequestParam("name") final String name,
                                                          @RequestParam("index") final int index,
-                                                         @RequestParam("number") final int number){
+                                                         @RequestParam("number") final int number) {
         try {
             List<Post> list = postService.findPostByUserTags(name, index, number);
             LOG.info("findPostByUserTags()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             LOG.info("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/suggestion")
+    public ResponseEntity<List<Post>> getPostBySearch(@RequestParam("search") final String search,
+                                                      @RequestParam("index") final int index,
+                                                      @RequestParam("number") final int number) {
+        try {
+            List<Post> list = postService.getPostBySearch(search, index, number);
+            LOG.info("findPostBySearch()- user - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findPostBySearch(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/reel")
+    public ResponseEntity<List<Post>> getPostForReelByUser(@RequestParam("name") final String name,
+                                                           @RequestParam("type") final PostEnum type,
+                                                           @RequestParam("hashtags") final List<String> hashtags,
+                                                           @RequestParam("index") final int index,
+                                                           @RequestParam("number") final int number) {
+        try {
+            List<Post> list = postService.getPostByUser(name, type, hashtags, index, number);
+            LOG.info("getPostForReelByUser()- user - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve getPostForReelByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }

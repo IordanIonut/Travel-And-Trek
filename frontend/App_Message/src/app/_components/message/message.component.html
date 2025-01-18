@@ -10,7 +10,7 @@
     />
   </div>
   <div
-    class="flex"
+    class="flex w-full"
     [ngClass]="{
       'justify-start': position === 'left',
       'justify-end': position === 'right'
@@ -20,7 +20,9 @@
       class="chat-bubble max-w-[45%] text-base"
       [ngClass]="validatePosition(position)"
     >
-      {{ chat!.message_id!.content }}
+    <app-story></app-story>
+    <p class="story">{{chat.message_id.post_id ? "post" : chat.message_id.story_id ? "story" : null}}</p>
+      <p>{{ chat!.message_id!.content }}</p>
       <div *ngIf="position === 'left'" class="flex flex-row justify-between">
         <mat-icon>{{ !chat!.is_read ? "reply" : "reply_all" }}</mat-icon>
         <div class="flex items-end p-1">

@@ -36,7 +36,7 @@ public class FollowerController {
         }
     }
 
-    @GetMapping("find")
+    @GetMapping("/find")
     public ResponseEntity<List<User>> findUsersByStatus(@RequestParam("name") final String name, @RequestParam("status") final FollowerStatusEnum status) {
         try {
             List<User> list = followerService.findUsersByStatus(name, status);
@@ -46,6 +46,19 @@ public class FollowerController {
             LOG.info("Failed to retrieve findUsersByStatus(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
+        }
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<Void> postCreateFollower(@RequestBody final Follower body) {
+        try {
+            this.followerService.postCreateFollower(body);
+            LOG.info("postCreateFollower()- user - Successful.");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve postCreateFollower(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 }
