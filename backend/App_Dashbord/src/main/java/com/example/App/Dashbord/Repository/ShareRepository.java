@@ -17,4 +17,8 @@ public interface ShareRepository extends JpaRepository<Share, ShareId> {
 
     @Query("SELECT s FROM Share s JOIN User u on s.share_user_id.id = u.id WHERE u.name = :name ORDER BY s.update_at DESC, s.create_at DESC")
     List<Share> findAllSharesByUser(@Param("name") final String name, Pageable pageable);
+
+    @Query("SELECT DISTINCT s FROM Share s INNER JOIN Group g ON s.share_post_id.post_group_id.id = g.id   WHERE g.name = :name ORDER BY s.update_at DESC, s.create_at DESC ")
+    List<Share> getAllSharesByGroup(@Param("name") final String name, final Pageable pageable);
+
 }

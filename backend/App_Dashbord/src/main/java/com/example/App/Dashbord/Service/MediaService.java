@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Service;
 
+import com.example.App.Dashbord.Model.User;
 import com.example.App.Dashbord.Repository.MediaRepository;
 import com.example.App.Dashbord.Model.Media;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class MediaService {
     }
 
     @Cacheable(value = "mediaCache", key = "'allUsers'")
-    public List<String> findAllUserIdMedia() {
+    public List<Media> findAllUserIdMedia() {
         return mediaRepository.findAllUserIdMedia();
     }
 

@@ -1,6 +1,7 @@
 package com.example.App.Dashbord.Model;
 
 import com.example.App.Dashbord.Embedded.PostId;
+import com.example.App.Messenger.Model.Group;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,9 +26,14 @@ public class Post {
     private PostId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User post_user_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GROUP_ID", referencedColumnName = "id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Group post_group_id;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -44,7 +50,7 @@ public class Post {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media_user_id"})
     private List<Media> post_medias_id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "POST_HASHTAG",
             joinColumns = {

@@ -1,6 +1,4 @@
-<div
-  class="story-com width-page flex !flex-col !h-[90.5vh]"
->
+<div class="story-com width-page flex !flex-col !h-[90.5vh]">
   <!-- Your Story-->
   <div class="story-header">
     <div class="border-efec story-body">
@@ -17,10 +15,15 @@
 
   <!-- Firiend Story-->
   <div *ngFor="let item of highlight; let k = index" class="story-header">
-    <button #con id="con" class="story-body" (click)="openDiaglog(k)">
+    <button
+      #conStory
+      id="conStory"
+      class="story-body"
+      (click)="openDiaglog(k)"
+    >
       <img
-        id="img"
-        #img
+        id="imgStory"
+        #imgStory
         draggable="false"
         class="story max-w-max"
         style="object-fit: cover"

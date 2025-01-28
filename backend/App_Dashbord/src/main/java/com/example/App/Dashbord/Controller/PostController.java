@@ -112,4 +112,20 @@ public class PostController {
                     .body(Collections.emptyList());
         }
     }
+
+    @GetMapping("/get/group")
+    public ResponseEntity<List<Post>> getPostByGroupNameAndType(@RequestParam("name") final String name,
+                                                                @RequestParam(value = "type", required = false) final PostEnum type,
+                                                                @RequestParam("index") final int index,
+                                                                @RequestParam("number") final int number) {
+        try {
+            List<Post> list = postService.getPostByGroupNameAndType(name, type, index, number);
+            LOG.info("getPostByGroupNameAndType()- user - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve getPostByGroupNameAndType(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
 }

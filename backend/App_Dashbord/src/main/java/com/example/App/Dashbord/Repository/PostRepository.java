@@ -64,4 +64,10 @@ public interface PostRepository extends JpaRepository<Post, PostId> {
                 ORDER BY p.create_at DESC, p.update_at DESC
             """)
     List<Post> getPostByUser(@Param("name") String name, @Param("type") PostEnum type, @Param("hashtags") List<String> hashtags, Pageable pageable);
+
+    @Query("SELECT DISTINCT p FROM Post p " +
+            "WHERE p.post_group_id.name = :name " +
+            "AND (:type IS NULL OR p.id.type = :type) ORDER BY p.create_at DESC, p.update_at DESC")
+    List<Post> getPostByGroupNameAndType(@Param("name") String name, @Param("type") PostEnum type, Pageable pageable);
+
 }

@@ -22,11 +22,14 @@ export class ShadowService {
     }
   }
   applyShadowStory(img: HTMLImageElement, con: HTMLElement): void {
+    if (!img || !con) {
+      return;
+    }
     if (img.complete && img.naturalWidth !== 0 && img.naturalHeight !== 0) {
       const dominantColor = this.colorThief!.getColor(img);
       const shadowColor = `rgba(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]}, 0.75)`;
-      con.style.borderColor = shadowColor;
-      con.style.boxShadow = `0 0 4px 4px ${shadowColor}`;
+      con!.style.borderColor = shadowColor;
+      con!.style.boxShadow = `0 0 4px 4px ${shadowColor}`;
     } else {
       img.onload = () => {
         const dominantColor = this.colorThief!.getColor(img);

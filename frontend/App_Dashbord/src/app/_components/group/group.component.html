@@ -30,7 +30,7 @@
       </div>
       <div class="flex w-full">
         <div
-          *ngFor="let friend of group.friends | slice : 0 : 5; let k = index"
+        *ngFor="let friend of (combineFriendsAndFollowers(group.friends, group.followers) | slice: 0:5); let k = index"
         >
           <button (click)="onOpenProfile($event, friend.name)">
             <img
@@ -58,7 +58,7 @@
         (click)="onMembership($event)"
       >
         <mat-icon
-          >{{group.groupMembership !== null ? (group.groupMembership.id.role | followerStatusIcon:enum:iconName) : 'send'}}</mat-icon
+          >{{group.groupMembership.length > 0 ? (group.groupMembership[0]!.id!.role | followerStatusIcon:enum:iconName) : 'send'}}</mat-icon
         >
         Follow
       </button>

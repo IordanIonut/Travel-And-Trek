@@ -1,6 +1,7 @@
 package com.example.App.Messenger.Controller;
 
 import com.example.App.Messenger.DTO.GroupDTO;
+import com.example.App.Messenger.DTO.GroupDetailsDTO;
 import com.example.App.Messenger.Model.Group;
 import com.example.App.Messenger.Service.GroupService;
 import org.slf4j.Logger;
@@ -42,6 +43,17 @@ public class GroupController {
         } catch (Exception e) {
             LOG.info("Failed to retrieve findGroupsByName(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/get/details")
+    public ResponseEntity<GroupDetailsDTO>findGroupDetailsDTO(@RequestParam("name") final String name){
+        try {
+            LOG.info("findGroupDetailsDTO()- group - Successful.");
+            return ResponseEntity.ok(groupService.findGroupDetailsDTO(name));
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findGroupDetailsDTO(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.example.App.Dashbord.Controller;
 
+import com.example.App.Dashbord.DTO.UserDTO;
 import com.example.App.Dashbord.Enum.FollowerStatusEnum;
 import com.example.App.Dashbord.Model.Follower;
-import com.example.App.Dashbord.Model.User;
 import com.example.App.Dashbord.Service.FollowerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class FollowerController {
     public ResponseEntity<List<Follower>> findAllFollowers() {
         try {
             List<Follower> list = followerService.findAllFollowers();
-            LOG.info("findAllFollowers()- user - Successful.");
+            LOG.info("findAllFollowers()- follower - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             LOG.info("Failed to retrieve findAllFollowers(): {}", e.getMessage(), e);
@@ -37,13 +37,25 @@ public class FollowerController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<List<User>> findUsersByStatus(@RequestParam("name") final String name, @RequestParam("status") final FollowerStatusEnum status) {
+    public ResponseEntity<List<UserDTO>> findUsersFollowerByStatus(@RequestParam("name") final String name, @RequestParam("status") final FollowerStatusEnum status, @RequestParam("page") final int index, @RequestParam("size") final int number) {
         try {
-            List<User> list = followerService.findUsersByStatus(name, status);
-            LOG.info("findUsersByStatus()- user - Successful.");
+            List<UserDTO> list = followerService.findUsersFollowerByStatus(name, status, index, number);
+            LOG.info("findUsersFollowerByStatus()- follower - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findUsersByStatus(): {}", e.getMessage(), e);
+            LOG.info("Failed to retrieve findUsersFollowerByStatus(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/find/follower")
+    public ResponseEntity<List<UserDTO>> findUsersByFollowerStatus(@RequestParam("name") final String name, @RequestParam("status") final FollowerStatusEnum status, @RequestParam("page") final int index, @RequestParam("size") final int number) {
+        try {
+            List<UserDTO> list = followerService.findUsersByFollowerStatus(name, status, index, number);
+            LOG.info("findUsersByFollowerStatus()- follower - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findUsersByFollowerStatus(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -53,7 +65,7 @@ public class FollowerController {
     public ResponseEntity<Void> postCreateFollower(@RequestBody final Follower body) {
         try {
             this.followerService.postCreateFollower(body);
-            LOG.info("postCreateFollower()- user - Successful.");
+            LOG.info("postCreateFollower()- follower - Successful.");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             LOG.info("Failed to retrieve postCreateFollower(): {}", e.getMessage(), e);

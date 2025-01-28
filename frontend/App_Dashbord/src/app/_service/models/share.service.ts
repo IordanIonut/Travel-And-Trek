@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Share } from "src/app/_type/models/share";
@@ -21,5 +21,10 @@ export class ShareService{
       return this.http.get<Share[]>(
         `${this.apiUrl}/find?name=${name}&index=${index}&number=${number}`
       );
+    }
+
+    getAllSharesByGroup(name: string, index: number, number: number):Observable<Share[]>{
+      const params = new HttpParams().append('name',name).append('index',index).append('number',number);
+      return this.http.get<Share[]>(`${this.apiUrl}/get/group`,{params})
     }
 }

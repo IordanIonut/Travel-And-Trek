@@ -195,6 +195,7 @@ export class MessageComponent {
       this.scrollToBottom();
     }
   }
+
   protected getContactProperty(
     property: 'name' | 'url' | 'description' | 'groupId' = 'name'
   ): string | boolean | null {
@@ -243,6 +244,6 @@ export class MessageComponent {
         }
       }
     }
-    return null;
+  return null;
   }
 }

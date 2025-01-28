@@ -65,4 +65,10 @@ public class PostService {
         Pageable pageable = PageRequest.of(index, number);
         return postRepository.getPostByUser(name, type, hashtags, pageable);
     }
+
+    @Cacheable(value = "postCache", key="'getPostByGroupNameAndType::'+#name+'::'+#type+'::'+#index+'::'+#number")
+    public List<Post> getPostByGroupNameAndType(String name, PostEnum type, int index, int number){
+        Pageable pageable = PageRequest.of(index, number);
+        return postRepository.getPostByGroupNameAndType(name, type, pageable);
+    }
 }

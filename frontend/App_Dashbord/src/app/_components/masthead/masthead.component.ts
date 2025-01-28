@@ -177,11 +177,12 @@ export class MastheadComponent {
     this.placeholder = option;
   }
 
-  protected onSelectValue(option: SearchDTO) {
-    const searchValue = this.formSearch?.get('search')?.value;
+  protected onSelectValue(option: SearchDTO, type: string) {
+    const searchValue =
+      type === 'enter' ? this.formSearch?.get('search')?.value : option;
     this.router
       .navigate(['/dashbord/search'], {
-        queryParams: { type: this.selectValue.value, search: option.name },
+        queryParams: { type: this.selectValue.value, search: searchValue.name ? searchValue.name : searchValue },
       })
       .then(() => {
         window.location.reload();

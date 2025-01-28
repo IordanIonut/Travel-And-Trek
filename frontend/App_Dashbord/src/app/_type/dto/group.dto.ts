@@ -4,7 +4,7 @@ import { User } from '../models/user';
 
 export interface GroupDTO {
   group: Group;
-  groupMembership: GroupMembership;
+  groupMembership: GroupMembership[];
   friends: User[];
   followers: User[];
   users: number;

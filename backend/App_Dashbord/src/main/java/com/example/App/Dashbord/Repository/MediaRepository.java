@@ -2,6 +2,8 @@ package com.example.App.Dashbord.Repository;
 
 import com.example.App.Dashbord.Embedded.MediaId;
 import com.example.App.Dashbord.Model.Media;
+import com.example.App.Dashbord.Model.User;
+import com.example.App.Messenger.Model.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,11 +16,17 @@ public interface MediaRepository extends JpaRepository<Media, MediaId> {
     @Query(value = "SELECT MAX(m.id) FROM MEDIA m WHERE m.type = :type", nativeQuery = true)
     Long findLastIdByType(@Param("type") String type);
 
-    @Query(value = "SELECT DISTINCT(m.user_id) FROM MEDIA m", nativeQuery = true)
-    List<String> findAllUserIdMedia();
+    @Query("SELECT DISTINCT(m) FROM Media m WHERE m.media_user_id IS NOT NULL")
+    List<Media> findAllUserIdMedia();
 
-    @Query(value = "SELECT * FROM MEDIA m WHERE m.user_id = :id", nativeQuery = true)
+    @Query("SELECT DISTINCT(m) FROM Media m WHERE m.media_group_id IS NOT NULL")
+    List<Media> findAllGroupIdMedia();
+
+    @Query("SELECT m FROM Media m WHERE m.media_user_id.id = :id")
     List<Media> findAllMediaByUserId(@Param("id") final String id);
+
+    @Query("SELECT m FROM Media m WHERE m.media_group_id.id = :id")
+    List<Media> findAllMediaByGroupId(@Param("id") final String id);
 
     @Query(value = "SELECT * FROM MEDIA m WHERE m.user_id <> :id AND m.type = :type ", nativeQuery = true)
     List<Media> findAllMediaWithoutUserId(@Param("id") final String id, @Param("type") final String type);

@@ -9,9 +9,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import ColorThief from 'colorthief';
+import { error } from 'console';
 import { throttle } from 'lodash';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
+import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { ShareEnum } from 'src/app/_type/enum/share.enum';
 import { Post } from 'src/app/_type/models/post';
@@ -46,8 +48,7 @@ export class PostComponent {
   @ViewChild('postImage3', { static: false })
   postImage3!: ElementRef<HTMLImageElement>;
 
-  @ViewChild('videoPlayer', { static: false })
-  videoPlayer!: ElementRef<HTMLVideoElement>;
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   @ViewChild('postElement', { static: false })
   postContainer!: ElementRef<HTMLDivElement>;
@@ -65,16 +66,41 @@ export class PostComponent {
   constructor(
     private dialogService: DialogService,
     private shadow: ShadowService,
+    private valiationService: ValidationModelService,
     private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {}
+
+  getProperty(property: 'name' | 'profile_picture'): string | undefined {
+    if (this.valiationService.isPostOrShare(this.data)) {
+      switch (property) {
+        case 'name': {
+          if (this.valiationService.isGroupOrUser(this.data.post_group_id))
+            return this.data.post_group_id.name;
+          if (this.valiationService.isUserOrGroup(this.data.post_user_id))
+            return this.data.post_user_id.name;
+          return '';
+        }
+        case 'profile_picture': {
+          if (this.valiationService.isUserOrGroup(this.data.post_user_id))
+            return this.data.post_user_id.profile_picture;
+          if (this.valiationService.isGroupOrUser(this.data.post_group_id))
+            return this.data.post_group_id.url;
+          return '';
+        }
+      }
+    }
+
+    return undefined;
+  }
 
   ngAfterViewInit(): void {
     if (this.videoPlayer && this.postContainer) {
       const videoElement = this.videoPlayer.nativeElement;
       const containerElement = this.postContainer.nativeElement;
       videoElement.crossOrigin = 'anonymous';
+      this.checkAutoplay();
 
       videoElement.addEventListener('play', () => {
         this.shadow.updateShadowFromVideo(videoElement, containerElement);
@@ -158,7 +184,6 @@ export class PostComponent {
         });
       }
     }
-    this.checkAutoplay();
   }
 
   ngOnChanges(): void {
@@ -166,16 +191,17 @@ export class PostComponent {
   }
 
   protected checkAutoplay(): void {
-    if (
-      this.videoPlayer?.nativeElement instanceof HTMLVideoElement &&
-      this.videoPlayer?.nativeElement !== null
-    ) {
-      if (this.run === this.index) {
-        this.videoPlayer?.nativeElement?.play()
-          .catch((error) => console.error('Autoplay error:', error));
-      } else {
-        this.videoPlayer!.nativeElement?.pause();
+    const videoElement = this.videoPlayer?.nativeElement;
+    if (videoElement instanceof HTMLVideoElement) {
+      if (this.run === this.index && videoElement.paused) {
+        videoElement.play().catch((error) => {
+          // console.error('Error while trying to play the video:', error);
+        });
+      } else if (!videoElement.paused) {
+        videoElement?.pause();
       }
+    } else {
+      // console.error('videoPlayer is not a valid HTMLVideoElement.');
     }
   }
 
@@ -203,20 +229,14 @@ export class PostComponent {
   }
 
   playVideo(videoElement: HTMLVideoElement): void {
-    // console.log(`Attempting to play video with id: ${videoElement.id}`);
-    if (videoElement && videoElement?.paused) {
-      videoElement.muted = false;
-      videoElement.volume = 1;
-      videoElement.play().catch((error) => {
-        console.error(
-          `Autoplay blocked for video with id: ${videoElement.id}. Playing after interaction.`,
-          error
-        );
-      });
+    if (videoElement.paused) {
+      try {
+        videoElement.play();
+        console.log('Video is playing successfully.');
+      } catch (error) {
+        console.error('Error playing video:', error);
+      }
     }
-    // } else {
-    //   console.log(`Video with id: ${videoElement.id} is already playing.`);
-    // }
   }
 
   pauseVideo(videoElement: HTMLVideoElement): void {

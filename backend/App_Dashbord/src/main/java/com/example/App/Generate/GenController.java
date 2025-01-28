@@ -271,19 +271,19 @@ public class GenController {
     public ResponseEntity<Void> postAll(@RequestParam(value = "num", defaultValue = "1") final int number) {
         try {
             genService.generateFakeTag(number / 10);
-            genService.generateFakeUser(number / 30);
+            genService.generateFakeUser(number/ 5);
+            genService.generateFakeGroup(number / 5);
             genService.generateFakeHobby(number);
             genService.generateFakeTravelDestination(number);
             genService.generateFakeJournal(number);
             genService.generateFakeMedia(number);
+            genService.generateFakePost(number * 2);
             genService.generateFakeStory(number);
-            genService.generateFakePost(number);
             genService.generateFakeComment(number);
             genService.generateFakeShare(number);
-            genService.generateFakeFollower(number);
+            genService.generateFakeFollower(number * 100);
             genService.generateFakeLike(number);
             genService.generateFakeHighlight(number);
-            genService.generateFakeGroup(number);
             genService.generateFakeMessage(number);
             genService.generateFakeMessageReadStatus(number);
             genService.generateFakeGroupMembers(number);

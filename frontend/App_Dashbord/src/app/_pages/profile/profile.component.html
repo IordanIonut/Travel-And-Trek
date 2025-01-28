@@ -1,19 +1,29 @@
 <div class="page overflow-visible" style="overflow: visible !important">
   <app-masthead></app-masthead>
   <div class="flex flex-row h-full justify-between mr-1.5 relative">
-    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-min relative">
+    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-[96rem] relative">
       <div class="flex-col w-full flex relative">
         <mat-tab-group
           animationDuration="12ms"
           class="h-[100%] dash-style-tab-group"
-          (selectedTabChange)="onTabChange($event)"
+          (selectedTabChange)="onTabChangePhoto($event)"
         >
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
               <mat-icon class="icon">apps</mat-icon>
             </ng-template>
-            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let post of postsAll" [data]="post"></app-post>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollPhoto($event, 0)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexAll)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postsAll[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
             </div>
           </mat-tab>
 
@@ -21,8 +31,18 @@
             <ng-template mat-tab-label>
               <mat-icon class="icon">newspaper</mat-icon>
             </ng-template>
-            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let post of postMedia" [data]="post"></app-post>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollPhoto($event, 1)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexMedia)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postMedia[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
             </div>
           </mat-tab>
 
@@ -30,8 +50,18 @@
             <ng-template mat-tab-label>
               <mat-icon class="icon">play_circle</mat-icon>
             </ng-template>
-            <div class="flex flex-wrap gap-3 justify-between w-full h-fit">
-              <app-post *ngFor="let post of postsReel" [data]="post"></app-post>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollPhoto($event, 2)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexReel)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postsReel[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
             </div>
           </mat-tab>
 
@@ -39,8 +69,18 @@
             <ng-template mat-tab-label>
               <mat-icon class="icon">description</mat-icon>
             </ng-template>
-            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let post of postsText" [data]="post"></app-post>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollPhoto($event, 3)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexText)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postsText[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
             </div>
           </mat-tab>
 
@@ -48,8 +88,18 @@
             <ng-template mat-tab-label>
               <mat-icon class="icon">reply_all</mat-icon>
             </ng-template>
-            <div class="flex flex-wrap gap-3 justify-between w-full h-fit">
-              <app-post *ngFor="let item of shareAll" [data]="item"></app-post>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollPhoto($event, 4)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexShare)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of shareAll[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
             </div>
           </mat-tab>
 
@@ -57,39 +107,87 @@
             <ng-template mat-tab-label>
               <mat-icon class="icon">sell</mat-icon>
             </ng-template>
-            <div class="flex flex-wrap gap-1 justify-between w-full h-max">
-              <app-post *ngFor="let post of postTag" [data]="post"></app-post>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollPhoto($event, 5)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexTag)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postTag[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
             </div>
           </mat-tab>
         </mat-tab-group>
       </div>
     </div>
 
-    <div *ngIf="isFollowing" class="flex flex-row gap-3">
-      <div class="flex-col w-full flex">
+    <div *ngIf="isFollowing"  class="flex flex-row gap-3 w-[96rem] relative">
+      <div class="flex-col w-full flex relative">
         <mat-tab-group
-          animationDuration="0ms"
-          class="h-full dash-style-tab-group"
+          animationDuration="12ms"
+          class="h-[100%] dash-style-tab-group"
+          (selectedTabChange)="onTabChangeFollowing($event)"
         >
-          <mat-tab label="follow" class="w-full h-full">
-            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-post *ngFor="let item of items"></app-post>
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">apps</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollFollowing($event, 0)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexFollowing)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-person
+                    *ngFor="let people of followings[item]?.data"
+                    [people]="people"
+                  ></app-person>
+                </div>
+              </div>
             </div>
           </mat-tab>
-          <mat-tab label="block" class="w-full h-full">
-            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-              <app-person *ngFor="let item of items"></app-person>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">block</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[37rem]"
+              (scroll)="onScrollFollowing($event, 0)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexBlock)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-person
+                    *ngFor="let people of blocks[item]?.data"
+                    [people]="people"
+                  ></app-person>
+                </div>
+              </div>
             </div>
           </mat-tab>
         </mat-tab-group>
       </div>
     </div>
 
-    <div *ngIf="isFollowrs" class="flex flex-row gap-3">
+    <div *ngIf="isFollowrs" class="flex flex-row gap-3 w-[96rem] relative">
       <div class="flex-col w-full flex">
-        <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-          <app-post *ngFor="let item of items"></app-post>
+        <div
+        class="hide-scrollbar h-[42rem]"
+        (scroll)="onScrollFollowers($event)"
+      >
+        <div *ngFor="let item of generateIndexArray(indexFollower)">
+          <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+            <app-person
+              *ngFor="let people of followers[item]?.data"
+              [people]="people"
+            ></app-person>
+          </div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -111,13 +209,18 @@
           <div
             class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
           >
-            <button #con class="story-body" (click)="onOpenPhote()">
+            <button
+              #conProfileDialog
+              class="story-body"
+              (click)="onOpenPhote()"
+            >
               <img
-              #img
+                #imgProfileDialog
+                id="imgProfileDialog"
                 draggable="false"
                 class="story max-w-max"
                 style="object-fit: cover; width: 6rem; height: 6rem"
-                src="{{ userDTO?.user?.profile_picture }}"
+                src="{{ getProperty('url') }}"
               />
             </button>
           </div>
@@ -128,7 +231,7 @@
           <div
             class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
           >
-            {{ userDTO?.user?.name }}
+            {{ getProperty("name") }}
           </div>
         </div>
         <div
@@ -136,7 +239,7 @@
           style="display: ruby"
         >
           <div
-            *ngFor="let item of userDTO?.user?.user_hashtag_id"
+            *ngFor="let item of getProperty('hashtag')!"
             class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
           >
             #{{ item?.name }}
@@ -153,7 +256,7 @@
               <div
                 class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
               >
-                {{ userDTO?.postsCount }}
+                {{ getProperty("posts") }}
               </div>
               <div
                 class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
@@ -174,7 +277,7 @@
               <div
                 class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
               >
-                {{ userDTO?.followersCount }}
+                {{ getProperty("followers") }}
               </div>
               <div
                 class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
@@ -195,7 +298,7 @@
               <div
                 class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
               >
-                {{ userDTO?.followingsCount }}
+                {{ getProperty("followings") }}
               </div>
               <div
                 class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
@@ -214,7 +317,7 @@
           <div
             class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal w-auto relative flex items-center justify-start"
           >
-            {{ userDTO?.user?.bio }}
+            {{ getProperty("bio") }}
           </div>
         </div>
 
@@ -239,7 +342,7 @@
     </div>
 
     <div>
-      <app-story [highlight]="userDTO?.highlights || []"> </app-story>
+      <app-story [highlight]="getProperty('highlight')!"></app-story>
     </div>
   </div>
 </div>

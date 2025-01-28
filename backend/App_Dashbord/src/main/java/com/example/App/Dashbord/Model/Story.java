@@ -22,9 +22,14 @@ public class Story {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User story_user_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GROUP_ID", referencedColumnName = "id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private User story_group_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({

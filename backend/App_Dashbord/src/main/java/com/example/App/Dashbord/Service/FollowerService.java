@@ -1,27 +1,28 @@
 package com.example.App.Dashbord.Service;
 
 import com.example.App.AppDashbordApplication;
+import com.example.App.Dashbord.DTO.UserDTO;
 import com.example.App.Dashbord.Embedded.FollowerId;
 import com.example.App.Dashbord.Enum.FollowerStatusEnum;
+import com.example.App.Dashbord.Model.Follower;
 import com.example.App.Dashbord.Model.User;
 import com.example.App.Dashbord.Repository.FollowerRepository;
-import com.example.App.Dashbord.Model.Follower;
+import com.example.App.Dashbord.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ConditionalOnEnabledResourceChain;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class FollowerService {
     @Autowired
     private FollowerRepository followerRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private static final Logger LOG = LoggerFactory.getLogger(FollowerService.class);
 
@@ -45,9 +46,14 @@ public class FollowerService {
         return followerRepository.countFollowingByUser(name);
     }
 
-    @Cacheable(value = "followerCache", key = "'findUsersByStatus::'+#name+'::'+#status")
-    public List<User> findUsersByStatus(final String name, final FollowerStatusEnum status){
-        return followerRepository.findUsersByStatus(name, status);
+    @Cacheable(value = "followerCache", key = "'findUsersFollowerByStatus::'+#name+'::'+#status+'::'+#page+'::'+#size")
+    public List<UserDTO> findUsersFollowerByStatus(final String name, final FollowerStatusEnum status, int page, int size) {
+        return new UserDTO().generateUserDTO(followerRepository.findUsersFollowerByStatus(name, status), userRepository.findMutualFriends(name), page, size);
+    }
+
+    @Cacheable(value = "followerCache", key = "'findUsersByFollowerStatus::'+#name+'::'+#status+'::'+#index+'::'+#number")
+    public List<UserDTO> findUsersByFollowerStatus(final String name, final FollowerStatusEnum status, int index, int number) {
+        return new UserDTO().generateUserDTO(followerRepository.findUsersByFollowerStatus(name, status), userRepository.findMutualFriends(name), index, number);
     }
 
     @CacheEvict(value = "followerCache", allEntries = true)

@@ -71,4 +71,18 @@ export class PostService {
       .append('number', number);
     return this.http.get<Post[]>(`${this.apiUrl}/reel`, { params });
   }
+
+  getPostByGroupNameAndType(
+    name: string,
+    type: string | null,
+    index: number,
+    number: number
+  ): Observable<Post[]> {
+    const params = new HttpParams()
+      .append('name', name)
+      .append('index', index)
+      .append('number', number).append('type', type || '');
+
+    return this.http.get<Post[]>(`${this.apiUrl}/get/group`, { params });
+  }
 }

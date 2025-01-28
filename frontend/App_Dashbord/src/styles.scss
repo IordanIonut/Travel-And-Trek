@@ -165,6 +165,14 @@ body.cyan-theme {
     overflow: visible !important;
   }
 
+  .mat-mdc-tab-group{
+    width: 25rem !important; 
+  }
+  
+  .mat-mdc-tab-header{
+    display: inline !important;
+  }
+
   .mat-mdc-tab-body.mat-mdc-tab-body-active {
     overflow-y: scroll;
     scrollbar-width: none;

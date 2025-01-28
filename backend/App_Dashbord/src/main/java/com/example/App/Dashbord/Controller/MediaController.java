@@ -1,6 +1,7 @@
 package com.example.App.Dashbord.Controller;
 
 import com.example.App.Dashbord.Model.Media;
+import com.example.App.Dashbord.Model.User;
 import com.example.App.Dashbord.Service.MediaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +36,9 @@ public class MediaController {
     }
 
     @GetMapping("/all/users")
-    public ResponseEntity<List<String>> getFindAllUserIdMedia() {
+    public ResponseEntity<List<Media>> getFindAllUserIdMedia() {
         try {
-            List<String> list = mediaService.findAllUserIdMedia();
+            List<Media> list = mediaService.findAllUserIdMedia();
             LOG.info("getFindAllUserIdMedia()- media - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {

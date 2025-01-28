@@ -20,7 +20,13 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
   selector: 'app-person',
   standalone: true,
   imports: [MaterialModule, NgFor, NgIf, SlicePipe, FollowerStatusIconPipe],
-  providers: [ShadowService, DialogService, FollowService, SlicePipe, FollowerStatusIconPipe],
+  providers: [
+    ShadowService,
+    DialogService,
+    FollowService,
+    SlicePipe,
+    FollowerStatusIconPipe,
+  ],
   templateUrl: './person.component.html',
   styleUrl: './person.component.scss',
 })
@@ -94,6 +100,9 @@ export class PersonComponent {
   protected onSendPage(name: string) {
     this.router.navigate(['/dashbord/profile'], {
       queryParams: { type: 'user', name: name },
+    })
+    .then(() => {
+      window.location.reload();
     });
   }
 

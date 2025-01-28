@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,15 @@ public class ShareService {
         return shareRepository.findAll();
     }
 
+    @Cacheable(value = "shareCache", key = "'findAllSharesByUser::'+#name+'::'+#index+'::'+#number")
     public List<Share> findAllSharesByUser(String name, int index, int number){
         Pageable pageable = PageRequest.of(index, number);
         return shareRepository.findAllSharesByUser(name, pageable);
+    }
+
+    @Cacheable(value = "shareCache", key = "'getAllSharesByGroup::'+#name+'::'+#index+'::'+#number")
+    public List<Share> getAllSharesByGroup(String name, int index, int number){
+        Pageable pageable = PageRequest.of(index, number);
+        return shareRepository.getAllSharesByGroup(name, pageable);
     }
 }

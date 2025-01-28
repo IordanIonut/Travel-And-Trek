@@ -1,4 +1,5 @@
 import { PostEnum } from '../enum/post.enum';
+import { Group } from './group';
 import { Hastag } from './hashtag';
 import { Media } from './media';
 import { User } from './user';
@@ -8,6 +9,7 @@ export interface Post {
   post_user_id: User;
   post_medias_id: Media[];
   post_hashtag_id: Hastag[];
+  post_group_id: Group;
   tagged_users: User[];
   description: string;
   visible: boolean;

@@ -7,10 +7,16 @@
     <div
       class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
     >
-      <button class="border-efec story-body" (click)="onProfilePage()">
+      <button
+        (click)="onProfilePage()"
+        class="story-body" 
+        #con
+      >
         <img
+          #img
+          id="img"
           draggable="false"
-          class="story max-w-max"
+          class="story max-w-max !w-14 !h-14"
           style="object-fit: cover"
           src="{{ userDTO?.user?.profile_picture }}"
         />
@@ -89,7 +95,8 @@
       {{ userDTO?.user?.bio }}
     </div>
   </div>
-  <div *ngIf="type === 'all'"
+  <div
+    *ngIf="type === 'all'"
     class="p-[5px] flex flex-row gap-2.5 items-center justify-around self-stretch shrink-0 relative"
   >
     <div class="nav-bar relative h-fit m-2 sm:m-4">

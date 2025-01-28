@@ -53,7 +53,7 @@ export class GroupComponent {
   ) {}
 
   ngOnInit(): void {
-    this.length = this.group.friends.length;
+    this.length = this.group.friends.length + this.group.followers.length;
   }
 
   ngAfterViewInit(): void {
@@ -95,12 +95,12 @@ export class GroupComponent {
     event.stopPropagation();
     console.log(this.group);
     if (
-      this.group.groupMembership?.id?.role === GroupMembershipEnum.ADMIN ||
-      this.group.groupMembership?.id?.role === GroupMembershipEnum.MEMBER
+      this.group.groupMembership[0]?.id?.role === GroupMembershipEnum.ADMIN ||
+      this.group.groupMembership[0]?.id?.role === GroupMembershipEnum.MEMBER
     ) {
       // console.log('view');
     } else if (
-      this.group.groupMembership?.id?.role === GroupMembershipEnum.PENDING
+      this.group.groupMembership[0]?.id?.role === GroupMembershipEnum.PENDING
     ) {
       // console.log('pending');
     } else if (this.group.groupMembership === null) {
@@ -123,7 +123,7 @@ export class GroupComponent {
         user_id: u,
         joined_at: new Date(),
       };
-      
+
       this.groupMembershipService
         .postCreateGroupMembership(groupMembership)
         .subscribe({
@@ -135,5 +135,9 @@ export class GroupComponent {
           },
         });
     }
+  }
+
+  protected combineFriendsAndFollowers(friends: User[], followers: User[]) {
+    return [...friends, ...followers];
   }
 }

@@ -46,4 +46,16 @@ public class ShareController {
                     .body(Collections.emptyList());
         }
     }
+
+    @GetMapping("/get/group")
+    public ResponseEntity<List<Share>> getAllSharesByGroup(@RequestParam("name") final String name, @RequestParam("index") final int index, @RequestParam("number") final int number) {
+        try {
+            List<Share> list = shareService.getAllSharesByGroup(name, index, number);
+            LOG.info("getAllSharesByGroup()- user - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve getAllSharesByGroup(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
 }

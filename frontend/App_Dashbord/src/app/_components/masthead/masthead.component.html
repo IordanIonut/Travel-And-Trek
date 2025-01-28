@@ -18,7 +18,7 @@
           matInput
           formControlName="search"
           [matAutocomplete]="auto"
-          (keydown.enter)="onSelectValue(placeholder)"
+          (keydown.enter)="onSelectValue(placeholder, 'enter')"
           (input)="onInputChange($event)"
           (dblclick)="onOpenPosibility($event)"
         />
@@ -26,7 +26,7 @@
           <mat-option
             *ngFor="let option of options"
             [value]="option"
-            (click)="onSelectValue(option)"
+            (click)="onSelectValue(option, 'click')"
             (focus)="onWillBeSelect(option)"
             (mouseenter)="onWillBeSelect(option)"
             (mouseleave)="

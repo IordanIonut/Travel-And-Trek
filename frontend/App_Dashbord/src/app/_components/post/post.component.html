@@ -12,7 +12,7 @@
         draggable="false"
         class="rounded-full mb-3 h-14 object-cover justify-start flex flex-col self-stretch max-w-max w-full"
         src="{{
-          (isPost(data) && data!.post_user_id!.profile_picture) ||
+          (  getProperty('profile_picture'))||
             (isShare(data) && data!.share_user_id!.profile_picture)
         }}"
       />
@@ -66,7 +66,7 @@
         class="textCl text-left text-2xl font-normal relative self-stretch flex items-center justify-start"
       >
         {{
-          (isPost(data) && data!.post_user_id!.name) ||
+          ( getProperty('name')) ||
             (isShare(data) && data!.share_user_id!.name)
         }}
       </div>

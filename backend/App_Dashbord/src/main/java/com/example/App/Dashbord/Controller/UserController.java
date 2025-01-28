@@ -73,7 +73,10 @@ public class UserController {
     @GetMapping("/info")
     public ResponseEntity<UserProfileDTO> findUserByName(@RequestParam("name") final String name) {
         try {
-            UserProfileDTO userDTO = new UserProfileDTO(userService.findByName(name), postService.countPostsByUserName(name), followerService.countFollowersByUser(name), followerService.countFollowingByUser(name), highlightRepository.findAllHighlightsByUser(name));
+            UserProfileDTO userDTO = new UserProfileDTO(userService.findByName(name), postService.countPostsByUserName(name),
+                    followerService.countFollowersByUser(name),
+                    followerService.countFollowingByUser(name),
+                    highlightRepository.findAllHighlightsByUser(name));
             LOG.info("findUserByName()- user - Successful.");
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {

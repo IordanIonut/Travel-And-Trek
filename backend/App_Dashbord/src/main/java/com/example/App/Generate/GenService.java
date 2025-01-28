@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.rmi.server.UID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -83,7 +82,7 @@ public class GenService {
     private static final Faker faker = new Faker();
     private static final Random random = new Random();
     @Autowired
-    private static final Logger LOG = LoggerFactory.getLogger(FollowerService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GenService.class);
 
     public Optional<Map<String, Object>> getGeoCode() {
         double[] coordinates = GenLatLot.generateRandomLandCoordinates();
@@ -223,18 +222,15 @@ public class GenService {
     @Transactional
     public void generateFakeMedia(int number) {
         try {
-            List<Long> userCount = userRepository.findCountUsers();
-            if (userCount.isEmpty()) {
-                System.err.println("No users available to associate with media.");
-                return;
-            }
-
+            List<User> users = userRepository.findAll();
+            List<Group> groups = groupRepository.findAll();
             List<Media> mediaBatch = new ArrayList<>(number);
             Random random = new Random();
             MediaEnum[] mediaTypes = MediaEnum.values();
 
+
             for (int i = 0; i < number; i++) {
-                String randomUserId = userCount.get(random.nextInt(userCount.size())).toString();
+                boolean randomBoolean = random.nextBoolean();
                 MediaEnum randomMediaType = mediaTypes[random.nextInt(mediaTypes.length)];
 
                 MediaId mediaId = new MediaId();
@@ -242,17 +238,19 @@ public class GenService {
                 mediaId.setType(randomMediaType);
 
                 User user = new User();
-                user.setId(randomUserId);
+                user.setId(users.get(random.nextInt(users.size())).getId());
+                Group group = new Group();
+                group.setId(groups.get(random.nextInt(groups.size())).getId());
 
                 Media media = new Media();
                 media.setId(mediaId);
-                media.setMedia_user_id(user);
+                media.setMedia_user_id(randomBoolean ? user : null);
+                media.setMedia_group_id(!randomBoolean ? group : null);
                 media.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                 media.setCreate_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
                 double[] val = GenLatLot.generateRandomLandCoordinates();
                 media.setLongitude(val[1]);
                 media.setLatitude(val[0]);
-                //System.out.println("Media: " + media);
                 mediaBatch.add(media);
             }
             mediaRepository.saveAll(mediaBatch);
@@ -265,18 +263,16 @@ public class GenService {
     @Transactional
     public void generateFakeHighlight(int number) {
         try {
-            List<String> listUsersMedia = mediaRepository.findAllUserIdMedia();
+            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
             if (listUsersMedia.isEmpty()) {
                 System.err.println("No users available to associate with media.");
                 return;
             }
-
             List<Highlight> highlightBatch = new ArrayList<>(number);
 
             for (int i = 0; i < number; i++) {
                 int randomUserIndex = random.nextInt(listUsersMedia.size());
-                String randomUserId = listUsersMedia.get(randomUserIndex);
-                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(randomUserId);
+                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
                 if (userMediaList.isEmpty()) continue;
 
                 List<Media> selectedMediaList = userMediaList.stream()
@@ -284,14 +280,13 @@ public class GenService {
                         .collect(Collectors.toList());
 
                 User user = new User();
-                user.setId(randomUserId);
+                user.setId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
 
                 Highlight highlight = new Highlight();
                 highlight.setId(generateId());
                 highlight.setHighlight_user_id(user);
                 highlight.setHighlight_medias(selectedMediaList);
                 highlight.setImage("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
-
                 highlight.setName(faker.hipster().word());
                 highlight.setVisibility(faker.random().nextBoolean());
                 highlight.setCreated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
@@ -310,26 +305,20 @@ public class GenService {
     @Transactional
     public void generateFakeStory(int number) {
         try {
-            List<String> listUsersMedia = mediaRepository.findAllUserIdMedia();
-            if (listUsersMedia.isEmpty()) {
-                System.err.println("No media available to associate with stories.");
-                return;
-            }
-
+            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
             Random random = new Random();
             List<Story> storyBatch = new ArrayList<>(number);
 
             for (int i = 0; i < number; i++) {
                 int randomUserIndex = random.nextInt(listUsersMedia.size());
-                String randomUserId = listUsersMedia.get(randomUserIndex);
-
-                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(randomUserId);
-                if (userMediaList.isEmpty()) continue;
+                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
+                if (userMediaList.isEmpty())
+                    continue;
 
                 Media randomMedia = userMediaList.get(random.nextInt(userMediaList.size()));
 
                 User user = new User();
-                user.setId(randomUserId);
+                user.setId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
                 Media media = new Media();
                 media.setId(new MediaId(randomMedia.getId().getId(), randomMedia.getId().getType()));
 
@@ -354,12 +343,18 @@ public class GenService {
     @Transactional
     public void generateFakePost(int number) {
         try {
-            List<String> listUsersMedia = mediaRepository.findAllUserIdMedia();
+            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
+            List<Media> listGroupsMedia = mediaRepository.findAllGroupIdMedia();
+
             List<Hashtag> tagList = hashtagRepository.findAll();
             List<User> listUsers = userRepository.findAll();
 
             if (listUsersMedia.isEmpty()) {
                 System.err.println("No users available to generate posts.");
+                return;
+            }
+            if(listGroupsMedia.isEmpty()) {
+                System.err.println("No groups available to generate posts.");
                 return;
             }
 
@@ -369,11 +364,13 @@ public class GenService {
 
             for (int i = 0; i < number; i++) {
                 int randomUserIndex = random.nextInt(listUsersMedia.size());
-                String randomUserId = listUsersMedia.get(randomUserIndex);
+                int randomGroupIndex = random.nextInt(listGroupsMedia.size());
+                boolean randomBoolean = random.nextBoolean();
+                List<Media> userMediaList = randomBoolean ?
+                        mediaRepository.findAllMediaByUserId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId()) :
+                        mediaRepository.findAllMediaByGroupId(listGroupsMedia.get(randomGroupIndex).getMedia_group_id().getId());
 
-                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(randomUserId);
                 if (userMediaList.isEmpty() && !postTypes[i % postTypes.length].equals(PostEnum.TEXT)) continue;
-
                 Post post = new Post();
                 PostEnum randomType = postTypes[random.nextInt(postTypes.length)];
 
@@ -383,8 +380,12 @@ public class GenService {
                 post.setId(postId);
 
                 User user = new User();
-                user.setId(randomUserId);
-                post.setPost_user_id(user);
+                user.setId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
+                post.setPost_user_id(randomBoolean ? user : null);
+
+                Group group = new Group();
+                group.setId(listGroupsMedia.get(randomGroupIndex).getMedia_group_id().getId());
+                post.setPost_group_id(!randomBoolean ? group : null);
 
                 post.setDescription(faker.lorem().paragraph(2));
                 post.setVisible(random.nextBoolean());
@@ -435,8 +436,8 @@ public class GenService {
                     List<String> mediaIds = userMediaList.stream()
                             .map(media -> media.getId().getId())
                             .collect(Collectors.toList());
-                    Long count = postRepository.countPostsByUserIdAndMediaIds(randomUserId, mediaIds);
-                    if (count > 0) continue;
+//                    Long count = postRepository.countPostsByUserIdAndMediaIds(randomUserId, mediaIds);
+//                    if (count > 0) continue;
                 }
 
                 postBatch.add(post);
@@ -455,7 +456,7 @@ public class GenService {
             Random random = new Random();
             Boolean source;
 
-            List<String> listUsersMedia = mediaRepository.findAllUserIdMedia();
+            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
             if (listUsersMedia.isEmpty()) {
                 System.err.println("No users available to generate comments.");
                 return;
@@ -465,7 +466,7 @@ public class GenService {
             List<Comment> commentBatch = new ArrayList<>(number);
 
             for (int i = 0; i < number; i++) {
-                String randomUserId = listUsersMedia.get(random.nextInt(listUsersMedia.size()));
+                String randomUserId = listUsersMedia.get(random.nextInt(listUsersMedia.size())).getMedia_user_id().getId();
                 List<Media> userMediaList = mediaRepository.findAllMediaByUserId(randomUserId);
                 List<Post> userPosts = postRepository.findAllPostByUserId(randomUserId);
                 List<Journal> userJournal = journalRepository.findAllJournalByUser(randomUserId);
@@ -533,7 +534,7 @@ public class GenService {
                 FollowerStatusEnum randomStatus = FollowerStatusEnum.values()[random.nextInt(FollowerStatusEnum.values().length)];
                 FollowerId followerId = new FollowerId();
                 followerId.setId(generateId());
-                followerId.setStatus(randomStatus);
+                followerId.setStatus(FollowerStatusEnum.ACCEPTED);
 
                 User user = new User();
                 user.setId(randomUserId);
@@ -793,7 +794,7 @@ public class GenService {
             User user;
             do {
                 user = users.get(random.nextInt(users.size()));
-                finds = followerRepository.findUsersByStatus(user.getName(), FollowerStatusEnum.ACCEPTED);
+                finds = followerRepository.findUsers(user.getName(), FollowerStatusEnum.ACCEPTED);
             }while (finds.size() == 0 || finds.size() == 1);
 
             Message message = new Message();
