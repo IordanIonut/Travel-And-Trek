@@ -17,9 +17,11 @@ import java.util.List;
 @Entity
 @Table(name = "JOURNALS", indexes = {
         @Index(name = "index_id_user_journal", columnList = "USER_ID"),
-        @Index(name = "index_ids_comment_journal", columnList = "JOURNAL_ID_COMMENT, COMMENT_ID_COMMENT"),
-        @Index(name = "index_ids_hobby_journal", columnList = "JOURNAL_ID_JOURNAL, HOBBY_ID_HOBBY"),
-        @Index(name = "index_ids_travel_journal", columnList = "JOURNAL_TR_ID_TRAVEL, TRAVEL_ID_TRAVEL")
+//        @Index(name = "index_ids_comment_journal", columnList = "JOURNAL_ID_COMMENT, COMMENT_ID_COMMENT"),
+//        @Index(name = "index_ids_hobby_journal", columnList = "JOURNAL_ID_JOURNAL, HOBBY_ID_HOBBY"),
+//        @Index(name = "index_ids_travel_journal", columnList = "JOURNAL_TR_ID_TRAVEL, TRAVEL_ID_TRAVEL"),
+        @Index(name = "idx_travel_journal_create_at", columnList = "CREATE_AT"),
+        @Index(name = "idx_travel_journal_update_at", columnList = "UPDATE_AT"),
 })
 public class Journal {
     @Id

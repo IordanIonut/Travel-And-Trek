@@ -6,6 +6,7 @@ import com.example.App.Dashbord.Service.PostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -97,17 +98,17 @@ public class PostController {
     }
 
     @GetMapping("/reel")
-    public ResponseEntity<List<Post>> getPostForReelByUser(@RequestParam("name") final String name,
+    public ResponseEntity<List<Post>> getPostByUser(@RequestParam("name") final String name,
                                                            @RequestParam("type") final PostEnum type,
                                                            @RequestParam("hashtags") final List<String> hashtags,
                                                            @RequestParam("index") final int index,
                                                            @RequestParam("number") final int number) {
         try {
             List<Post> list = postService.getPostByUser(name, type, hashtags, index, number);
-            LOG.info("getPostForReelByUser()- user - Successful.");
+            LOG.info("getPostByUser()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve getPostForReelByUser(): {}", e.getMessage(), e);
+            LOG.info("Failed to retrieve getPostByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }

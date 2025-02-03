@@ -1,6 +1,6 @@
 <div
   #con
-  class="rounded-[15px] p-2 mb-4 flex flex-row gap-1 items-center justify-start relative w-[550px] h-[180px]"
+  class="rounded-[15px] p-2 mb-4 flex flex-row gap-1 items-center justify-start relative w-[550px] w-max h-[180px]"
   (click)="onSendPage(people.user.name)"
 >
   <div class="flex flex-col justify-start items-center self-stretch">
@@ -24,20 +24,20 @@
       </div>
 
       <div
-      class="textCl text-left text-xl w-full font-normal relative self-stretch flex items-center justify-start overflow-hidden whitespace-nowrap text-ellipsis"
+        class="textCl text-left text-xl w-full font-normal relative self-stretch flex items-center justify-start overflow-hidden whitespace-nowrap text-ellipsis"
       >
         {{ onExtractLocationName(people.user.location) }}
       </div>
       <div
-      class="textCl text-left text-base w-full font-normal relative self-stretch flex items-center justify-start overflow-hidden whitespace-nowrap text-ellipsis"
+        class="textCl text-left text-base w-full font-normal relative self-stretch flex items-center justify-start overflow-hidden whitespace-nowrap text-ellipsis"
       >
         {{ onHastagPeaple(people.user.user_hashtag_id) }}
       </div>
-      <div class="flex w-full" >
+      <div class="flex w-full">
         <div
           *ngFor="let friend of people?.friends | slice : 0 : 5; let k = index"
         >
-          <button (click)="onOpenProfile($event, friend.name)">
+          <button (click)="onOpenProfile($event, friend?.name!)">
             <img
               draggable="false"
               class="rounded-full w-14 h-14 object-cover justify-start flex flex-col self-stretch"
@@ -45,18 +45,29 @@
             />
           </button>
         </div>
-        <div *ngIf="length > 5"
-        class="textCl text-left text-2xl font-normal relative ml-4 self-stretch flex items-center justify-start"
-      >+ {{length - 5}}</div>
+        <div
+          *ngIf="length > 5"
+          class="textCl text-left text-2xl font-normal relative ml-4 self-stretch flex items-center justify-start"
+        >
+          + {{ length - 5 }}
+        </div>
       </div>
     </div>
     <div
       class="flex flex-col gap-2.5 w-1/4 items-center justify-center relative"
     >
-      <button class="dash-style-button" mat-stroked-button color="primary" (click)="onFollow($event, people.user)">
-        <mat-icon
-        >{{people !== null ? (people.state| followerStatusIcon:enums:iconName) : 'send'}}</mat-icon
-      > Follow
+      <button
+        class="dash-style-button"
+        mat-stroked-button
+        color="primary"
+        (click)="onFollow($event, people.user)"
+      >
+        <mat-icon>{{
+          people !== null
+            ? (people.state | followerStatusIcon : enums : iconName)
+            : "send"
+        }}</mat-icon>
+        Follow
       </button>
     </div>
   </div>

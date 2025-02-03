@@ -1,7 +1,7 @@
-import { NgFor, NgIf, NgStyle, SlicePipe } from '@angular/common';
+import { NgFor, NgIf, SlicePipe } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { error } from 'console';
 import { FollowerStatusIconPipe } from 'src/app/_pipe/follower-status-icon.pipe';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { FollowService } from 'src/app/_service/models/follower.service';
@@ -12,25 +12,25 @@ import { GenderEnum } from 'src/app/_type/enum/gender.enum';
 import { Follow } from 'src/app/_type/models/follow';
 import { Hastag } from 'src/app/_type/models/hashtag';
 import { User } from 'src/app/_type/models/user';
-import { environment } from 'src/app/environments/environment';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 
 @Component({
-  selector: 'app-person',
+  selector: 'app-user',
   standalone: true,
-  imports: [MaterialModule, NgFor, NgIf, SlicePipe, FollowerStatusIconPipe],
-  providers: [
-    ShadowService,
-    DialogService,
-    FollowService,
-    SlicePipe,
+  imports: [
+    MaterialModule,
     FollowerStatusIconPipe,
+    SlicePipe,
+    HttpClientModule,
+    NgIf,
+    NgFor,
   ],
-  templateUrl: './person.component.html',
-  styleUrl: './person.component.scss',
+  providers: [],
+  templateUrl: './user.component.html',
+  styleUrl: './user.component.scss',
 })
-export class PersonComponent {
+export class UserComponent {
   @Input() people!: UserDTO;
 
   @ViewChild('con', { static: false })
@@ -47,8 +47,10 @@ export class PersonComponent {
     private shadow: ShadowService,
     private followService: FollowService,
     private dialogService: DialogService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private elementRef: ElementRef
+  ) {
+  }
 
   ngOnInit(): void {
     this.length = this.people?.friends.length;
@@ -98,12 +100,13 @@ export class PersonComponent {
   }
 
   protected onSendPage(name: string) {
-    this.router.navigate(['/dashbord/profile'], {
-      queryParams: { type: 'user', name: name },
-    })
-    .then(() => {
-      window.location.reload();
-    });
+    this.router
+      .navigate(['/dashbord/profile'], {
+        queryParams: { type: 'user', name: name },
+      })
+      .then(() => {
+        window.location.reload();
+      });
   }
 
   protected onFollow(event: Event, user: User) {

@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Controller;
 
+import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Share;
 import com.example.App.Dashbord.Service.ShareService;
 import org.slf4j.Logger;
@@ -56,6 +57,17 @@ public class ShareController {
         } catch (Exception e) {
             LOG.info("Failed to retrieve getAllSharesByGroup(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/post/number")
+    public ResponseEntity<Long> findCountSharesByPost(@RequestParam("id") final String id, @RequestParam("type") final PostEnum type){
+        try {
+            LOG.info("findCountSharesByPost()- user - Successful.");
+            return ResponseEntity.ok(shareService.findCountSharesByPost(id, type));
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findCountSharesByPost(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0L);
         }
     }
 }

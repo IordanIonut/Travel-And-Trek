@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 @Table(name = "MEDIA", indexes = {
         @Index(name = "index_media_id", columnList = "ID, TYPE"),
         @Index(name = "index_media_user", columnList = "USER_ID"),
-        @Index(name = "index_media_group", columnList = "GROUP_ID")
+        @Index(name = "index_media_group", columnList = "GROUP_ID"),
+        @Index(name = "idx_media_create_at", columnList = "CREATE_AT"),
 })
 public class Media {
     @EmbeddedId

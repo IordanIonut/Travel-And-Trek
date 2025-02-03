@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "FOLLOWERS", indexes = {
         @Index(name = "index_follower_id", columnList = "ID, STATUS"),
         @Index(name = "index_follower_user", columnList = "USER_ID"),
-        @Index(name = "index_follower_user_id", columnList = "USER_ID_FOLLOWER")
+        @Index(name = "index_follower_user_id", columnList = "USER_ID_FOLLOWER"),
+        @Index(name = "idx_follower_create_at", columnList = "CREATE_AT"),
 })
 public class Follower {
     @EmbeddedId

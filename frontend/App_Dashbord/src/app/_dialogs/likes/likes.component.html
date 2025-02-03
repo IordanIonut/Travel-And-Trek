@@ -1,0 +1,64 @@
+<div class="page-dialog">
+  <div class="flex flex-col justify-between w-full h-full px-4 items-center">
+    <div class="flex-col w-full flex relative">
+      <mat-tab-group
+        animationDuration="12ms"
+        class="h-[100%] dash-style-tab-group"
+        (selectedTabChange)="onTabChange($event)"
+      >
+        <mat-tab class="w-full h-full">
+          <ng-template mat-tab-label>
+            <mat-icon class="icon">apps</mat-icon>
+          </ng-template>
+          <div
+            class="tab-content"
+            class="flex flex-wrap gap-1 justify-between w-full h-fit"
+          >
+            <app-user
+              style="width: initial !important"
+              *ngFor="let data of all || []"
+              [people]="data"
+            ></app-user>
+          </div>
+        </mat-tab>
+
+        <mat-tab class="w-full h-full">
+          <ng-template mat-tab-label>
+            <mat-icon class="icon">thumb_up</mat-icon>
+          </ng-template>
+          <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+            <app-user
+              style="width: initial !important"
+              *ngFor="let data of like || []"
+              [people]="data"
+            ></app-user>
+          </div>
+        </mat-tab>
+        <mat-tab class="w-full h-full">
+          <ng-template mat-tab-label>
+            <mat-icon class="icon">favorite</mat-icon>
+          </ng-template>
+          <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+            <app-user
+              style="width: initial !important"
+              *ngFor="let data of favorite || []"
+              [people]="data"
+            ></app-user>
+          </div>
+        </mat-tab>
+        <mat-tab class="w-full h-full">
+          <ng-template mat-tab-label>
+            <mat-icon class="icon">mood</mat-icon>
+          </ng-template>
+          <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+            <app-user
+              style="width: initial !important"
+              *ngFor="let data of funny || []"
+              [people]="data"
+            ></app-user>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

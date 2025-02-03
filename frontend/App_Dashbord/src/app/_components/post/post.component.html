@@ -5,14 +5,18 @@
   <div class="flex flex-col justify-start items-center self-stretch w-[3.5rem]">
     <button
       *ngIf="isShare(data) || isPost(data)"
-      (click)="isPost(data) ? onOpenProfile($event, data!.post_user_id!.name) : null"
-      (click)="isShare(data) ? onOpenProfile($event, data!.share_user_id!.name) : null"
+      (click)="
+        isPost(data) ? onOpenProfile($event, data!.post_user_id!.name) : null
+      "
+      (click)="
+        isShare(data) ? onOpenProfile($event, data!.share_user_id!.name) : null
+      "
     >
       <img
         draggable="false"
         class="rounded-full mb-3 h-14 object-cover justify-start flex flex-col self-stretch max-w-max w-full"
         src="{{
-          (  getProperty('profile_picture'))||
+          getProperty('profile_picture') ||
             (isShare(data) && data!.share_user_id!.profile_picture)
         }}"
       />
@@ -57,7 +61,7 @@
   </div>
 
   <div
-    class="flex flex-col w-[40rem] gap-2.5 items-start justify-start self-stretch relative"
+    class="flex flex-col w-[40rem] gap-2.5 items-start self-stretch relative justify-between"
   >
     <div
       class="bgCom rounded-[15px] p-2.5 flex flex-col gap-1 items-start justify-start self-stretch shrink-0 relative"
@@ -66,8 +70,7 @@
         class="textCl text-left text-2xl font-normal relative self-stretch flex items-center justify-start"
       >
         {{
-          ( getProperty('name')) ||
-            (isShare(data) && data!.share_user_id!.name)
+          getProperty("name") || (isShare(data) && data!.share_user_id!.name)
         }}
       </div>
       <div
@@ -284,17 +287,14 @@
     <div
       class="flex flex-row w-full items-center justify-between self-stretch shrink-0 relative"
     >
-      <div class="bgCom icons">
+      <div #share (click)="onOpenShare($event)">
         <mat-icon>share</mat-icon>
       </div>
-      <div class="bgCom icons">
+      <div #comment (click)="onOpenComment($event)">
         <mat-icon>comment</mat-icon>
       </div>
-      <div class="bgCom icons">
+      <div #like (click)="onClickLike($event)">
         <mat-icon>favorite</mat-icon>
-      </div>
-      <div class="bgCom icons">
-        <mat-icon>bookmark</mat-icon>
       </div>
     </div>
   </div>

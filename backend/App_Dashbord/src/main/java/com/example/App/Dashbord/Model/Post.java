@@ -17,9 +17,12 @@ import java.util.List;
 @Data
 @Table(name = "POSTS", indexes = {
         @Index(name = "index_post_id", columnList = "ID, TYPE"),
-        @Index(name = "index_post_media", columnList = "POST_ID_POST, POST_TYPE_POST, MEDIA_ID_MEDIA, MEDIA_TYPE_MEDIA"),
-        @Index(name = "index_post_tag", columnList = "POST_ID_POST, POST_TYPE_POST, HASHTAG_ID"),
-        @Index(name = "idx_post_tags", columnList = "POST_ID, USER_ID")
+//        @Index(name = "index_post_media", columnList = "POST_ID_POST, POST_TYPE_POST, MEDIA_ID_MEDIA, MEDIA_TYPE_MEDIA"),
+//        @Index(name = "index_post_tag", columnList = "POST_ID_POST, POST_TYPE_POST, HASHTAG_ID"),
+        @Index(name = "idx_post_user", columnList = "USER_ID"),
+        @Index(name = "idx_post_group", columnList = "GROUP_ID"),
+        @Index(name = "idx_post_create_at", columnList = "CREATE_AT"),
+        @Index(name = "idx_post_update_at", columnList = "UPDATE_AT"),
 })
 public class Post {
     @EmbeddedId

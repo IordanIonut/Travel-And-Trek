@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table(name = "USER_GROUPS", indexes = {
-        @Index(name = "index_group_id", columnList = "ID")
+        @Index(name = "index_group_id", columnList = "ID"),
+        @Index(name = "idx_group_create_at", columnList = "CREATE_AT"),
+        @Index(name = "idx_group_update_at", columnList = "UPDATED_AT"),
 })
 public class Group {
     @Id

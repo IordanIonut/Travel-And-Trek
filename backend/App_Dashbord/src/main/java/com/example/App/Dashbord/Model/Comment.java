@@ -17,10 +17,11 @@ import java.time.LocalDateTime;
 @Table(name = "COMMENTS", indexes = {
         @Index(name = "index_comment_id", columnList = "ID, TYPE"),
         @Index(name = "index_comment_user", columnList = "USER_ID"),
-        @Index(name = "index_journal_id", columnList = "JOURNAL_ID"),
+        @Index(name = "index_journal_id", columnList = "JOURNAL_ID_COMMENT"),
         @Index(name = "index_comment_post", columnList = "POST_ID_COMMENT, POST_TYPE_COMMENT"),
         @Index(name = "index_comment_media", columnList = "MEDIA_ID_COMMENT, MEDIA_TYPE_COMMENT"),
-        @Index(name ="index_comment_source", columnList = "SOURCE_ID_COMMENT, SOURCE_TYPE_COMMENT")
+        @Index(name ="index_comment_source", columnList = "SOURCE_ID_COMMENT, SOURCE_TYPE_COMMENT"),
+        @Index(name = "idx_comment_create_at", columnList = "CREATE_AT"),
 })
 public class Comment {
     @EmbeddedId
@@ -64,7 +65,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "SOURCE_ID_COMMENT", referencedColumnName = "id"),
-            @JoinColumn(name = "SOURCE_TYPE_COOMENT", referencedColumnName = "type")
+            @JoinColumn(name = "SOURCE_TYPE_COMMENT", referencedColumnName = "type")
     })
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Comment comment_source_id;

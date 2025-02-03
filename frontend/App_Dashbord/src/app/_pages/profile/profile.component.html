@@ -125,7 +125,7 @@
       </div>
     </div>
 
-    <div *ngIf="isFollowing"  class="flex flex-row gap-3 w-[96rem] relative">
+    <div *ngIf="isFollowing" class="flex flex-row gap-3 w-[96rem] relative">
       <div class="flex-col w-full flex relative">
         <mat-tab-group
           animationDuration="12ms"
@@ -142,10 +142,10 @@
             >
               <div *ngFor="let item of generateIndexArray(indexFollowing)">
                 <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-                  <app-person
+                  <app-user
                     *ngFor="let people of followings[item]?.data"
                     [people]="people"
-                  ></app-person>
+                  ></app-user>
                 </div>
               </div>
             </div>
@@ -161,10 +161,10 @@
             >
               <div *ngFor="let item of generateIndexArray(indexBlock)">
                 <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-                  <app-person
+                  <app-user
                     *ngFor="let people of blocks[item]?.data"
                     [people]="people"
-                  ></app-person>
+                  ></app-user>
                 </div>
               </div>
             </div>
@@ -176,18 +176,18 @@
     <div *ngIf="isFollowrs" class="flex flex-row gap-3 w-[96rem] relative">
       <div class="flex-col w-full flex">
         <div
-        class="hide-scrollbar h-[42rem]"
-        (scroll)="onScrollFollowers($event)"
-      >
-        <div *ngFor="let item of generateIndexArray(indexFollower)">
-          <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
-            <app-person
-              *ngFor="let people of followers[item]?.data"
-              [people]="people"
-            ></app-person>
+          class="hide-scrollbar h-[42rem]"
+          (scroll)="onScrollFollowers($event)"
+        >
+          <div *ngFor="let item of generateIndexArray(indexFollower)">
+            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+              <app-user
+                *ngFor="let people of followers[item]?.data"
+                [people]="people"
+              ></app-user>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
 

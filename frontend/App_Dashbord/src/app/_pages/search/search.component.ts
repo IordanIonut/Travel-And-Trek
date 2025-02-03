@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
 import { MastheadComponent } from 'src/app/_components/masthead/masthead.component';
 import { FilterSeach } from 'src/app/_type/filters/filter';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
-import { PersonComponent } from '../../_components/person/person.component';
 import { GroupComponent } from '../../_components/group/group.component';
 import { PlaceComponent } from '../../_components/place/place.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,6 +23,8 @@ import { Hastag } from 'src/app/_type/models/hashtag';
 import { HashtagService } from 'src/app/_service/models/hashtag.service';
 import { env } from 'process';
 import { User } from 'src/app/_type/models/user';
+import { LikeService } from 'src/app/_service/models/like.service';
+import { UserComponent } from 'src/app/_components/user/user.component';
 
 @Component({
   selector: 'app-search',
@@ -32,17 +33,18 @@ import { User } from 'src/app/_type/models/user';
     MaterialModule,
     MastheadComponent,
     NgFor,
-    PersonComponent,
     GroupComponent,
     FormsModule,
     PostComponent,
     NgIf,
+    UserComponent,
     HttpClientModule,
   ],
   templateUrl: './search.component.html',
   providers: [
     UserService,
     GroupService,
+    LikeService,
     PostService,
     ShadowService,
     HashtagService,
@@ -293,7 +295,7 @@ export class SearchComponent {
           },
         });
     }
-    this.cdr.detectChanges();
+    // this.cdr.detectChanges();
   }
 
   protected onScroll(event: any) {

@@ -82,7 +82,6 @@ export class PostService {
       .append('name', name)
       .append('index', index)
       .append('number', number).append('type', type || '');
-
     return this.http.get<Post[]>(`${this.apiUrl}/get/group`, { params });
   }
 }

@@ -25,7 +25,7 @@ public interface FollowerRepository extends JpaRepository<Follower, FollowerId> 
     @Query("SELECT DISTINCT COUNT(DISTINCT f.follower_user_id.id) FROM Follower f  WHERE f.follower_user_id_follower.name = :name AND f.id.status = 'ACCEPTED' ")
     Long countFollowingByUser(@Param("name") final String name);
 
-    @Query("SELECT COUNT(f.id) FROM Follower f JOIN User u ON f.follower_user_id.id = u.id WHERE u.name = :name AND f.id.status = :status")
+    @Query("SELECT f.follower_user_id_follower FROM Follower f JOIN User u ON f.follower_user_id.id = u.id WHERE u.name = :name AND f.id.status = :status")
     List<User> findUsers(@Param("name") final String name, @Param("status") final FollowerStatusEnum status);
 
     @Query("SELECT DISTINCT f.follower_user_id_follower FROM Follower f WHERE f.follower_user_id.name = :name AND f.id.status = :status")

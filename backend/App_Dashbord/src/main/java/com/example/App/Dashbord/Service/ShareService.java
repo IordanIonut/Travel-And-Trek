@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Service;
 
+import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Repository.ShareRepository;
 import com.example.App.Dashbord.Model.Share;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,13 +29,18 @@ public class ShareService {
 
     @Cacheable(value = "shareCache", key = "'findAllSharesByUser::'+#name+'::'+#index+'::'+#number")
     public List<Share> findAllSharesByUser(String name, int index, int number){
-        Pageable pageable = PageRequest.of(index, number);
+        Pageable pageable = PageRequest.of(index, number, Sort.by(Sort.Direction.DESC, "update_at"));
         return shareRepository.findAllSharesByUser(name, pageable);
     }
 
     @Cacheable(value = "shareCache", key = "'getAllSharesByGroup::'+#name+'::'+#index+'::'+#number")
     public List<Share> getAllSharesByGroup(String name, int index, int number){
-        Pageable pageable = PageRequest.of(index, number);
+        Pageable pageable = PageRequest.of(index, number, Sort.by(Sort.Direction.DESC, "update_at"));
         return shareRepository.getAllSharesByGroup(name, pageable);
+    }
+
+    @Cacheable(value = "shareCache", key = "'findCountSharesByPost::'+#id+'::'+#type")
+    public Long findCountSharesByPost(String id, PostEnum type){
+        return shareRepository.findCountSharesByPost(id, type);
     }
 }

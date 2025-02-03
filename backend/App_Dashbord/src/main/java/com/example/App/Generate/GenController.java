@@ -17,7 +17,7 @@ import java.util.Optional;
 public class GenController {
     private final GenService genService;
     @Autowired
-    private static final Logger LOG = LoggerFactory.getLogger(CommentController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GenController.class);
 
     @Autowired
     public GenController(GenService genService) {

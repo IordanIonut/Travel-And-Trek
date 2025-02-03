@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
         @Index(name ="index_like_user", columnList = "USER_ID"),
         @Index(name = "index_like_media", columnList = "MEDIA_ID_LIKE, MEDIA_TYPE_LIKE"),
         @Index(name = "index_like_post", columnList = "POST_ID_LIKE, POST_TYPE_LIKE"),
-        @Index(name = "index_like_comment", columnList = "COMMENT_ID_LIKE, COMMENT_TYPE_LIKE")
+        @Index(name = "index_like_comment", columnList = "COMMENT_ID_LIKE, COMMENT_TYPE_LIKE"),
+        @Index(name = "idx_like_create_at", columnList = "CREATE_AT"),
 })
 public class Like {
     @EmbeddedId

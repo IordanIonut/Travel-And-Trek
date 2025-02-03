@@ -16,7 +16,16 @@ import java.time.LocalDateTime;
 @Setter
 @Data
 @Entity
-@Table(name = "MESSAGES", indexes = {@Index(name = "index_id_message", columnList = "ID, TYPE"), @Index(name = "index_sender_id_message", columnList = "SENDER_ID_MESSAGE"), @Index(name = "index_recipient_id_message", columnList = "RECIPIENT_ID_MESSAGE"), @Index(name = "index_post_message", columnList = "POST_ID_MESSAGE, POST_TYPE_MESSAGE"), @Index(name = "index_story_message", columnList = "STORY_ID_MESSAGE"), @Index(name = "index_group_message", columnList = "GROUP_ID_MESSAGE")})
+@Table(name = "MESSAGES", indexes = {
+        @Index(name = "index_id_message", columnList = "ID, TYPE"),
+        @Index(name = "index_sender_id_message", columnList = "SENDER_ID_MESSAGE"),
+        @Index(name = "index_recipient_id_message", columnList = "RECIPIENT_ID_MESSAGE"),
+        @Index(name = "index_post_message", columnList = "POST_ID_MESSAGE, POST_TYPE_MESSAGE"),
+        @Index(name = "index_story_message", columnList = "STORY_ID_MESSAGE"),
+        @Index(name = "index_group_message", columnList = "GROUP_ID_MESSAGE"),
+        @Index(name = "idx_message_create_at", columnList = "CREATED_AT"),
+        @Index(name = "idx_message_update_at", columnList = "UPDATED_AT"),
+})
 public class Message {
     @EmbeddedId
     private MessagesId id;

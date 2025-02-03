@@ -3,6 +3,7 @@ package com.example.App.Dashbord.Repository;
 import com.example.App.Dashbord.Embedded.PostId;
 import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Post;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,20 +27,20 @@ public interface PostRepository extends JpaRepository<Post, PostId> {
     @Query("SELECT COUNT(DISTINCT p.id) FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name AND p.visible = true")
     Long countPostsByUserName(@Param("name") final String name);
     //add visibility condition
-    @Query("SELECT p FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name AND p.id.type = :type ORDER BY p.update_at DESC, p.create_at DESC")
+    @Query("SELECT p FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name AND p.id.type = :type ORDER BY p.update_at DESC")
     List<Post> findAllPostsByUserType(@Param("name") final String name, @Param("type") final PostEnum type, Pageable pageable);
     //add visibility condition
-    @Query("SELECT p FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name  ORDER BY p.update_at DESC, p.create_at DESC")
+    @Query("SELECT p FROM Post p JOIN User u ON p.post_user_id.id = u.id WHERE u.name = :name  ORDER BY p.update_at DESC")
     List<Post> findAllPostsByUserWithoutType(@Param("name") final String name, Pageable pageable);
     //add visibility condition
-    @Query("SELECT p FROM Post p JOIN p.tagged_users u  WHERE u.name = :name ORDER BY p.update_at DESC, p.create_at DESC")
+    @Query("SELECT p FROM Post p JOIN p.tagged_users u  WHERE u.name = :name ORDER BY p.update_at DESC")
     List<Post> findPostByUserTags(@Param("name") final String name, Pageable pageable);
     //add visibility condition
     @Query("SELECT DISTINCT p FROM Post p " +
             "LEFT JOIN p.post_user_id u " +
             "WHERE u.name LIKE CONCAT(:search, '%') " +
             "OR EXISTS (SELECT 1 FROM p.tagged_users t WHERE t.name LIKE CONCAT(:search, '%')) " +
-            "ORDER BY p.create_at DESC, p.update_at DESC")
+            "ORDER BY p.update_at DESC")
     List<Post> getPostBySearch(@Param("search") String search, Pageable pageable);
     //add visibility condition
     @Query("""
@@ -61,13 +62,13 @@ public interface PostRepository extends JpaRepository<Post, PostId> {
                       OR hs.name IN :hashtags
                       OR uh.name IN :hashtags
                   )
-                ORDER BY p.create_at DESC, p.update_at DESC
-            """)
+                ORDER BY p.update_at DESC
+      """)
     List<Post> getPostByUser(@Param("name") String name, @Param("type") PostEnum type, @Param("hashtags") List<String> hashtags, Pageable pageable);
 
     @Query("SELECT DISTINCT p FROM Post p " +
             "WHERE p.post_group_id.name = :name " +
-            "AND (:type IS NULL OR p.id.type = :type) ORDER BY p.create_at DESC, p.update_at DESC")
+            "AND (:type IS NULL OR p.id.type = :type) ORDER BY p.update_at DESC")
     List<Post> getPostByGroupNameAndType(@Param("name") String name, @Param("type") PostEnum type, Pageable pageable);
 
 }

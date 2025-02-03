@@ -21,7 +21,7 @@ import java.util.List;
         @Index(name = "index_user_gender", columnList = "GENDER"),
         @Index(name = "index_user_date_create", columnList = "DATE_CREATE"),
         @Index(name = "index_user_location", columnList = "LOCATION"),
-        @Index(name = "index_user_tag", columnList = "USER_TAGS, USER_ID_POST")
+//        @Index(name = "index_user_tag", columnList = "TAG_ID, USER_ID_POST")
 })
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
@@ -29,7 +29,7 @@ public class User {
     @Column(name = "ID", nullable = false)
     private String id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_HASHTAG",
             joinColumns = {

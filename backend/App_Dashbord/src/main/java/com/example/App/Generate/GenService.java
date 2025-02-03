@@ -282,6 +282,7 @@ public class GenService {
                 User user = new User();
                 user.setId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
 
+                LocalDateTime date =faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
                 Highlight highlight = new Highlight();
                 highlight.setId(generateId());
                 highlight.setHighlight_user_id(user);
@@ -289,8 +290,8 @@ public class GenService {
                 highlight.setImage("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                 highlight.setName(faker.hipster().word());
                 highlight.setVisibility(faker.random().nextBoolean());
-                highlight.setCreated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-                highlight.setUpdated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+                highlight.setCreated_at(date);
+                highlight.setUpdated_at(date);
 
                 highlightBatch.add(highlight);
             }
@@ -390,14 +391,12 @@ public class GenService {
                 post.setDescription(faker.lorem().paragraph(2));
                 post.setVisible(random.nextBoolean());
 
-                post.setCreate_at(faker.date().birthday(18, 19).toInstant()
+                LocalDateTime date = faker.date().birthday(18, 19).toInstant()
                         .atZone(ZoneId.systemDefault())
-                        .toLocalDate().atStartOfDay());
-                post.setUpdate_at((random.nextBoolean() ?
-                        faker.date().birthday(1, 4).toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate() : LocalDate.now())
-                        .atStartOfDay());
+                        .toLocalDate().atStartOfDay();
+
+                post.setCreate_at(LocalDateTime.from(date));
+                post.setUpdate_at(LocalDateTime.from(date));
 
                 List<User> tags = listUsers.stream()
                         .limit(Math.min(random.nextInt(4), 3))
@@ -677,12 +676,13 @@ public class GenService {
                 User userShared = new User();
                 userShared.setId(randomUserIdShared);
 
+                LocalDateTime date = faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
                 Share share = new Share();
                 share.setShareId(shareId);
                 share.setShare_user_id(user);
                 share.setShare_user_id_sharled(userShared);
-                share.setUpdate_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-                share.setCreate_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+                share.setUpdate_at(date);
+                share.setCreate_at(date);
 
                 switch (randomType) {
                     case MEDIA:
@@ -724,18 +724,15 @@ public class GenService {
             do {
                 uniqueName = faker.superhero().name() + '-' + faker.name().fullName();
             } while (groupRepository.existsByName(uniqueName).isPresent());
-
+            LocalDateTime date = faker.date().birthday(18, 65)
+                    .toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDate().atStartOfDay();
             Group group = new Group();
             group.setId(generateId());
             group.setName(uniqueName);
             group.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
-            group.setUpdated_at(faker.date().birthday(18, 65)
-                    .toInstant().atZone(ZoneId.systemDefault())
-                    .toLocalDate().atStartOfDay());
-            group.setCreate_at(faker.date().birthday(18, 65)
-                    .toInstant().atZone(ZoneId.systemDefault())
-                    .toLocalDate().atStartOfDay());
-            group.setDescription(faker.superhero().descriptor());
+            group.setUpdated_at(date);
+            group.setCreate_at(date);
             groups.add(group);
         }
 
@@ -794,14 +791,15 @@ public class GenService {
             User user;
             do {
                 user = users.get(random.nextInt(users.size()));
-                finds = followerRepository.findUsers(user.getName(), FollowerStatusEnum.ACCEPTED);
-            }while (finds.size() == 0 || finds.size() == 1);
+                finds = followerRepository.findUsers(user.getName(),  FollowerStatusEnum.values()[random.nextInt(FollowerStatusEnum.values().length)]);
+            }while (finds.isEmpty() || finds.size() == 1);
 
+            LocalDateTime date = faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
             Message message = new Message();
             message.setId(messagesId);
             message.setContent(faker.lorem().paragraph(2));
-            message.setCreated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-            message.setUpdated_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            message.setCreated_at(date);
+            message.setUpdated_at(date);
 
             message.setGroup_id(faker.random().nextBoolean() ? groups.get(random.nextInt(groups.size())) : null);
             message.setPost_id(m == MessageEnum.POST ? posts.get(random.nextInt(posts.size())) : null);
@@ -872,13 +870,13 @@ public class GenService {
 
             List<Hobby> selectHobby = hobbies.stream().limit(Math.min(random.nextInt(6), 5)).collect(Collectors.toList());
             List<TravelDestination> selectTravelDestination = travelDestinations.stream().limit(Math.min(random.nextInt(6), 5)).collect(Collectors.toList());
-
+            LocalDateTime date = faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
             Journal journal = new Journal();
             journal.setId(generateId());
             journal.setTittle(faker.dune().title());
             journal.setContent(faker.lorem().sentence());
-            journal.setCreate_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-            journal.setUpdate_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            journal.setCreate_at(date);
+            journal.setUpdate_at(date);
             journal.setUser_id(users.get(random.nextInt(users.size())));
             journal.setHobby_ids(selectHobby);
             journal.setTravel_destination_ids(selectTravelDestination);

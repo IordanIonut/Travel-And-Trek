@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Controller;
 
+import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Comment;
 import com.example.App.Dashbord.Service.CommentService;
 import org.slf4j.Logger;
@@ -7,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +31,18 @@ public class CommentController {
             LOG.info("Failed to retrieve findAllComments(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/post/number")
+    public ResponseEntity<Long> findCountCommentsByPost(@RequestParam("id") final String id, @RequestParam("type") final PostEnum type) {
+        try {
+            LOG.info("findCountCommentsByPost()- user - Successful.");
+            return ResponseEntity.ok(commentService.findCountCommentsByPost(id, type));
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findCountCommentsByPost(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(0L);
         }
     }
 }

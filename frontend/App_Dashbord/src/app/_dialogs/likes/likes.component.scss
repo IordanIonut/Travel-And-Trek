@@ -1,0 +1,30 @@
+/* Set height of tab content and enable scrolling */
+.tab-content {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  /* Ensure the tab labels and icons are fixed */
+  .mat-tab-group {
+    height: 100%; /* Full height */
+  }
+  
+  .mat-tab-body-wrapper {
+    height: calc(100% - 48px); /* Adjust to prevent scrolling of tab headers */
+  }
+  
+  /* Optional: Style scrollbar */
+  .tab-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .tab-content::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+  }
+  
+  .tab-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  

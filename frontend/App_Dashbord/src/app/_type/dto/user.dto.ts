@@ -5,4 +5,5 @@ export interface UserDTO {
   user: User;
   friends: User[];
   state: FollowerStatusEnum;
+
 }

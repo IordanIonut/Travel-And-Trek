@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Service;
 
+import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Repository.CommentRepository;
 import com.example.App.Dashbord.Model.Comment;
 import org.slf4j.Logger;
@@ -25,5 +26,10 @@ public class CommentService {
     @Cacheable(value = "commentCache", key = "'lastIdByType'")
     public Long findLastIdByType(final String type){
         return commentRepository.findLastIdByType(type);
+    }
+
+    @Cacheable(value = "commentCache", key = "'findCountCommentsByPost::'+#id+'::'+#type")
+    public Long findCountCommentsByPost(String id, PostEnum type){
+        return commentRepository.findCountCommentsByPost(id, type);
     }
 }

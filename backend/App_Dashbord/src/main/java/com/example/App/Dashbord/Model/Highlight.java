@@ -17,7 +17,9 @@ import java.util.List;
 @Table(name = "HIGHLIGHTS", indexes = {
         @Index(name = "index_highlight_id", columnList = "ID"),
         @Index(name = "index_highlight_user", columnList = "USER_ID"),
-        @Index(name = "index_highlight_medias", columnList = "MEDIA_ID_MEDIA, MEDIA_TYPE_MEDIA")
+//        @Index(name = "index_highlight_medias", columnList = "MEDIA_ID_MEDIA, MEDIA_TYPE_MEDIA, HIGHLIGHT_ID"),
+        @Index(name = "idx_highlight_create_at", columnList = "CREATE_AT"),
+        @Index(name = "idx_highlight_update_at", columnList = "UPDATE_AT"),
 })
 public class Highlight {
     @Id

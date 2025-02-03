@@ -11,7 +11,6 @@ import { MastheadComponent } from '../../_components/masthead/masthead.component
 import { PostComponent } from '../../_components/post/post.component';
 import { StoryComponent } from '../../_components/story/story.component';
 import { PlaceComponent } from '../../_components/place/place.component';
-import { PersonComponent } from '../../_components/person/person.component';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { FilterSeach } from 'src/app/_type/filters/filter';
 import { UserService } from 'src/app/_service/models/user.service';
@@ -36,6 +35,7 @@ import { FollowService } from 'src/app/_service/models/follower.service';
 import { FollowerStatusEnum } from 'src/app/_type/enum/follower.status.enum';
 import { UserDTO } from 'src/app/_type/dto/user.dto';
 import e from 'express';
+import { UserComponent } from 'src/app/_components/user/user.component';
 
 @Component({
   selector: 'app-profile',
@@ -48,9 +48,8 @@ import e from 'express';
     PostComponent,
     StoryComponent,
     HttpClientModule,
-    PersonComponent,
     PostComponent,
-    PersonComponent,
+    UserComponent,
   ],
   providers: [
     UserService,
@@ -280,8 +279,7 @@ export class ProfileComponent {
     this.isFollowrs = true;
     this.isFollowing = false;
 
-    if (this.followers?.[0]?.data?.length === 0)
-      this.onTabChangeFollowers();
+    if (this.followers?.[0]?.data?.length === 0) this.onTabChangeFollowers();
   }
 
   protected onIsFollowing() {

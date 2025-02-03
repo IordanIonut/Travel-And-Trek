@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
         @Index(name = "index_share_id_type_share", columnList = "MEDIA_ID_SHARE, MEDIA_TYPE_SHARE"),
         @Index(name = "index_share_id_type_post", columnList = "POST_ID_SHARE, POST_TYPE_SHARE"),
         @Index(name = "index_share_story_post", columnList = "STORY_ID_SHARE"),
+        @Index(name = "idx_share_create_at", columnList = "CREATE_AT"),
+        @Index(name = "idx_share_update_at", columnList = "UPDATE_AT"),
 })
 public class Share {
     @EmbeddedId

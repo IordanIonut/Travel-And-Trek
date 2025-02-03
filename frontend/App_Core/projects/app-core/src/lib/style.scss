@@ -93,20 +93,32 @@ body {
   display: none;
 }
 
+mat-dialog-container {
+  height: fit-content !important;
+  width: fit-content !important;
+}
+
 .page-dialog {
   @apply h-max flex bgPrimary overflow-y-auto p-3 flex-col;
   max-height: 80vh;
   overflow-y: scroll;
+  background: #101414 !important;
   overflow-x: hidden;
   -ms-overflow-style: none;
 }
 
+.mat-mdc-dialog-surface {
+  background-color: transparent !important;
+}
+
 .page-dialog::-webkit-scrollbar {
   width: 0;
+  height: fit-content !important;
 }
 
 .page-dialog::-webkit-scrollbar-thumb {
   background-color: transparent;
+  background: #101414 !important;
 }
 
 .line {

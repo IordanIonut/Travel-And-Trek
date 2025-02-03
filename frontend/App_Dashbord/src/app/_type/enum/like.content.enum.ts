@@ -1,3 +1,5 @@
-export enum LikeContentEnum{
-    LIKE, LOVE, FUNNY
+export enum LikeContentEnum {
+  LIKE = 'LIKE',
+  LOVE = 'LOVE',
+  FUNNY = 'FUNNY',
 }
