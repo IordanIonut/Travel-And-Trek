@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatComponent } from 'src/app/_dialogs/chat/chat.component';
+import { CommentsComponent } from 'src/app/_dialogs/comments/comments.component';
 import { FilterComponent } from 'src/app/_dialogs/filter/filter.component';
 import { HighlightComponent } from 'src/app/_dialogs/highlight/highlight.component';
 import { LikesComponent } from 'src/app/_dialogs/likes/likes.component';
@@ -8,8 +9,11 @@ import { NotificationComponent } from 'src/app/_dialogs/notification/notificatio
 import { PhotoComponent } from 'src/app/_dialogs/photo/photo.component';
 import { ProfileComponent } from 'src/app/_dialogs/profile/profile.component';
 import { SeeValueComponent } from 'src/app/_dialogs/see-value/see-value.component';
+import { SendComponent } from 'src/app/_dialogs/send/send.component';
+import { SharesComponent } from 'src/app/_dialogs/shares/shares.component';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { FilterSeach } from 'src/app/_type/filters/filter';
+import { CommentId } from 'src/app/_type/models/commet';
 import { Highlight } from 'src/app/_type/models/highlight';
 import { PostId } from 'src/app/_type/models/post';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
@@ -106,13 +110,15 @@ export class DialogService {
 
   openDialogSeeValue(
     position: Position,
-    id: PostId,
-    type: 'LIKE' | 'SHARE' | 'COMMENT'
+    id: PostId | CommentId,
+    type: 'LIKE' | 'SHARE' | 'COMMENT',
+    isComment: boolean
   ) {
     const dialogRef = this.dialog.open(SeeValueComponent, {
       width: '5px',
       height: '5px',
-      data: { id: id, type: type },
+      minWidth: 'fit-content',
+      data: { id: id, type: type, isComment },
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -133,5 +139,51 @@ export class DialogService {
       },
     });
     dialogRef.afterClosed().subscribe(() => {});
+  }
+
+  openDialogShares(position: Position, id: PostId) {
+    const dialogRef = this.dialog.open(SharesComponent, {
+      width: 'auto',
+      height: 'auto',
+      data: { id: id },
+      position: {
+        top: `${position.pos_y}px`,
+        left: `${position.pos_x - this.width}px`,
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {});
+  }
+
+  openDialogComponents(position: Position, id: PostId) {
+    const dialogRef = this.dialog.open(CommentsComponent, {
+      width: 'auto',
+      minWidth: '50rem',
+      height: 'auto',
+      data: { id: id },
+      position: {
+        top: `${position.pos_y}px`,
+        left: `${position.pos_x - this.width}px`,
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {});
+  }
+
+  openDialogSend(
+    position: Position,
+    postId: PostId,
+    parent: boolean,
+    commentId?: CommentId
+  ): any {
+    const dialogRef = this.dialog.open(SendComponent, {
+      width: 'auto',
+      minWidth: 'auto',
+      height: 'auto',
+      data: { postId: postId, commentId: commentId, parent: parent },
+      position: {
+        top: `${position.pos_y}px`,
+        left: `${position.pos_x - this.width}px`,
+      },
+    });
+    return dialogRef.afterClosed();
   }
 }

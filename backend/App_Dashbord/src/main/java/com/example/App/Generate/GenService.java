@@ -4,7 +4,6 @@ import com.example.App.Dashbord.Embedded.*;
 import com.example.App.Dashbord.Enum.*;
 import com.example.App.Dashbord.Model.*;
 import com.example.App.Dashbord.Repository.*;
-import com.example.App.Dashbord.Service.FollowerService;
 import com.example.App.Journal.Model.Hobby;
 import com.example.App.Journal.Model.Journal;
 import com.example.App.Journal.Model.TravelDestination;
@@ -477,8 +476,8 @@ public class GenService {
                 Journal selectJournal = userJournal.get(random.nextInt(userJournal.size()));
 
                 Comment comment = new Comment();
-                CommnetEnum[] commentTypes = CommnetEnum.values();
-                CommnetEnum randomType = commentTypes[random.nextInt(commentTypes.length)];
+                CommentEnum[] commentTypes = CommentEnum.values();
+                CommentEnum randomType = commentTypes[random.nextInt(commentTypes.length)];
 
                 CommentId commentId = new CommentId();
                 commentId.setId(generateId());
@@ -489,9 +488,9 @@ public class GenService {
                 user.setId(randomUserId);
 
                 comment.setComment_user_id(user);
-                comment.setComment_post_id(randomType == CommnetEnum.POST ? selectedPost : null);
-                comment.setComment_media_id(randomType == CommnetEnum.MEDIA ? selectedMedia : null);
-                comment.setComment_journal_id(randomType == CommnetEnum.JOURNAL ? selectJournal : null);
+                comment.setComment_post_id(randomType == CommentEnum.POST ? selectedPost : null);
+                comment.setComment_media_id(randomType == CommentEnum.MEDIA ? selectedMedia : null);
+                comment.setComment_journal_id(randomType == CommentEnum.JOURNAL ? selectJournal : null);
                 comment.setMessage(faker.lorem().sentence());
                 comment.setCreate_at(LocalDateTime.now());
 

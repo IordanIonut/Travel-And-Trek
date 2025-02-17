@@ -34,7 +34,7 @@ public class HashTagController {
             LOG.info("getPostByTag()- hashtag - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve getPostByTag(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve getPostByTag(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -50,7 +50,7 @@ public class HashTagController {
             LOG.info("getUserByTag()- hashtag - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve getUserByTag(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve getUserByTag(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }

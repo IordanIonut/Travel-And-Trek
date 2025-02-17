@@ -1,4 +1,5 @@
 export enum CommentEnum {
-  MEDIA,
-  POST,
+  MEDIA = 'MEDIA',
+  POST = 'POST',
+  JOURNAL = 'JOURNAL',
 }

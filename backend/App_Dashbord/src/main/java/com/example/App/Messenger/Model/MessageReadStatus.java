@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
         @Index(name = "index_message_id_read_status", columnList = "MESSAGE_ID_MESSAGE_READ_STATUS, MESSAGE_TYPE_MESSAGE_READ_STATUS"),
         @Index(name = "index_user_id_read_status", columnList = "USER_ID_MESSAGE_READ_STATUS")
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class MessageReadStatus {
     @Id
     @Column(name = "ID", nullable = false)
@@ -27,12 +29,10 @@ public class MessageReadStatus {
             @JoinColumn(name = "MESSAGE_ID_MESSAGE_READ_STATUS", referencedColumnName = "id", nullable = false),
             @JoinColumn(name = "MESSAGE_TYPE_MESSAGE_READ_STATUS", referencedColumnName = "type", nullable = false)
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Message message_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID_MESSAGE_READ_STATUS", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user_id;
 
     @Column(name = "IS_READ", nullable = false)

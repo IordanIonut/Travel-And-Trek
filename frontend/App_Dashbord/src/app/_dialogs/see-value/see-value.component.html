@@ -1,5 +1,27 @@
 <div class="page-dialog">
-  <div class="flex flex-row justify-center w-full px-4 items-center">
+  <div
+    class="flex justify-between w-full h-full px-4 items-center"
+    [ngStyle]="{ 'flex-row': type === 'LIKE', 'flex-col': type !== 'LIKE' }"
+  >
     <h1 class="text-white">{{ formatNumber(count)! }}</h1>
+    <div *ngIf="type === 'LIKE'" class="flex flex-row w-32 ml-7 gap-2 px-2">
+      <div class="flex w-32 justify-between">
+        <mat-icon
+          (dblclick)="onReactPost(LikeContentEnum.LIKE, isComment)"
+          [ngClass]="{ clicked: selectedIcon === LikeContentEnum.LIKE }"
+          >{{ iconsObject["LIKE"].name }}</mat-icon
+        >
+        <mat-icon
+          (dblclick)="onReactPost(LikeContentEnum.LOVE, isComment)"
+          [ngClass]="{ clicked: selectedIcon === LikeContentEnum.LOVE }"
+          >{{ iconsObject["FAVORITE"].name }}</mat-icon
+        >
+        <mat-icon
+          (dblclick)="onReactPost(LikeContentEnum.FUNNY, isComment)"
+          [ngClass]="{ clicked: selectedIcon === LikeContentEnum.FUNNY }"
+          >{{ iconsObject["FUNNY"].name }}</mat-icon
+        >
+      </div>
+    </div>
   </div>
 </div>

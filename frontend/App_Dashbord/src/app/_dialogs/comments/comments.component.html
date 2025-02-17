@@ -1,0 +1,19 @@
+<div class="page-dialog overflow-clip!">
+  <div class="flex flex-col justify-between h-[55vh] px-4 items-center">
+    <div class="flex-col h-full w-full flex relative">
+      <div class="hide-scrollbar w-full h-full">
+        <div class="flex flex-wrap gap-3 justify-between w-full h-fit">
+          <app-comment
+            class="w-full"
+            *ngFor="let item of comments"
+            [comment]="item"
+            (reloade)="onReloade($event)"
+          />
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <mat-icon (click)="onComment($event)">send</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>

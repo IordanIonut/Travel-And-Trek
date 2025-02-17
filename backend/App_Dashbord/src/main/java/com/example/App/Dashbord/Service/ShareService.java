@@ -1,8 +1,10 @@
 package com.example.App.Dashbord.Service;
 
+import com.example.App.Dashbord.DTO.UserDTO;
 import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Repository.ShareRepository;
 import com.example.App.Dashbord.Model.Share;
+import com.example.App.Dashbord.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import java.util.List;
 public class ShareService {
     @Autowired
     private ShareRepository shareRepository;
+    @Autowired
+    private  UserRepository userRepository;
     @Autowired
     private static final Logger LOG = LoggerFactory.getLogger(ShareService.class);
 
@@ -42,5 +46,11 @@ public class ShareService {
     @Cacheable(value = "shareCache", key = "'findCountSharesByPost::'+#id+'::'+#type")
     public Long findCountSharesByPost(String id, PostEnum type){
         return shareRepository.findCountSharesByPost(id, type);
+    }
+
+    @Cacheable(value = "shareCache", key = "'findUsersSharesByPost::'+#name+'::'+#id+'::'+#type+'::'")
+    public List<UserDTO> findUsersSharesByPost(String name,String id, PostEnum type){
+        LOG.info(shareRepository.findUsersSharesByPost(id, type).size()+"");
+        return new UserDTO().generateUserDTO(shareRepository.findUsersSharesByPost(id,type), this.userRepository.findMutualFriends(name),0, 1000);
     }
 }

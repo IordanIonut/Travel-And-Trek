@@ -1,19 +1,19 @@
 <div class="page overflow-visible" style="overflow: visible !important">
   <app-masthead></app-masthead>
   <div class="flex flex-row h-full justify-between mr-1.5 relative">
-    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-[96rem] relative">
+    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-[48rem] relative">
       <div class="flex-col w-full flex relative">
         <mat-tab-group
           animationDuration="12ms"
-          class="h-[100%] dash-style-tab-group"
+          class="h-[100%] dash-style-tab-group !flex-col-reverse"
           (selectedTabChange)="onTabChangePhoto($event)"
         >
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">apps</mat-icon>
+              <mat-icon class="icon">{{ iconsObject["ALL"].name }}</mat-icon>
             </ng-template>
             <div
-              class="hide-scrollbar h-[37rem]"
+              class="hide-scrollbar h-[38rem]"
               (scroll)="onScrollPhoto($event, 0)"
             >
               <div *ngFor="let item of generateIndexArray(indexAll)">
@@ -29,7 +29,9 @@
 
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">newspaper</mat-icon>
+              <mat-icon class="icon">{{
+                iconsObject["NEWSPAPER"].name
+              }}</mat-icon>
             </ng-template>
             <div
               class="hide-scrollbar h-[37rem]"
@@ -48,7 +50,9 @@
 
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">play_circle</mat-icon>
+              <mat-icon class="icon">{{
+                iconsObject["PLAY_CIRCLE"].name
+              }}</mat-icon>
             </ng-template>
             <div
               class="hide-scrollbar h-[37rem]"
@@ -67,7 +71,9 @@
 
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">description</mat-icon>
+              <mat-icon class="icon">{{
+                iconsObject["DESCRIPTION"].name
+              }}</mat-icon>
             </ng-template>
             <div
               class="hide-scrollbar h-[37rem]"
@@ -86,7 +92,9 @@
 
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">reply_all</mat-icon>
+              <mat-icon class="icon">{{
+                iconsObject["REPLY_ALL"].name
+              }}</mat-icon>
             </ng-template>
             <div
               class="hide-scrollbar h-[37rem]"
@@ -105,7 +113,7 @@
 
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">sell</mat-icon>
+              <mat-icon class="icon">{{ iconsObject["SELL"].name }}</mat-icon>
             </ng-template>
             <div
               class="hide-scrollbar h-[37rem]"
@@ -125,7 +133,7 @@
       </div>
     </div>
 
-    <div *ngIf="isFollowing" class="flex flex-row gap-3 w-[96rem] relative">
+    <div *ngIf="isFollowing" class="flex flex-row gap-3 w-[48rem] relative">
       <div class="flex-col w-full flex relative">
         <mat-tab-group
           animationDuration="12ms"
@@ -134,7 +142,7 @@
         >
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">apps</mat-icon>
+              <mat-icon class="icon">{{ iconsObject["ALL"].name }}</mat-icon>
             </ng-template>
             <div
               class="hide-scrollbar h-[37rem]"
@@ -153,7 +161,7 @@
 
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">block</mat-icon>
+              <mat-icon class="icon">{{ iconsObject["BLOCK"].name }}</mat-icon>
             </ng-template>
             <div
               class="hide-scrollbar h-[37rem]"
@@ -173,7 +181,7 @@
       </div>
     </div>
 
-    <div *ngIf="isFollowrs" class="flex flex-row gap-3 w-[96rem] relative">
+    <div *ngIf="isFollowrs" class="flex flex-row gap-3 w-[48rem] relative">
       <div class="flex-col w-full flex">
         <div
           class="hide-scrollbar h-[42rem]"
@@ -198,7 +206,7 @@
           class="dash-style-input w-4/5 absolute -top-20"
           appearance="fill"
         >
-          <mat-icon matPrefix>search</mat-icon>
+          <mat-icon matPrefix>{{ iconsObject["SEARCH"].name }}</mat-icon>
           <mat-label>Seach ...</mat-label>
           <input matInput placeholder="Search" />
         </mat-form-field>
@@ -262,7 +270,9 @@
                 class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
               >
                 <button class="border-efec story-body" (click)="onIsPhoto()">
-                  <mat-icon class="icon-butoon">photo_camera</mat-icon>
+                  <mat-icon class="icon-butoon">{{
+                    iconsObject["PHOTO_CAMERA"].name
+                  }}</mat-icon>
                 </button>
               </div>
             </div>
@@ -283,7 +293,9 @@
                 class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
               >
                 <button class="border-efec story-body" (click)="onIsFollowrs()">
-                  <mat-icon class="icon-butoon">person</mat-icon>
+                  <mat-icon class="icon-butoon">{{
+                    iconsObject["PERSON"].name
+                  }}</mat-icon>
                 </button>
               </div>
             </div>
@@ -307,7 +319,9 @@
                   class="border-efec story-body"
                   (click)="onIsFollowing()"
                 >
-                  <mat-icon class="icon-butoon">person_search</mat-icon>
+                  <mat-icon class="icon-butoon">{{
+                    iconsObject["PERSON_SEARCH"].name
+                  }}</mat-icon>
                 </button>
               </div>
             </div>

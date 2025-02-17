@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SearchDTO } from 'src/app/_type/dto/search.dto';
 import { NgFor } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { iconsObject } from 'src/app/_type/icon/icon';
 
 @Component({
   selector: 'app-masthead',
@@ -33,6 +34,7 @@ export class MastheadComponent {
     id: 'Search...',
   };
 
+  iconsObject = iconsObject;
   @ViewChild('masthead') masthead!: ElementRef;
   @ViewChild('img', { static: false })
   img!: ElementRef<HTMLImageElement>;
@@ -182,7 +184,10 @@ export class MastheadComponent {
       type === 'enter' ? this.formSearch?.get('search')?.value : option;
     this.router
       .navigate(['/dashbord/search'], {
-        queryParams: { type: this.selectValue.value, search: searchValue.name ? searchValue.name : searchValue },
+        queryParams: {
+          type: this.selectValue.value,
+          search: searchValue.name ? searchValue.name : searchValue,
+        },
       })
       .then(() => {
         window.location.reload();

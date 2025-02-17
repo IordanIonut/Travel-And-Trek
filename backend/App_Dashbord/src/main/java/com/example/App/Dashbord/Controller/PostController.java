@@ -30,7 +30,7 @@ public class PostController {
             LOG.info("findAllPosts()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllPosts(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllPosts(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -46,7 +46,7 @@ public class PostController {
             LOG.info("findAllPostsByUser()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -61,7 +61,7 @@ public class PostController {
             LOG.info("findAllPostsByUserWithoutType()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -76,7 +76,7 @@ public class PostController {
             LOG.info("findPostByUserTags()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllPostsByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -91,7 +91,7 @@ public class PostController {
             LOG.info("findPostBySearch()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findPostBySearch(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findPostBySearch(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -108,7 +108,7 @@ public class PostController {
             LOG.info("getPostByUser()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve getPostByUser(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve getPostByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -124,7 +124,7 @@ public class PostController {
             LOG.info("getPostByGroupNameAndType()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve getPostByGroupNameAndType(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve getPostByGroupNameAndType(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }

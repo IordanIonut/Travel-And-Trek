@@ -24,6 +24,7 @@ import java.util.List;
 //        @Index(name = "index_user_tag", columnList = "TAG_ID, USER_ID_POST")
 })
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class User {
     @Id
     @Column(name = "ID", nullable = false)
@@ -37,7 +38,6 @@ public class User {
             },
             inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "id")
     )
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Hashtag> user_hashtag_id;
 
     @Column(name = "NAME", nullable = false, unique = true)

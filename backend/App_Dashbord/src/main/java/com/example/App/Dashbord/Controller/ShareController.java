@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Controller;
 
+import com.example.App.Dashbord.DTO.UserDTO;
 import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Share;
 import com.example.App.Dashbord.Service.ShareService;
@@ -68,6 +69,19 @@ public class ShareController {
         } catch (Exception e) {
             LOG.info("Failed to retrieve findCountSharesByPost(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0L);
+        }
+    }
+
+    @GetMapping("/post/userDTO")
+    public ResponseEntity<List<UserDTO>> findUsersSharesByPost(@RequestParam("name") final String name,
+                                                               @RequestParam("id") final String id,
+                                                               @RequestParam("type") final PostEnum type){
+        try {
+            LOG.info("findUsersSharesByPost()- user - Successful.");
+            return ResponseEntity.ok(shareService.findUsersSharesByPost(name, id, type));
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findUsersSharesByPost(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
 }

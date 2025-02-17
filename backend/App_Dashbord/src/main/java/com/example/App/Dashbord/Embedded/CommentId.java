@@ -1,6 +1,6 @@
 package com.example.App.Dashbord.Embedded;
 
-import com.example.App.Dashbord.Enum.CommnetEnum;
+import com.example.App.Dashbord.Enum.CommentEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -14,12 +14,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Setter
 @Embeddable
+@EqualsAndHashCode
 public class CommentId implements Serializable {
     @Column(name = "ID")
     private String id;
     @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
-    private CommnetEnum type;
+    private CommentEnum type;
 
     @Override
     public boolean equals(Object o) {
@@ -29,8 +30,5 @@ public class CommentId implements Serializable {
         return id.equals(commentId.id) && type == commentId.type;
     }
 
-    @Override
-    public int hashCode() {
-        return 31 * id.hashCode() + type.hashCode();
-    }
+
 }

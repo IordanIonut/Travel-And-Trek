@@ -29,7 +29,7 @@ public class GroupController {
             LOG.info("findAllGroups()- group - Successful.");
             return ResponseEntity.ok(groupService.findAllGroups());
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllGroups(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllGroups(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -41,7 +41,7 @@ public class GroupController {
             LOG.info("findGroupsByName()- group - Successful.");
             return ResponseEntity.ok(groupService.findGroupsByName(name, search, page, size));
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findGroupsByName(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findGroupsByName(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -52,7 +52,7 @@ public class GroupController {
             LOG.info("findGroupDetailsDTO()- group - Successful.");
             return ResponseEntity.ok(groupService.findGroupDetailsDTO(name));
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findGroupDetailsDTO(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findGroupDetailsDTO(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

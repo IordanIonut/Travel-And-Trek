@@ -20,18 +20,18 @@ import java.time.LocalDateTime;
         @Index(name = "index_group_id_membership", columnList = "GROUP_ID_GROUP_MEMBERSHIP"),
         @Index(name = "index_user_id_group_membership", columnList = "USER_ID_MEMBERHIP")
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class GroupMembership {
     @EmbeddedId
     private GroupMembershipId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID_GROUP_MEMBERSHIP", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Group group_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID_MEMBERHIP", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user_id;
 
     @Column(name = "JOINED_AT", nullable = false)

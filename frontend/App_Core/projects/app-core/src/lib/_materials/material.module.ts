@@ -15,11 +15,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 //AD TO CORE
 @NgModule({
@@ -44,11 +44,13 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatTabsModule,
     MatAutocompleteModule,
     MatSliderModule,
+    MatDialogModule,
     MatButtonToggleModule,
   ],
   exports: [
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
@@ -66,6 +68,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatSortModule,
     MatSliderModule,
     MatButtonToggleModule,
-  ]
+  ],
 })
 export class MaterialModule {}

@@ -20,18 +20,18 @@ import java.time.LocalDateTime;
         @Index(name = "index_media_group", columnList = "GROUP_ID"),
         @Index(name = "idx_media_create_at", columnList = "CREATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Media {
     @EmbeddedId
     private MediaId id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User media_user_id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "id", nullable = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Group media_group_id;
 
     @Column(name = "URL", nullable = false)

@@ -15,7 +15,7 @@
       class="progress-bar px-5"
     ></mat-progress-bar>
     <div class="w-10 h-10 items-center">
-      <mat-icon>more_vert</mat-icon>
+      <mat-icon>{{ iconsObject["MORE_VENT"].name }}</mat-icon>
     </div>
   </div>
 </div>
@@ -31,7 +31,7 @@
       id="dynamicImage"
       #dynamicImage
       style="object-fit: cover"
-      class="max-w-full  max-h-full w-full h-full"
+      class="max-w-full max-h-full w-full h-full"
       [src]="currentImage.url"
       crossorigin="anonymous"
       draggable="false"

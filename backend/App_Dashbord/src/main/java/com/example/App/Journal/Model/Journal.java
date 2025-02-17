@@ -23,6 +23,8 @@ import java.util.List;
         @Index(name = "idx_travel_journal_create_at", columnList = "CREATE_AT"),
         @Index(name = "idx_travel_journal_update_at", columnList = "UPDATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Journal {
     @Id
     @Column(name = "ID", nullable = false)
@@ -53,13 +55,11 @@ public class Journal {
     @JoinTable(name = "JOURNAL_HOBBYS",
             joinColumns = {@JoinColumn(name = "JOURNAL_ID_JOURNAL", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "HOBBY_ID_HOBBY", referencedColumnName = "id")})
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Hobby> hobby_ids;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "JOURNAL_TRAVEL_DESTIONATIONS",
             joinColumns = {@JoinColumn(name = "JOURNAL_TR_ID_TRAVEL", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "TRAVEL_ID_TRAVEL", referencedColumnName = "id")})
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<TravelDestination> travel_destination_ids;
 }

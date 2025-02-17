@@ -39,7 +39,6 @@ export class ShadowService {
       };
     }
   }
-  
 
   applyShadowToContainer1(img: HTMLImageElement, container: HTMLElement): void {
     try {
@@ -160,7 +159,7 @@ export class ShadowService {
   ): void {
     try {
       const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
+      const context = canvas.getContext('2d', { willReadFrequently: true });
       if (!context) {
         throw new Error('Canvas context is not available.');
       }

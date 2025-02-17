@@ -28,7 +28,7 @@ public class MessageController {
             LOG.info("findAllMessage()- message - Successful.");
             return ResponseEntity.ok(messageService.findAllMessage());
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllMessage(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllMessage(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }

@@ -167,6 +167,8 @@ body.cyan-theme {
 
   .mat-mdc-tab-group{
     width: 25rem !important; 
+    display: flex !important;
+    flex-direction: column-reverse;
   }
   
   .mat-mdc-tab-header{

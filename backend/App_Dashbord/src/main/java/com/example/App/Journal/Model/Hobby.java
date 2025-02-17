@@ -1,9 +1,7 @@
 package com.example.App.Journal.Model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,6 +10,8 @@ import lombok.*;
 @Setter
 @Entity
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 @Table( name = "HOBBYS")
 public class Hobby {
     @Id

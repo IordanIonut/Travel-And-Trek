@@ -1,6 +1,6 @@
 export enum LikeEnum {
-  REEL,
-  TEXT,
-  POST,
-  COMMENT,
+  REEL = 'REEL',
+  TEXT = 'TEXT',
+  POST = 'POST',
+  COMMENT = 'COMMENT',
 }

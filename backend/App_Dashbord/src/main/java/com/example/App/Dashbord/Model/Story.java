@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
         @Index(name = "idx_story_group", columnList="GROUP_ID"),
         @Index(name = "idx_story_create_at", columnList = "CREATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Story {
     @Id
     @Column(name = "ID")
@@ -26,12 +28,10 @@ public class Story {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User story_user_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Group story_group_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,7 +39,7 @@ public class Story {
             @JoinColumn(name = "MEDIA_ID_STORY", referencedColumnName = "id", nullable = false),
             @JoinColumn(name = "MEDIA_TYPE_STORY", referencedColumnName = "type", nullable = false)
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media_user_id"})
+    @JsonIgnoreProperties({ "media_user_id"})
     private Media story_media_id;
 
     @Column(name = "CREATE_AT", nullable = false)

@@ -16,6 +16,7 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { HammerModule } from '@angular/platform-browser';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgFor } from '@angular/common';
+import { iconsObject } from 'src/app/_type/icon/icon';
 
 @Component({
   selector: 'app-highlight',
@@ -37,7 +38,7 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   private subscription!: Subscription;
   startX = 0;
   currentIndex = 0;
-
+  iconsObject = iconsObject;
   highlights!: Highlight[];
   index!: number;
 

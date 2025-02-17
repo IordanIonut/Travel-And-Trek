@@ -21,6 +21,8 @@ import java.util.List;
         @Index(name = "idx_highlight_create_at", columnList = "CREATE_AT"),
         @Index(name = "idx_highlight_update_at", columnList = "UPDATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Highlight {
     @Id
     @Column(name = "ID", nullable = false)
@@ -28,7 +30,6 @@ public class Highlight {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonIgnore
     private User highlight_user_id;
 
@@ -41,7 +42,7 @@ public class Highlight {
                     @JoinColumn(name = "MEDIA_TYPE_MEDIA", referencedColumnName = "type")
             }
     )
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media_user_id"})
+    @JsonIgnoreProperties({ "media_user_id"})
     private List<Media> highlight_medias;
 
     @Column(name = "NAME", nullable = false)

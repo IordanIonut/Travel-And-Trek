@@ -23,13 +23,14 @@ import java.time.LocalDateTime;
         @Index(name ="index_comment_source", columnList = "SOURCE_ID_COMMENT, SOURCE_TYPE_COMMENT"),
         @Index(name = "idx_comment_create_at", columnList = "CREATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Comment {
     @EmbeddedId
     private CommentId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User comment_user_id;
 
     //post
@@ -38,7 +39,6 @@ public class Comment {
             @JoinColumn(name = "POST_ID_COMMENT", referencedColumnName = "id"),
             @JoinColumn(name = "POST_TYPE_COMMENT", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Post comment_post_id;
 
     //media
@@ -47,13 +47,11 @@ public class Comment {
             @JoinColumn(name = "MEDIA_ID_COMMENT", referencedColumnName = "id"),
             @JoinColumn(name = "MEDIA_TYPE_COMMENT", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Media comment_media_id;
 
     //journal
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOURNAL_ID_COMMENT", referencedColumnName = "id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Journal comment_journal_id;
 
     @Column(name = "MESSAGE", nullable = false)
@@ -67,6 +65,5 @@ public class Comment {
             @JoinColumn(name = "SOURCE_ID_COMMENT", referencedColumnName = "id"),
             @JoinColumn(name = "SOURCE_TYPE_COMMENT", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Comment comment_source_id;
 }

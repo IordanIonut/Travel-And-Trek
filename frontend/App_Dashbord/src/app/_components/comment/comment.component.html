@@ -1,0 +1,36 @@
+<div
+  #con
+  class="flex w-full flex-col rounded-md py-2"
+  [ngClass]="{ 'pl-6': ischild }"
+>
+  <div class="flex flex-row justify-between mb-4">
+    <div class="flex flex-row gap-1.5">
+      <div>
+        <img
+          #im
+          draggable="false"
+          class="rounded-full max-w-max w-14 mb-3 h-14 object-cover justify-start flex flex-col self-stretch shrink-0"
+          [src]="onProperty('img')"
+        />
+      </div>
+      <div class="textCl">
+        <span>{{ onProperty("name") }}</span>
+        <p>{{ onProperty("date") | date : "medium" }}</p>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <div (click)="onLike($event)" class="mr-5">
+        <mat-icon>thumb_up</mat-icon>
+      </div>
+      <mat-icon (click)="onComment($event)">send</mat-icon>
+    </div>
+  </div>
+  <p class="flex ml-10 textCl">{{ onProperty("text") }}</p>
+  <div *ngIf="onProperty('parent')">
+    <app-comment
+      class="w-full"
+      [comment]="comment.comment_source_id!"
+      [ischild]="true"
+    />
+  </div>
+</div>

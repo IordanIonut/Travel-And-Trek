@@ -1,0 +1,17 @@
+<div class="page-dialog overflow-clip!">
+  <div
+    class="flex flex-col justify-between w-[75vh] h-[65vh] px-4 items-center"
+  >
+    <div class="flex-col w-full flex relative">
+      <div class="hide-scrollbar h-full">
+        <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+          <app-user
+            class="w-full"
+            *ngFor="let user of data || []"
+            [people]="user"
+          ></app-user>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

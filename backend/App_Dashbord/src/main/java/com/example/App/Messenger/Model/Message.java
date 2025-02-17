@@ -26,34 +26,31 @@ import java.time.LocalDateTime;
         @Index(name = "idx_message_create_at", columnList = "CREATED_AT"),
         @Index(name = "idx_message_update_at", columnList = "UPDATED_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Message {
     @EmbeddedId
     private MessagesId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SENDER_ID_MESSAGE", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User sender_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECIPIENT_ID_MESSAGE", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User recipient_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({@JoinColumn(name = "POST_ID_MESSAGE", referencedColumnName = "id"),
             @JoinColumn(name = "POST_TYPE_MESSAGE", referencedColumnName = "type")})
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Post post_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STORY_ID_MESSAGE", referencedColumnName = "id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Story story_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID_MESSAGE", referencedColumnName = "id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Group group_id;
 
     @Column(name = "CONTENT", nullable = false)

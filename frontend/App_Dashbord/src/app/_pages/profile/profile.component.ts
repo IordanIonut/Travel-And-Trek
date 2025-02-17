@@ -36,6 +36,8 @@ import { FollowerStatusEnum } from 'src/app/_type/enum/follower.status.enum';
 import { UserDTO } from 'src/app/_type/dto/user.dto';
 import e from 'express';
 import { UserComponent } from 'src/app/_components/user/user.component';
+import { iconsObject } from 'src/app/_type/icon/icon';
+import { SendComponent } from "../../_dialogs/send/send.component";
 
 @Component({
   selector: 'app-profile',
@@ -50,7 +52,8 @@ import { UserComponent } from 'src/app/_components/user/user.component';
     HttpClientModule,
     PostComponent,
     UserComponent,
-  ],
+    SendComponent
+],
   providers: [
     UserService,
     PostService,
@@ -64,7 +67,7 @@ import { UserComponent } from 'src/app/_components/user/user.component';
 })
 export class ProfileComponent {
   profileDTO?: UserProfileDTO | GroupDetailDTO;
-
+  iconsObject = iconsObject;
   postsAll: { index: number; data: Post[] }[] = [{ index: 0, data: [] }];
   postsReel: { index: number; data: Post[] }[] = [{ index: 0, data: [] }];
   postsText: { index: number; data: Post[] }[] = [{ index: 0, data: [] }];

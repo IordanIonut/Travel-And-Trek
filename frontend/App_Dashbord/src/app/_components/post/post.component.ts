@@ -1,9 +1,11 @@
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { isPlatformBrowser, NgFor, NgIf, NgStyle } from '@angular/common';
 import {
   Component,
   ElementRef,
   HostListener,
+  Inject,
   Input,
+  PLATFORM_ID,
   ViewChild,
   ViewChildren,
   ViewEncapsulation,
@@ -19,6 +21,7 @@ import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { ShareEnum } from 'src/app/_type/enum/share.enum';
+import { iconsObject } from 'src/app/_type/icon/icon';
 import { Post, PostId } from 'src/app/_type/models/post';
 import { Share } from 'src/app/_type/models/share';
 import { User } from 'src/app/_type/models/user';
@@ -41,6 +44,7 @@ export class PostComponent {
   PostEnum = PostEnum;
   ShareEnum = ShareEnum;
 
+  iconsObject = iconsObject;
   buttonPosition!: Position;
   @ViewChild('postElement') postElement!: ElementRef;
   @ViewChild('comment') commentElement!: ElementRef;
@@ -60,6 +64,7 @@ export class PostComponent {
   postContainer!: ElementRef<HTMLDivElement>;
 
   shouldAutoplay = true;
+  clickTimeout: any;
 
   isPost(data: Post | Share): data is Post {
     return (data as Post).post_medias_id !== undefined;
@@ -74,7 +79,8 @@ export class PostComponent {
     private shadow: ShadowService,
     private valiationService: ValidationModelService,
     private elementRef: ElementRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {}
@@ -112,18 +118,7 @@ export class PostComponent {
 
   ngAfterViewInit(): void {
     if (this.videoPlayer && this.postContainer) {
-      const videoElement = this.videoPlayer.nativeElement;
-      const containerElement = this.postContainer.nativeElement;
-      videoElement.crossOrigin = 'anonymous';
-      this.checkAutoplay();
-
-      videoElement.addEventListener('play', () => {
-        this.shadow.updateShadowFromVideo(videoElement, containerElement);
-      });
-      videoElement.addEventListener('pause', () => {});
-      videoElement.addEventListener('ended', () => {
-        videoElement.play();
-      });
+      this.setupVideoAutoplayObserver();
     }
     if (
       this.postImage1 !== undefined &&
@@ -209,14 +204,35 @@ export class PostComponent {
     const videoElement = this.videoPlayer?.nativeElement;
     if (videoElement instanceof HTMLVideoElement) {
       if (this.run === this.index && videoElement.paused) {
-        videoElement.play().catch((error) => {
-          // console.error('Error while trying to play the video:', error);
-        });
-      } else if (!videoElement.paused) {
+        videoElement?.play();
+      } else {
         videoElement?.pause();
       }
-    } else {
-      // console.error('videoPlayer is not a valid HTMLVideoElement.');
+    }
+  }
+
+  setupVideoAutoplayObserver(): void {
+    const videoElement = this.videoPlayer.nativeElement;
+
+    if (isPlatformBrowser(this.platformId)) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              this.checkAutoplay();
+              this.shadow.updateShadowFromVideo(
+                videoElement,
+                this.postContainer.nativeElement
+              );
+            } else {
+              videoElement.pause();
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      observer.observe(videoElement);
     }
   }
 
@@ -268,48 +284,49 @@ export class PostComponent {
   protected onOpenLike(likeElement: HTMLElement): void {
     const rect = likeElement?.getBoundingClientRect();
     this.buttonPosition = {
-      pos_x: rect.x + 270,
+      pos_x: rect.x + 350,
       pos_y: rect.y + 30,
     };
     this.dialogService.openDialogSeeValue(
       this.buttonPosition,
       this.getProperty('id')!,
-      'LIKE'
+      'LIKE',
+      true
     );
   }
 
-  protected onOpenComment(event: MouseEvent): void {
-    const buttonElement = event.currentTarget as HTMLElement;
-    const rect = buttonElement.getBoundingClientRect();
+  protected onOpenComment(commentElement: HTMLElement): void {
+    const rect = commentElement.getBoundingClientRect();
     this.buttonPosition = {
-      pos_x: rect.x + 270,
+      pos_x: rect.x + 380,
       pos_y: rect.y + 30,
     };
     this.dialogService.openDialogSeeValue(
       this.buttonPosition,
       this.getProperty('id')!,
-      'COMMENT'
+      'COMMENT',
+      true
     );
   }
 
-  protected onOpenShare(event: MouseEvent): void {
-    const buttonElement = event.currentTarget as HTMLElement;
-    const rect = buttonElement.getBoundingClientRect();
+  protected onOpenShare(shareElement: HTMLElement): void {
+    const rect = shareElement.getBoundingClientRect();
     this.buttonPosition = {
-      pos_x: rect.x + 270,
+      pos_x: rect.x + 380,
       pos_y: rect.y + 30,
     };
     this.dialogService.openDialogSeeValue(
       this.buttonPosition,
       this.getProperty('id')!,
-      'SHARE'
+      'SHARE',
+      true
     );
   }
 
   protected onOpenLikes(likeElement: HTMLElement): void {
     const rect = likeElement?.getBoundingClientRect();
     this.buttonPosition = {
-      pos_x: rect.x + 0,
+      pos_x: rect.x - 130,
       pos_y: rect.y + 30,
     };
     this.dialogService.openDialogLikes(
@@ -318,9 +335,31 @@ export class PostComponent {
     );
   }
 
-  clickTimeout: any;
+  protected onOpenShares(shareElement: HTMLElement): void {
+    const rest = shareElement.getBoundingClientRect();
+    this.buttonPosition = {
+      pos_x: rest.x + 390,
+      pos_y: rest.y + 30,
+    };
+    this.dialogService.openDialogShares(
+      this.buttonPosition,
+      this.getProperty('id')!
+    );
+  }
 
-  onClickLike(event: MouseEvent) {
+  protected onOpenCommnets(commentElement: HTMLElement): void {
+    const rest = commentElement.getBoundingClientRect();
+    this.buttonPosition = {
+      pos_x: rest.x + 150,
+      pos_y: rest.y + 30,
+    };
+    this.dialogService.openDialogComponents(
+      this.buttonPosition,
+      this.getProperty('id')!
+    );
+  }
+
+  protected onClickLike(event: MouseEvent) {
     const likeElement = event.currentTarget as HTMLElement;
     if (!likeElement) {
       console.error('onClickLike: Element not found.');
@@ -334,6 +373,44 @@ export class PostComponent {
     } else {
       this.clickTimeout = setTimeout(() => {
         this.onOpenLike(likeElement);
+        this.clickTimeout = null;
+      }, 300);
+    }
+  }
+
+  protected onClickComment(event: MouseEvent) {
+    const commentElement = event.currentTarget as HTMLElement;
+    if (!commentElement) {
+      console.error('onClickLike: Element not found.');
+      return;
+    }
+
+    if (this.clickTimeout) {
+      clearTimeout(this.clickTimeout);
+      this.clickTimeout = null;
+      this.onOpenCommnets(commentElement);
+    } else {
+      this.clickTimeout = setTimeout(() => {
+        this.onOpenComment(commentElement);
+        this.clickTimeout = null;
+      }, 300);
+    }
+  }
+
+  protected onClickShare(event: MouseEvent) {
+    const shareElement = event.currentTarget as HTMLElement;
+    if (!shareElement) {
+      console.error('onClickLike: Element not found.');
+      return;
+    }
+
+    if (this.clickTimeout) {
+      clearTimeout(this.clickTimeout);
+      this.clickTimeout = null;
+      this.onOpenShares(shareElement);
+    } else {
+      this.clickTimeout = setTimeout(() => {
+        this.onOpenShare(shareElement);
         this.clickTimeout = null;
       }, 300);
     }

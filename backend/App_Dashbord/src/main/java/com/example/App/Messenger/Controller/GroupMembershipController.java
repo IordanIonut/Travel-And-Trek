@@ -29,7 +29,7 @@ public class GroupMembershipController {
             LOG.info("findAllGroupMemberships()- groupMembership - Successful.");
             return ResponseEntity.ok(groupMembershipService.findAllGroupMemberships());
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllGroupMemberships(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllGroupMemberships(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -41,7 +41,7 @@ public class GroupMembershipController {
             LOG.info("postCreateGroupMembership() - user - Successful.");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
-            LOG.info("Failed to retrieve postCreateGroupMembership(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve postCreateGroupMembership(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }

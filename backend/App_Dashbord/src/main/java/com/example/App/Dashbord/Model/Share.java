@@ -23,18 +23,18 @@ import java.time.LocalDateTime;
         @Index(name = "idx_share_create_at", columnList = "CREATE_AT"),
         @Index(name = "idx_share_update_at", columnList = "UPDATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Share {
     @EmbeddedId
     private ShareId shareId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User share_user_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID_SHARED", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User share_user_id_sharled;
 
     //media
@@ -43,7 +43,7 @@ public class Share {
             @JoinColumn(name = "MEDIA_ID_SHARE", referencedColumnName = "id"),
             @JoinColumn(name = "MEDIA_TYPE_SHARE", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media_user_id"})
+    @JsonIgnoreProperties({ "media_user_id"})
     private Media share_media_id;
 
     //post
@@ -52,13 +52,13 @@ public class Share {
             @JoinColumn(name = "POST_ID_SHARE", referencedColumnName = "id"),
             @JoinColumn(name = "POST_TYPE_SHARE", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "post_user_id"})
+    @JsonIgnoreProperties({"post_user_id"})
     private Post share_post_id;
 
     //story
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STORY_ID_SHARE", referencedColumnName = "id", nullable = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "story_user_id"})
+    @JsonIgnoreProperties({ "story_user_id"})
     private Story share_story_id;
 
     @Column(name = "DESCRIPTION", nullable = false)

@@ -31,7 +31,7 @@ public class GenController {
             LOG.info("getGeocode()- location - Successful geocoding result retrieved.");
             return ResponseEntity.ok(geocodeDataOpt.get());
         } else {
-            LOG.warn("getGeocode() - No results found.");
+            LOG.error("getGeocode() - No results found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("error", "No results found"));
         }
@@ -44,7 +44,7 @@ public class GenController {
             LOG.info("getGeocodeFormatted()- location - Successful geocoding result retrieved.");
             return ResponseEntity.ok(geocodeDataOpt.get());
         } else {
-            LOG.warn("getGeocodeFormatted() - No results found.");
+            LOG.error("getGeocodeFormatted() - No results found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No results found");
         }
@@ -57,7 +57,7 @@ public class GenController {
             LOG.info("getGeocode()- location - Successful geocoding result retrieved.");
             return ResponseEntity.ok(geocodeDataOpt.get());
         } else {
-            LOG.warn("getLocation()- location - No results found.");
+            LOG.error("getLocation()- location - No results found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("error", "No results found"));
         }

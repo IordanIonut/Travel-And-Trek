@@ -27,7 +27,7 @@ public class MessageReadStatusController {
             LOG.info("findAllMessageReadStatus()- messageReadStatus - Successful.");
             return ResponseEntity.ok(messageReadStatusService.findAllMessageReadStatus());
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllMessageReadStatus(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllMessageReadStatus(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -38,7 +38,7 @@ public class MessageReadStatusController {
             LOG.info("findConversationsByUser()- message - Successful.");
             return ResponseEntity.ok(messageReadStatusService.findConversationsByUser(name, conversationType));
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findConversationsByUser(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findConversationsByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -49,7 +49,7 @@ public class MessageReadStatusController {
             LOG.info("findMessageByUser()- message - Successful.");
             return ResponseEntity.ok(messageReadStatusService.findMessageByUser(recipient, sender));
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findMessageByUser(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findMessageByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -60,7 +60,7 @@ public class MessageReadStatusController {
             LOG.info("findMessageReadStatusByGroup()- message - Successful.");
             return ResponseEntity.ok(messageReadStatusService.findMessageReadStatusByGroup(groupId));
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findMessageReadStatusByGroup(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findMessageReadStatusByGroup(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }

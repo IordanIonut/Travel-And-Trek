@@ -24,18 +24,18 @@ import java.util.List;
         @Index(name = "idx_post_create_at", columnList = "CREATE_AT"),
         @Index(name = "idx_post_update_at", columnList = "UPDATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Post {
     @EmbeddedId
     private PostId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User post_user_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Group post_group_id;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -50,7 +50,7 @@ public class Post {
                     @JoinColumn(name = "MEDIA_TYPE_MEDIA", referencedColumnName = "type")
             }
     )
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media_user_id"})
+    @JsonIgnoreProperties({"media_user_id"})
     private List<Media> post_medias_id;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -62,7 +62,6 @@ public class Post {
             },
             inverseJoinColumns = @JoinColumn(name = "HASHTAG_ID", referencedColumnName = "id")
     )
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Hashtag> post_hashtag_id;
 
     @ManyToMany(fetch = FetchType.LAZY)

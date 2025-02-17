@@ -1,5 +1,6 @@
 package com.example.App.Messenger.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.checkerframework.checker.units.qual.C;
@@ -17,6 +18,8 @@ import java.time.LocalDateTime;
         @Index(name = "idx_group_create_at", columnList = "CREATE_AT"),
         @Index(name = "idx_group_update_at", columnList = "UPDATED_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Group {
     @Id
     @Column(name = "ID", nullable = false)

@@ -30,7 +30,7 @@ public class FollowerController {
             LOG.info("findAllFollowers()- follower - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllFollowers(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllFollowers(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -43,7 +43,7 @@ public class FollowerController {
             LOG.info("findUsersFollowerByStatus()- follower - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findUsersFollowerByStatus(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findUsersFollowerByStatus(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -55,7 +55,7 @@ public class FollowerController {
             LOG.info("findUsersByFollowerStatus()- follower - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findUsersByFollowerStatus(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findUsersByFollowerStatus(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -68,7 +68,7 @@ public class FollowerController {
             LOG.info("postCreateFollower()- follower - Successful.");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
-            LOG.info("Failed to retrieve postCreateFollower(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve postCreateFollower(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }

@@ -2,13 +2,12 @@ import { NgFor } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { error } from 'console';
 import { UserComponent } from 'src/app/_components/user/user.component';
 import { LikeService } from 'src/app/_service/models/like.service';
 import { UserDTO } from 'src/app/_type/dto/user.dto';
 import { LikeContentEnum } from 'src/app/_type/enum/like.content.enum';
+import { iconsObject } from 'src/app/_type/icon/icon';
 import { PostId } from 'src/app/_type/models/post';
-import { User } from 'src/app/_type/models/user';
 import { environment } from 'src/app/environments/environment';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 
@@ -22,7 +21,8 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 })
 export class LikesComponent {
   id!: PostId;
-
+  iconsObject = iconsObject;
+  
   all!: UserDTO[];
   like!: UserDTO[];
   favorite!: UserDTO[];
@@ -53,15 +53,7 @@ export class LikesComponent {
           )
           .subscribe({
             next: (data: UserDTO[]) => {
-              this.all = [
-                ...data,
-                ...data,
-                ...data,
-                ...data,
-                ...data,
-                ...data,
-                ...data,
-              ];
+              this.all = [...data];
             },
             error: (error: Error) => {
               console.log(error);

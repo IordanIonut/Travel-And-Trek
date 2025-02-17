@@ -28,7 +28,7 @@ public class HighlightController {
             LOG.info("findAll()- highlight - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAll(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAll(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }
@@ -41,7 +41,7 @@ public class HighlightController {
             LOG.info("findAllHighlightsByUser()- highlight - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllHighlightsByUser(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllHighlightsByUser(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }

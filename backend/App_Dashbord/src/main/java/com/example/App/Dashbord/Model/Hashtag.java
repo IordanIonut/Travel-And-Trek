@@ -1,9 +1,7 @@
 package com.example.App.Dashbord.Model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -13,6 +11,8 @@ import lombok.*;
 @Data
 @Entity
 @Table(name = "HASHTAGS")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Hashtag {
     @Id
     @Column(name = "ID")

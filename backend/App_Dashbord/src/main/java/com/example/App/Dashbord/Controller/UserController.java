@@ -41,7 +41,7 @@ public class UserController {
             LOG.info("findAllUsers()- user - Successful.");
             return ResponseEntity.ok(list);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllUsers(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllUsers(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -53,7 +53,7 @@ public class UserController {
             LOG.info("findByName()- user - Successful.");
             return ResponseEntity.ok(user);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findAllUsers(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findAllUsers(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -65,7 +65,7 @@ public class UserController {
             LOG.info("findUsersFriendsStory()- user - Successful.");
             return ResponseEntity.ok(stories);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findUsersFriendsStory(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findUsersFriendsStory(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -80,7 +80,7 @@ public class UserController {
             LOG.info("findUserByName()- user - Successful.");
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findUsersFriendsStory(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findUsersFriendsStory(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -92,7 +92,7 @@ public class UserController {
             LOG.info("findSuggesters()- user - Successful.");
             return ResponseEntity.ok(searchDTO);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findSuggesters(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findSuggesters(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -105,7 +105,7 @@ public class UserController {
             LOG.info("findUsersAndFriendsByName()- user - Successful.");
             return ResponseEntity.ok(searchDTO);
         } catch (Exception e) {
-            LOG.info("Failed to retrieve findUsersAndFriendsByName(): {}", e.getMessage(), e);
+            LOG.error("Failed to retrieve findUsersAndFriendsByName(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

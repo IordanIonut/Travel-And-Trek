@@ -21,13 +21,14 @@ import java.time.LocalDateTime;
         @Index(name = "index_like_comment", columnList = "COMMENT_ID_LIKE, COMMENT_TYPE_LIKE"),
         @Index(name = "idx_like_create_at", columnList = "CREATE_AT"),
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Like {
     @EmbeddedId
     private LikeId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User like_user_id;
 
     //media
@@ -36,7 +37,6 @@ public class Like {
             @JoinColumn(name = "MEDIA_ID_LIKE", referencedColumnName = "id"),
             @JoinColumn(name = "MEDIA_TYPE_LIKE", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Media like_media_id;
 
     //post
@@ -45,7 +45,6 @@ public class Like {
             @JoinColumn(name = "POST_ID_LIKE", referencedColumnName = "id"),
             @JoinColumn(name = "POST_TYPE_LIKE", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Post like_post_id;
 
     //comment
@@ -54,7 +53,6 @@ public class Like {
             @JoinColumn(name = "COMMENT_ID_LIKE", referencedColumnName = "id"),
             @JoinColumn(name = "COMMENT_TYPE_LIKE", referencedColumnName = "type")
     })
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Comment like_comment_id;
 
     @Column(name = "CREATE_AT", nullable = false)
