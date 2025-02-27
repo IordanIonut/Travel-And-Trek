@@ -2,6 +2,7 @@ package com.example.App.Dashbord.Controller;
 
 import com.example.App.Dashbord.DTO.UserDTO;
 import com.example.App.Dashbord.Enum.FollowerStatusEnum;
+import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Follower;
 import com.example.App.Dashbord.Service.FollowerService;
 import org.slf4j.Logger;
@@ -71,6 +72,22 @@ public class FollowerController {
             LOG.error("Failed to retrieve postCreateFollower(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
+        }
+    }
+
+    @GetMapping("/suggestion")
+    public ResponseEntity<List<UserDTO>> findUserSuggestions(@RequestParam("name") final String name,
+                                                            @RequestParam("hashtags") final List<String> hashtags,
+                                                            @RequestParam("index") final int index,
+                                                            @RequestParam("number") final int number) {
+        try {
+            List<UserDTO> list = followerService.findUserSuggestions(name, hashtags, index, number);
+            LOG.info("findUserSuggestion()- follower - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve findUserSuggestion(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
         }
     }
 }

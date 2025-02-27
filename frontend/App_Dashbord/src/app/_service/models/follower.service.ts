@@ -41,13 +41,31 @@ export class FollowService {
     return this.http.get<UserDTO[]>(`${this.apiUrl}/find/follower`, { params });
   }
 
-
-  findUsersFollowerByStatus(name: string, status: string, page: number, size: number):Observable<UserDTO[]>{
+  findUsersFollowerByStatus(
+    name: string,
+    status: string,
+    page: number,
+    size: number
+  ): Observable<UserDTO[]> {
     const params = new HttpParams()
-    .append('name', name)
-    .append('status', status)
-    .append('page', page)
-    .append('size', size);
-    return this.http.get<UserDTO[]>(`${this.apiUrl}/find`,{params});
+      .append('name', name)
+      .append('status', status)
+      .append('page', page)
+      .append('size', size);
+    return this.http.get<UserDTO[]>(`${this.apiUrl}/find`, { params });
+  }
+
+  findUserSuggestions(
+    name: string,
+    hashtags: string[],
+    index: number,
+    number: number
+  ): Observable<UserDTO[]> {
+    const params = new HttpParams()
+      .append('name', name)
+      .append('hashtags', hashtags.map((item) => item).join(','))
+      .append('index', index)
+      .append('number', number);
+    return this.http.get<UserDTO[]>(`${this.apiUrl}/suggestion`, { params });
   }
 }

@@ -46,4 +46,17 @@ public class StoryController {
                     .body(Collections.emptyList());
         }
     }
+
+    @GetMapping("/get")
+    public ResponseEntity<List<Story>> findFriendsStory(@RequestParam("name") final String name, @RequestParam("page") final int page, @RequestParam("size") final int size){
+        try {
+            List<Story> stories = storyService.findFriendsStory(name, page, size);
+            LOG.info("findFriendsStory()- user - Successful.");
+            return ResponseEntity.ok(stories);
+        } catch (Exception e) {
+            LOG.info("Failed to retrieve findFriendsStory(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
 }

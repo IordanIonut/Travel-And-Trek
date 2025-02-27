@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Service;
 
+import com.example.App.Dashbord.Embedded.PostId;
 import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Post;
 import com.example.App.Dashbord.Repository.PostRepository;
@@ -8,13 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -62,15 +63,20 @@ public class PostService {
         return postRepository.getPostBySearch(name, pageable);
     }
 
-    @Cacheable(value = "postCache", key = "'getPostByUser::'+#name+'::'+#type+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
-    public List<Post> getPostByUser(String name, PostEnum type, List<String> hashtags, int index, int number) {
-        Pageable pageable = PageRequest.of(index, number, Sort.by(Sort.Direction.DESC, "update_at"));
-        return postRepository.getPostByUser(name, type, hashtags, pageable);
-    }
-
     @Cacheable(value = "postCache", key="'getPostByGroupNameAndType::'+#name+'::'+#type+'::'+#index+'::'+#number")
     public List<Post> getPostByGroupNameAndType(String name, PostEnum type, int index, int number){
         Pageable pageable = PageRequest.of(index, number, Sort.by(Sort.Direction.DESC, "update_at"));
         return postRepository.getPostByGroupNameAndType(name, type, pageable);
+    }
+
+    @Cacheable(value = "postCache", key = "'getPostById::'+#id")
+    public Optional<Post> getPostById(PostId id) {
+        return this.postRepository.findById(id);
+    }
+
+    @Cacheable(value = "postCache", key = "'getPostByUserFriends::'+#name+'::'+#type+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
+    public List<Post> getPostByUserFriends(String name, PostEnum type, List<String> hashtags, int index, int number) {
+        Pageable pageable = PageRequest.of(index, number, Sort.by(Sort.Direction.DESC, "update_at"));
+        return this.postRepository.getPostByUserFriends(name, type, hashtags, pageable);
     }
 }

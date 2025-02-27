@@ -1,21 +1,22 @@
 package com.example.App.Dashbord.Service;
 
 import com.example.App.Dashbord.DTO.UserDTO;
+import com.example.App.Dashbord.Embedded.ShareId;
 import com.example.App.Dashbord.Enum.PostEnum;
-import com.example.App.Dashbord.Repository.ShareRepository;
 import com.example.App.Dashbord.Model.Share;
+import com.example.App.Dashbord.Repository.ShareRepository;
 import com.example.App.Dashbord.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShareService {
@@ -53,4 +54,10 @@ public class ShareService {
         LOG.info(shareRepository.findUsersSharesByPost(id, type).size()+"");
         return new UserDTO().generateUserDTO(shareRepository.findUsersSharesByPost(id,type), this.userRepository.findMutualFriends(name),0, 1000);
     }
+
+    @Cacheable(value = "shareCache", key = "'getSharetById::'+#id")
+    public Optional<Share> getSharetById(ShareId id) {
+        return this.shareRepository.findById(id);
+    }
+
 }

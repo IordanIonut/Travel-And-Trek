@@ -17,6 +17,8 @@ import { HammerModule } from '@angular/platform-browser';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgFor } from '@angular/common';
 import { iconsObject } from 'src/app/_type/icon/icon';
+import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
+import { Story } from 'src/app/_type/models/story';
 
 @Component({
   selector: 'app-highlight',
@@ -39,7 +41,7 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   startX = 0;
   currentIndex = 0;
   iconsObject = iconsObject;
-  highlights!: Highlight[];
+  highlights!: Highlight[] | Story[];
   index!: number;
 
   images!: Media[];
@@ -51,6 +53,7 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   constructor(
     private elementRef: ElementRef,
     private shadow: ShadowService,
+    private validatorModelService: ValidationModelService,
     @Inject(MAT_DIALOG_DATA) public data: { data: Highlight[]; index: number }
   ) {
     this.highlights = data.data;
@@ -120,10 +123,14 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  onPostPosition(highlight: Highlight) {
+  onPostPosition(highlight: Highlight | Story) {
     this.currentIndex = 0;
-    this.images = highlight.highlight_medias;
-    // console.log('New highlight set, images:', this.images);
+    if (this.validatorModelService.isHighlight(highlight))
+      this.images = highlight.highlight_medias;
+    else if (this.validatorModelService.isStory(highlight)) {
+      this.images = [];
+      this.images.push(highlight.story_media_id);
+    }
     this.onProgress();
   }
 

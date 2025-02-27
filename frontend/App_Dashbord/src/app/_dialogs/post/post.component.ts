@@ -1,18 +1,16 @@
 import { isPlatformBrowser, NgFor, NgIf, NgStyle } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  HostListener,
   Inject,
   Input,
   PLATFORM_ID,
   ViewChild,
-  ViewChildren,
-  ViewEncapsulation,
 } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import ColorThief from 'colorthief';
-import { LikesComponent } from 'src/app/_dialogs/likes/likes.component';
 import { PostShareService } from 'src/app/_service/common/post-share.service';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { CommentService } from 'src/app/_service/models/comment.service';
@@ -23,20 +21,19 @@ import { ValidationModelService } from 'src/app/_service/validator/validation-mo
 import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { ShareEnum } from 'src/app/_type/enum/share.enum';
 import { iconsObject } from 'src/app/_type/icon/icon';
-import { Post, PostId } from 'src/app/_type/models/post';
+import { Post } from 'src/app/_type/models/post';
 import { Share } from 'src/app/_type/models/share';
 import { User } from 'src/app/_type/models/user';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
-import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
+import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 
 @Component({
   selector: 'app-post',
   standalone: true,
   imports: [MaterialModule, NgFor, NgIf, NgStyle],
-  providers: [LikeService, CommentService, ShareService, PostShareService],
+  providers: [ShareService],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
-  encapsulation: ViewEncapsulation.None,
 })
 export class PostComponent {
   @Input() data!: Post | Share;
@@ -61,6 +58,10 @@ export class PostComponent {
 
   @ViewChild('profile', { static: false })
   profile!: ElementRef<HTMLImageElement>;
+  @ViewChild('conImage3', { static: false })
+  conImage3!: ElementRef<HTMLImageElement>;
+  @ViewChild('conImage2', { static: false })
+  conImage2!: ElementRef<HTMLImageElement>;
 
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
@@ -69,6 +70,8 @@ export class PostComponent {
 
   shouldAutoplay = true;
   clickTimeout: any;
+
+  position = 0;
 
   isPost(data: Post | Share): data is Post {
     return (data as Post).post_medias_id !== undefined;
@@ -81,12 +84,15 @@ export class PostComponent {
   constructor(
     private dialogService: DialogService,
     private shadow: ShadowService,
-    protected valiationService: ValidationModelService,
+    private valiationService: ValidationModelService,
     private elementRef: ElementRef,
-    private dialog: MatDialog,
     private postShareService: PostShareService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(MAT_DIALOG_DATA) data: { data: Post | Share }
+  ) {
+    this.data = data.data;
+  }
 
   ngOnInit(): void {}
 
@@ -105,10 +111,16 @@ export class PostComponent {
       this.run,
       this.index
     );
+    this.cdr.detectChanges();
+    this.onShadowLefAndRight();
   }
 
   ngOnChanges(): void {
     this.postShareService.checkAutoplay(this.videoPlayer, this.run, this.index);
+  }
+
+  ngAfterViewChecked() {
+    this.cdr.detectChanges();
   }
 
   protected onOpenProfile(event: MouseEvent, name: string): void {
@@ -128,57 +140,67 @@ export class PostComponent {
   }
 
   protected onClickLike(event: MouseEvent) {
-    this.postShareService.onClickLike(event, this.data, false);
+    this.postShareService.onClickLike(event, this.data, true);
   }
 
   protected onClickComment(event: MouseEvent) {
-    this.postShareService.onClickComment(event, this.data, false);
+    this.postShareService.onClickComment(event, this.data, true);
   }
 
   protected onClickShare(event: MouseEvent) {
-    this.postShareService.onClickShare(event, this.data, false);
+    this.postShareService.onClickShare(event, this.data, true);
   }
 
   protected generateIndexArray(index: number): number[] {
     return this.postShareService.generateIndexArray(index);
   }
 
-  private holdTimeout: any = null;
-  private isHolding = false;
-  private time = 500;
-
-  protected onOpenPost() {
-    console.log(this.getProperty('id'));
-    if (this.getProperty('id').type === 'REEL') {
-      this.pauseVideo(this.videoPlayer.nativeElement);
-    }
-    this.dialogService.openDialogPost(this.data);
-  }
-
-  protected onMouseDown(event: MouseEvent | TouchEvent) {
-    if (this.holdTimeout) {
-      clearTimeout(this.holdTimeout);
-    }
-    this.isHolding = true;
-
-    this.holdTimeout = setTimeout(() => {
-      if (this.isHolding) {
-        this.onOpenPost();
+  private onShadowLefAndRight() {
+    if (this.postImage2 !== undefined && this.conImage2 !== undefined) {
+      const imgElement = this.postImage2!.nativeElement;
+      const containerElement = this.conImage2.nativeElement;
+      imgElement.crossOrigin = 'anonymous';
+      if (imgElement.complete) {
+        this.shadow.applyShadowToContainer1(imgElement, containerElement);
+      } else {
+        imgElement.addEventListener('load', () => {
+          this.shadow.applyShadowToContainer1(imgElement, containerElement);
+        });
       }
-    }, this.time);
+    }
+
+    if (this.postImage3 !== undefined && this.conImage3 !== undefined) {
+      const imgElement = this.postImage3!.nativeElement;
+      const containerElement = this.conImage3.nativeElement;
+      imgElement.crossOrigin = 'anonymous';
+      if (imgElement.complete) {
+        this.shadow.applyShadowToContainer1(imgElement, containerElement);
+      } else {
+        imgElement.addEventListener('load', () => {
+          this.shadow.applyShadowToContainer1(imgElement, containerElement);
+        });
+      }
+    }
   }
 
-  protected onMouseUp(event: MouseEvent | TouchEvent) {
-    if (this.holdTimeout) {
-      clearTimeout(this.holdTimeout);
+  protected onRight() {
+    if (
+      (this.isPost(this.data) &&
+        this.data!.post_medias_id!.length > this.position + 1) ||
+      (this.isShare(this.data) &&
+        this.data!.share_post_id!.post_medias_id!.length > this.position + 1)
+    ) {
+      this.position++;
+      this.cdr.detectChanges();
+      this.onShadowLefAndRight();
     }
-    this.isHolding = false;
   }
 
-  protected onMouseLeave(event: MouseEvent | TouchEvent) {
-    if (this.holdTimeout) {
-      clearTimeout(this.holdTimeout);
+  protected onLeft() {
+    if (this.position - 1 >= 0) {
+      this.position--;
+      this.cdr.detectChanges();
+      this.onShadowLefAndRight();
     }
-    this.isHolding = false;
   }
 }

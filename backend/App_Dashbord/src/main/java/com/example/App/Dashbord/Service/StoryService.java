@@ -6,6 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,5 +28,11 @@ public class StoryService {
     @Cacheable(value = "storyCache", key = "'findUsersFriends::' + #name + '::' + #view")
     public List<Story> findUsersFriendsStory(String name, String view) {
         return storyRepository.findUsersFriendsStory(name, view);
+    }
+
+    @Cacheable(value = "storyCache", key = "'findFriendsStory::'+#name+'::'+#page+'::'+#size")
+    public List<Story> findFriendsStory(String name, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return storyRepository.findFriendsStory(name,pageable);
     }
 }

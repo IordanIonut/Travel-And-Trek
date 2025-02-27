@@ -15,26 +15,29 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,
+  imports: [
+    RouterOutlet,
     CommonModule,
     MaterialModule,
     NavbarComponent,
     RouterLink,
-    RouterModule],
-    providers: [SetThemeService],
-    encapsulation: ViewEncapsulation.None,
+    RouterModule,
+  ],
+  providers: [SetThemeService],
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   pages: Page[] = [
     { icon: 'home', route: '/dashbord/feet' },
     { icon: 'add', route: '/dashbord/create-post' },
     { icon: 'movie', route: '/dashbord/reel' },
+    { icon: 'message', route: '' },
   ];
   style: boolean = false;
   selectedIndex: number = 0;
-  position: Position = {pos_x: 38, pos_y: 28};
+  position: Position = { pos_x: 38, pos_y: 28 };
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -44,6 +47,4 @@ export class AppComponent {
       this.setThemeService.setTheme('cyan-theme');
     }
   }
-
- 
 }

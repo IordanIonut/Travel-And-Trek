@@ -107,14 +107,14 @@ export class SeeValueComponent {
   private onProperty(
     property: 'value' | 'type'
   ): PostEnum | CommentEnum | 'POST' | 'COMMENT' | undefined {
-    if (this.validation.isPostIdOrCommentId(this.id)) {
+    if (this.validation.isPostId(this.id)) {
       switch (property) {
         case 'value':
           return this.id.type as PostEnum;
         case 'type':
           return 'POST';
       }
-    } else if (this.validation.isCommentIdOrPostId(this.id)) {
+    } else if (this.validation.isCommentId(this.id)) {
       switch (property) {
         case 'value':
           return this.id.type as CommentEnum;

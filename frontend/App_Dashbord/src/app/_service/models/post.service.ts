@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { Hastag } from 'src/app/_type/models/hashtag';
-import { Post } from 'src/app/_type/models/post';
+import { Post, PostId } from 'src/app/_type/models/post';
 import { environment } from 'src/app/environments/environment';
 
 @Injectable({
@@ -56,7 +56,25 @@ export class PostService {
     return this.http.get<Post[]>(`${this.apiUrl}/suggestion`, { params });
   }
 
-  getPostByUser(
+  getPostByGroupNameAndType(
+    name: string,
+    type: string | null,
+    index: number,
+    number: number
+  ): Observable<Post[]> {
+    const params = new HttpParams()
+      .append('name', name)
+      .append('index', index)
+      .append('number', number)
+      .append('type', type || '');
+    return this.http.get<Post[]>(`${this.apiUrl}/get/group`, { params });
+  }
+
+  getPostById(id: PostId): Observable<Post> {
+    return this.http.get<Post>(`${this.apiUrl}/get?id=${id}`);
+  }
+
+  getPostByUserFriends(
     name: string,
     type: PostEnum,
     hashtags: string[],
@@ -69,19 +87,6 @@ export class PostService {
       .append('hashtags', hashtags.map((item) => item).join(','))
       .append('index', index)
       .append('number', number);
-    return this.http.get<Post[]>(`${this.apiUrl}/reel`, { params });
-  }
-
-  getPostByGroupNameAndType(
-    name: string,
-    type: string | null,
-    index: number,
-    number: number
-  ): Observable<Post[]> {
-    const params = new HttpParams()
-      .append('name', name)
-      .append('index', index)
-      .append('number', number).append('type', type || '');
-    return this.http.get<Post[]>(`${this.apiUrl}/get/group`, { params });
+    return this.http.get<Post[]>(`${this.apiUrl}/find/data`, { params });
   }
 }

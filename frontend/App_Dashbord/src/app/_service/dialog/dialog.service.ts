@@ -7,6 +7,7 @@ import { HighlightComponent } from 'src/app/_dialogs/highlight/highlight.compone
 import { LikesComponent } from 'src/app/_dialogs/likes/likes.component';
 import { NotificationComponent } from 'src/app/_dialogs/notification/notification.component';
 import { PhotoComponent } from 'src/app/_dialogs/photo/photo.component';
+import { PostComponent } from 'src/app/_dialogs/post/post.component';
 import { ProfileComponent } from 'src/app/_dialogs/profile/profile.component';
 import { SeeValueComponent } from 'src/app/_dialogs/see-value/see-value.component';
 import { SendComponent } from 'src/app/_dialogs/send/send.component';
@@ -15,7 +16,9 @@ import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { FilterSeach } from 'src/app/_type/filters/filter';
 import { CommentId } from 'src/app/_type/models/commet';
 import { Highlight } from 'src/app/_type/models/highlight';
-import { PostId } from 'src/app/_type/models/post';
+import { Post, PostId } from 'src/app/_type/models/post';
+import { Share } from 'src/app/_type/models/share';
+import { Story } from 'src/app/_type/models/story';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
 
 @Injectable({
@@ -74,7 +77,10 @@ export class DialogService {
     dialogRef.afterClosed().subscribe();
   }
 
-  openDialogHighlight(highlight: Highlight[], position: number): void {
+  openDialogHighlightOrStory(
+    highlight: Highlight[] | Story[],
+    position: number
+  ): void {
     const dialogRef = this.dialog.open(HighlightComponent, {
       width: 'auto',
       height: 'auto',
@@ -184,6 +190,17 @@ export class DialogService {
         left: `${position.pos_x - this.width}px`,
       },
     });
+    return dialogRef.afterClosed();
+  }
+
+  openDialogPost(data: Post | Share): any {
+    const dialogRef = this.dialog.open(PostComponent, {
+      width: '50rem',
+      minWidth: '50rem',
+      height: 'auto',
+      data: { data: data },
+    });
+    dialogRef.afterClosed().subscribe(() => {});
     return dialogRef.afterClosed();
   }
 }

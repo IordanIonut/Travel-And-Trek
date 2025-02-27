@@ -1,10 +1,4 @@
 <div
-  (mousedown)="onMouseDown($event)"
-  (mouseup)="onMouseUp($event)"
-  (mouseleave)="onMouseLeave($event)"
-  (touchstart)="onMouseDown($event)"
-  (touchend)="onMouseUp($event)"
-  (touchcancel)="onMouseLeave($event)"
   #postElement
   class="rounded-[15px] p-2.5 flex flex-row gap-2.5 items-center justify-start self-stretch relative overflow-hidden mb-3"
 >
@@ -19,10 +13,10 @@
       "
     >
       <img
+        draggable="false"
         id="profile"
         #profile
         crossorigin="anonymous"
-        draggable="false"
         class="rounded-full mb-3 h-14 object-cover justify-start flex flex-col self-stretch max-w-max w-full"
         src="{{
           getProperty('profile_picture') ||
@@ -70,7 +64,7 @@
   </div>
 
   <div
-    class="flex flex-col w-[40rem] gap-2.5 items-start self-stretch relative justify-between"
+    class="flex flex-col w-[45rem] gap-2.5 items-start self-stretch relative justify-between"
   >
     <div
       class="bgCom rounded-[15px] p-2.5 flex flex-col gap-1 items-start justify-start self-stretch shrink-0 relative"
@@ -140,7 +134,7 @@
     </div>
     <!-- POST -->
     <div
-      class="flex flex-row gap-[5px] items-center justify-around content-around self-stretch flex-1 relative"
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
       *ngIf="
         (isPost(data) &&
           data?.id?.type === PostEnum.POST &&
@@ -152,92 +146,85 @@
     >
       <div
         #postContainer
-        class="flex flex-col gap-2.5 items-start justify-around self-stretch flex-1 relative post-container"
+        class="flex flex-col gap-2.5 self-stretch flex-1 relative post-container flex-wrap content-around items-center justify-between"
       >
         <img
           draggable="false"
-          class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full h-[32rem]"
           style="object-fit: cover"
           id="postImage1"
           #postImage1
           crossorigin="anonymous"
           src="{{
-            (isPost(data) && data!.post_medias_id![0]!.url) ||
-              (isShare(data) && data!.share_post_id!.post_medias_id![0]!.url)
+            (isPost(data) && data!.post_medias_id![position]!.url) ||
+              (isShare(data) &&
+                data!.share_post_id!.post_medias_id![position]!.url)
           }}"
           alt="image"
         />
       </div>
       <div
         *ngIf="
-          (isPost(data) && data!.post_medias_id!.length === 2) ||
-          (isShare(data) && data!.share_post_id!.post_medias_id!.length === 2)
+          (isPost(data) && data!.post_medias_id!.length >= 1) ||
+          (isShare(data) && data!.share_post_id!.post_medias_id!.length >= 1)
         "
-        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative"
+        class="flex flex-col gap-2.5 items-start justify-center self-stretch flex-1 fixed"
       >
-        <img
-          draggable="false"
-          class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full"
-          style="object-fit: cover"
-          id="postImage2"
-          #postImage2
-          src="{{
-            (isPost(data) && data!.post_medias_id![1]!.url) ||
-              (isShare(data) && data!.share_post_id!.post_medias_id![1]!.url)
-          }}"
-        />
-      </div>
-      <div
-        *ngIf="
-          (isPost(data) && data!.post_medias_id!.length >= 3) ||
-          (isShare(data) && data!.share_post_id!.post_medias_id!.length >= 3)
-        "
-        class="flex flex-col gap-2.5 items-start justify-center self-stretch flex-1 relative"
-      >
-        <img
-          draggable="false"
-          class="rounded-[5px] self-stretch flex-1 w-full relative max-w-max"
-          style="object-fit: cover"
-          id="postImage2"
-          #postImage2
-          src="{{
-            (isPost(data) && data!.post_medias_id![1]!.url) ||
-              (isShare(data) && data!.share_post_id!.post_medias_id![1]!.url)
-          }}"
-        />
-        <img
-          draggable="false"
-          class="rounded-[5px] max-w-max w-full self-stretch flex-1 relative"
-          style="object-fit: cover"
-          id="postImage3"
-          #postImage3
-          src="{{
-            (isPost(data) && data!.post_medias_id![2]!.url) ||
-              (isShare(data) && data!.share_post_id!.post_medias_id![2]!.url)
-          }}"
-        />
+        <div
+          #conImage2
+          class="rounded-[15px] p-2.5 img right-[-20rem]"
+          *ngIf="
+            (isPost(data) && data!.post_medias_id!.length > position + 1) ||
+            (isShare(data) &&
+              data!.share_post_id!.post_medias_id!.length > position + 1)
+          "
+        >
+          <img
+            draggable="false"
+            style="object-fit: cover; position: static"
+            id="postImage2"
+            #postImage2
+            (click)="onRight()"
+            crossorigin="anonymous"
+            src="{{
+              (isPost(data) && data!.post_medias_id![position + 1]!.url!) ||
+                (isShare(data) &&
+                  data!.share_post_id!.post_medias_id![position + 1]!.url!)
+            }}"
+          />
+        </div>
+        <div
+          *ngIf="position - 1 >= 0"
+          #conImage3
+          class="rounded-[15px] p-2.5 img left-[-20rem]"
+        >
+          <img
+            draggable="false"
+            style="object-fit: cover; position: static"
+            id="postImage3"
+            (click)="onLeft()"
+            #postImage3
+            crossorigin="anonymous"
+            src="{{
+              (isPost(data) && data!.post_medias_id![position - 1]!.url!) ||
+                (isShare(data) &&
+                  data!.share_post_id!.post_medias_id![position - 1]!.url!)
+            }}"
+          />
+        </div>
       </div>
     </div>
     <!-- REEL -->
     <div
-      class="flex flex-row gap-[5px] items-center justify-around content-around self-stretch flex-1 relative"
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
       *ngIf="isPost(data) && data!.id!.type === PostEnum.REEL"
     >
       <div
-        class="flex flex-col gap-2.5 items-start justify-around self-stretch flex-1 relative post-container"
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
       >
-        <!-- <img
-        draggable="false"
-        class="rounded-[5px] self-stretch flex-1 relative"
-        style="object-fit: cover"
-        id=" postImage1"
-        # postImage1
-        crossorigin="anonymous"
-        src="{{ post!.post_medias_id[0]!.url }}"
-      /> -->
         <div class="video-container" #postContainer>
           <video
-            class="rounded-[5px] self-stretch flex-1 relative"
+            class="rounded-[5px] self-stretch h-full flex-1 relative"
             [controls]="true"
             [autoplay]="false"
             [muted]="true"
@@ -258,12 +245,12 @@
     </div>
     <!-- MEDIA -->
     <div
-      class="flex flex-row gap-[5px] items-center justify-around content-around self-stretch flex-1 relative"
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
       *ngIf="isShare(data) && data?.shareId?.type === ShareEnum.MEDIA"
     >
       <div
         #postContainer
-        class="flex flex-col gap-2.5 items-start justify-around self-stretch flex-1 relative post-container"
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
       >
         <img
           draggable="false"
@@ -278,12 +265,12 @@
     </div>
     <!-- Story -->
     <div
-      class="flex flex-row gap-[5px] items-center justify-around content-around self-stretch flex-1 relative"
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
       *ngIf="isShare(data) && data?.shareId?.type === ShareEnum.STORY"
     >
       <div
         #postContainer
-        class="flex flex-col gap-2.5 items-start justify-around self-stretch flex-1 relative post-container"
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
       >
         <img
           draggable="false"

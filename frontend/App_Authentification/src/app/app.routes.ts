@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { PasswordComponent } from './password/password.component';
+import { LoginComponent } from './_page/login/login.component';
+import { RegisterComponent } from './_page/register/register.component';
+import { PasswordComponent } from './_page/password/password.component';
 
 export const routes: Routes = [
   {
-    path: 'authentification',
+    path: 'authentication',
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
@@ -13,5 +13,5 @@ export const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
-  { path: '', redirectTo: 'authentification/login', pathMatch: 'full' }, 
+  { path: '', redirectTo: 'authentication/login', pathMatch: 'full' },
 ];

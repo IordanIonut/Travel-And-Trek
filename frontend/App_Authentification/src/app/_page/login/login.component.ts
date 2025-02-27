@@ -1,26 +1,30 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
-import { NavbarComponent, Page, SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Component,
+  Inject,
+  PLATFORM_ID,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  NavbarComponent,
+  Page,
+  SetThemeService,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { RouterLink, RouterModule } from '@angular/router';
+import { CButtonComponent } from 'src/app/_components/c-button/c-button.component';
+import { GOOGLE_LOGO_URL } from 'src/app/_constant/constant';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, MaterialModule, RouterLink, RouterModule, NavbarComponent],
+  imports: [CommonModule, MaterialModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent {
-  pages: Page[] = [
-    { icon: 'home', route: '/authentification/login' },
-    { icon: 'search', route: '/authentification/register' },
-  ];
-  style: boolean = true;
-  selectedIndex: number = 0;
-  centerX: number = 33;
-  centerY: number = 28;
+  google = GOOGLE_LOGO_URL;
 
   constructor(
     private setThemeService: SetThemeService,
@@ -32,4 +36,8 @@ export class LoginComponent {
   }
 
   ngOnInit() {}
+
+  onClickGoogle() {}
+
+  onClickSignIn() {}
 }

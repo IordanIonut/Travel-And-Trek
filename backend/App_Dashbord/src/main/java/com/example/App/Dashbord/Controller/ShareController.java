@@ -1,7 +1,10 @@
 package com.example.App.Dashbord.Controller;
 
 import com.example.App.Dashbord.DTO.UserDTO;
+import com.example.App.Dashbord.Embedded.PostId;
+import com.example.App.Dashbord.Embedded.ShareId;
 import com.example.App.Dashbord.Enum.PostEnum;
+import com.example.App.Dashbord.Model.Post;
 import com.example.App.Dashbord.Model.Share;
 import com.example.App.Dashbord.Service.ShareService;
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -82,6 +86,18 @@ public class ShareController {
         } catch (Exception e) {
             LOG.info("Failed to retrieve findUsersSharesByPost(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Optional<Share>> getSharetById(@RequestParam("id") final ShareId id) {
+        try {
+            LOG.info("getSharetById()- user - Successful.");
+            return ResponseEntity.ok(shareService.getSharetById(id));
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve getSharetById(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 }

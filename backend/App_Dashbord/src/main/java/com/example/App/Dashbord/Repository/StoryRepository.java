@@ -1,6 +1,7 @@
 package com.example.App.Dashbord.Repository;
 
 import com.example.App.Dashbord.Model.Story;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +21,16 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
             "AND s.expiration_time > current_time() " +
             "ORDER BY s.expiration_time DESC")
     List<Story> findUsersFriendsStory(@Param("name") String name, @Param("view") String view);
+
+    @Query("SELECT DISTINCT s FROM Story s " +
+            "JOIN s.story_user_id u " +
+            "JOIN Follower f ON f.follower_user_id_follower = u " +
+            "JOIN User u2 ON f.follower_user_id = u2 " +
+            "WHERE UPPER(u2.name) LIKE UPPER(:name) " +
+            "AND f.id.status = 'ACCEPTED' " +
+            "AND s.expiration = false " +
+//            "AND s.expiration_time > current_time() " +
+            "ORDER BY s.expiration_time DESC")
+    List<Story> findFriendsStory(@Param("name") String name, Pageable pageable);
+
 }

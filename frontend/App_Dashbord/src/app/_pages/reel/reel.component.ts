@@ -41,13 +41,13 @@ export class ReelComponent {
   index = 0;
   isLoading = false;
   isRun: number = 0;
-  
+
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private postService: PostService,
-    private ngZone: NgZone,
+    private ngZone: NgZone
   ) {
     this.fetchData();
   }
@@ -74,11 +74,11 @@ export class ReelComponent {
   detectVisibleElement(): void {
     const container = this.scrollContainer.nativeElement;
     const children = container.querySelectorAll('app-post');
-  
+
     children.forEach((child: HTMLElement) => {
       const rect = child.getBoundingClientRect();
       const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
-  
+
       if (isVisible) {
         const id = parseInt(child.id.replace('post-', ''), 10);
         if (!isNaN(id) && this.isRun !== id) {
@@ -93,7 +93,7 @@ export class ReelComponent {
   protected fetchData() {
     if (this.isLoading || !this.posts || this.posts.length === 0) {
       this.postService
-        .getPostByUser(
+        .getPostByUserFriends(
           environment.user.name,
           PostEnum.REEL,
           environment.user.user_hashtag_id,

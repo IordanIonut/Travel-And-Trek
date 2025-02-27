@@ -5,28 +5,37 @@
 @import "./_theme/scss/themes";
 @import "./_theme/scss/material";
 
-.hide-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
+@layer utilities {
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    &::-webkit-scrollbar-thumb {
+      display: none;
+    }
+    overflow: auto;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  &::-webkit-scrollbar-thumb {
-    display: none;
-  }
-  overflow: auto;
 }
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
 html,
 body {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   height: 100%;
   width: 100%;
   background-color: var(--bgPrimary);
 }
 body {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
@@ -71,7 +80,7 @@ body {
 }
 
 .story-com {
-  @apply rounded-[15px] p-2 flex flex-row gap-1 items-center justify-start self-stretch shrink-0 relative overflow-y-auto mb-3 no-scrollbar;
+  @apply rounded-[15px] p-2 flex flex-row gap-1 items-center justify-start self-stretch shrink-0 relative overflow-y-auto mb-3;
 }
 
 .width-page {
@@ -130,7 +139,7 @@ mat-dialog-container {
 .rotate-line {
   transform: rotate(180deg);
   width: 1rem;
-  height: 1rem;
+  height: 2rem;
 }
 
 .center-circle {
@@ -156,6 +165,10 @@ mat-icon.clicked {
 .cdk-overlay-pane.mat-mdc-dialog-panel {
   // min-width: fit-content !important;
   border-radius: 30px !important;
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.7) !important;
 }
 
 .icon-butoon {

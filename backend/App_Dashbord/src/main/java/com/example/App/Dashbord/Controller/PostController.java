@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Controller;
 
+import com.example.App.Dashbord.Embedded.PostId;
 import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Post;
 import com.example.App.Dashbord.Service.PostService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -97,23 +99,6 @@ public class PostController {
         }
     }
 
-    @GetMapping("/reel")
-    public ResponseEntity<List<Post>> getPostByUser(@RequestParam("name") final String name,
-                                                           @RequestParam("type") final PostEnum type,
-                                                           @RequestParam("hashtags") final List<String> hashtags,
-                                                           @RequestParam("index") final int index,
-                                                           @RequestParam("number") final int number) {
-        try {
-            List<Post> list = postService.getPostByUser(name, type, hashtags, index, number);
-            LOG.info("getPostByUser()- user - Successful.");
-            return ResponseEntity.ok(list);
-        } catch (Exception e) {
-            LOG.error("Failed to retrieve getPostByUser(): {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.emptyList());
-        }
-    }
-
     @GetMapping("/get/group")
     public ResponseEntity<List<Post>> getPostByGroupNameAndType(@RequestParam("name") final String name,
                                                                 @RequestParam(value = "type", required = false) final PostEnum type,
@@ -125,6 +110,35 @@ public class PostController {
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             LOG.error("Failed to retrieve getPostByGroupNameAndType(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Optional<Post>> getPostById(@RequestParam("id") final PostId id) {
+        try {
+            LOG.info("getPostById()- user - Successful.");
+            return ResponseEntity.ok(postService.getPostById(id));
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve getPostById(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
+    }
+
+    @GetMapping("/find/data")
+    public ResponseEntity<List<Post>> getPostByUserFriends(@RequestParam("name") final String name,
+                                                    @RequestParam("type") final PostEnum type,
+                                                    @RequestParam("hashtags") final List<String> hashtags,
+                                                    @RequestParam("index") final int index,
+                                                    @RequestParam("number") final int number) {
+        try {
+            List<Post> list = postService.getPostByUserFriends(name, type, hashtags, index, number);
+            LOG.info("getPostByUserFriends()- user - Successful.");
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve getPostByUserFriends(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
         }

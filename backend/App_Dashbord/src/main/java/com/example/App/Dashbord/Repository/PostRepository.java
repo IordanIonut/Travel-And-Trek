@@ -42,33 +42,27 @@ public interface PostRepository extends JpaRepository<Post, PostId> {
             "OR EXISTS (SELECT 1 FROM p.tagged_users t WHERE t.name LIKE CONCAT(:search, '%')) " +
             "ORDER BY p.update_at DESC")
     List<Post> getPostBySearch(@Param("search") String search, Pageable pageable);
-    //add visibility condition
-    @Query("""
-                SELECT DISTINCT p
-                FROM Post p
-                LEFT JOIN p.post_user_id u
-                LEFT JOIN p.tagged_users pt
-                LEFT JOIN p.post_hashtag_id hs
-                LEFT JOIN Follower f on f.follower_user_id.id = p.post_user_id.id
-                LEFT JOIN u.user_hashtag_id uh
-                WHERE p.id.type = :type
-                  AND (
-                      u.name = :name
-                      OR (
-                          f.follower_user_id.id = u.id
-                          AND f.id.status = 'ACCEPTED'
-                      )
-                      OR pt.id = u.id
-                      OR hs.name IN :hashtags
-                      OR uh.name IN :hashtags
-                  )
-                ORDER BY p.update_at DESC
-      """)
-    List<Post> getPostByUser(@Param("name") String name, @Param("type") PostEnum type, @Param("hashtags") List<String> hashtags, Pageable pageable);
-
     @Query("SELECT DISTINCT p FROM Post p " +
             "WHERE p.post_group_id.name = :name " +
             "AND (:type IS NULL OR p.id.type = :type) ORDER BY p.update_at DESC")
     List<Post> getPostByGroupNameAndType(@Param("name") String name, @Param("type") PostEnum type, Pageable pageable);
+
+    @Query("""
+    SELECT DISTINCT p
+        FROM Post p
+        LEFT JOIN p.post_user_id u
+        LEFT JOIN p.tagged_users pt 
+        LEFT JOIN p.post_hashtag_id hs
+        LEFT JOIN Follower f ON f.follower_user_id.id = p.post_user_id.id
+        LEFT JOIN u.user_hashtag_id uh
+        WHERE p.id.type = :type AND ( u.name = :name 
+        OR(f.follower_user_id.name = :name AND f.id.status = 'ACCEPTED')
+        OR (f.follower_user_id_follower.name = :name AND f.id.status = 'ACCEPTED')
+        OR pt.id = u.id
+        OR hs.name IN :hashtags
+        OR uh.name IN :hashtags )
+        AND p.visible = true ORDER BY p.update_at DESC
+            """)
+    List<Post> getPostByUserFriends(@Param("name") String name, @Param("type") PostEnum type, @Param("hashtags") List<String> hashtags, Pageable pageable);
 
 }

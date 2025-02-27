@@ -22,7 +22,7 @@ public class UserDTO {
     private List<User> friends;
     private FollowerStatusEnum state;
 
-    public List<UserDTO> generateUserDTO(List<User> users, List<Follower> friends,int index,int number) {
+    public List<UserDTO> generateUserDTO(List<User> users, List<Follower> friends, int index, int number) {
         List<UserDTO> userDTOs = new ArrayList<>();
 
         for (User user : users) {
@@ -56,4 +56,5 @@ public class UserDTO {
         }
         return userDTOs.subList(start, end);
     }
+
 }

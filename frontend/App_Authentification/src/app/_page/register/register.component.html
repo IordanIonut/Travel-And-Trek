@@ -1,0 +1,194 @@
+<div class="page">
+  <div class="flex flex-col gap-4 bg-[#1f1f1f] p-8  rounded-2xl font-sans">
+    <label class="title">Welcome to {{ name }}</label>
+
+    <div class="flex flex-col gap-3">
+      <button type="button"
+        class="flex items-center justify-center gap-2 w-full h-12 border border-gray-700 rounded-lg text-white bg-[#2b2b2b] hover:border-efec transition">
+        <img [src]="google" alt="Google" class="w-[5rem] h-[5rem]" />
+      </button>
+    </div>
+
+    <mat-stepper [linear]="isLinear" #stepper [selectedIndex]="2">
+      <mat-step [stepControl]="firstFormGroup">
+
+        <form [formGroup]="firstFormGroup" class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3">
+            <div
+              class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+              <mat-icon>edit</mat-icon>
+              <input type="text"
+                class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+                placeholder="Enter your name" />
+            </div>
+            <div
+              class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+              <mat-icon>alternate_email</mat-icon>
+              <input type="email"
+                class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+                placeholder="Enter your Email" />
+            </div>
+          </div>
+          <div class="flex flex-row gap-3">
+            <div
+              class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+              <mat-icon>password</mat-icon>
+              <input type="password"
+                class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+                placeholder="Enter your password" />
+            </div>
+            <div
+              class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+              <mat-icon>password</mat-icon>
+              <input type="password"
+                class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+                placeholder="Enter your password again" />
+            </div>
+          </div>
+          <div>
+            <button type="button" (click)="onMoveToSecundForm()" class="move">
+              <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+          </div>
+        </form>
+
+      </mat-step>
+      <mat-step [stepControl]=" secondFormGroup">
+
+        <form [formGroup]="secondFormGroup">
+          <div class="flex flex-row justify-around gap-3">
+
+            <label for="file" class="custum-file-upload">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z"
+                      fill=""></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="text">
+                <span>Click to upload image</span>
+              </div>
+              <input id="file" type="file">
+            </label>
+
+          </div>
+          <div>
+            <button type="button" (click)="onMoveToThirdForm()" class="move">
+              <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+          </div>
+        </form>
+
+      </mat-step>
+      <mat-step [stepControl]=" thirdFormGroup">
+
+        <form [formGroup]="thirdFormGroup">
+          <div class="flex flex-col justify-around gap-3">
+
+            <div class="radio-input">
+              <input value="value-1" name="value-radio" id="value-1" type="radio" class="input i_female">
+              <input value="value-2" name="value-radio" id="value-2" type="radio" class="input i_no-gender">
+              <input value="value-3" name="value-radio" id="value-3" type="radio" class="input i_male">
+              <div class="card female">
+                <svg class="logo" width="48" height="48" fill="none" stroke="currentColor" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 15.75A7.125 7.125 0 1 0 12 1.5a7.125 7.125 0 0 0 0 14.25Z"></path>
+                  <path d="M12 15.75v6.75"></path>
+                  <path d="M14.719 19.5H9.28"></path>
+                </svg>
+                <div class="title">Female</div>
+              </div>
+              <div class="card no-gender">
+                <svg class="logo" width="48" height="48" fill="none" stroke="currentColor" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.125 15.75a6.375 6.375 0 1 0 0-12.75 6.375 6.375 0 0 0 0 12.75Z"></path>
+                  <path d="M10.125 16.5v6"></path>
+                  <path d="M12.75 19.5H7.5"></path>
+                  <path d="M20.25 5.25V1.5H16.5"></path>
+                  <path d="M15.717 6.034 20.25 1.5"></path>
+                </svg>
+                <div class="title">N/A</div>
+              </div>
+              <div class="card male">
+                <svg class="logo" width="48" height="48" fill="none" stroke="currentColor" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.125 21a7.125 7.125 0 1 0 0-14.25 7.125 7.125 0 0 0 0 14.25Z"></path>
+                  <path d="M21 7.5V3h-4.5"></path>
+                  <path d="M15.188 8.813 21 3"></path>
+                </svg>
+                <div class="title">Male</div>
+              </div>
+            </div>
+
+            <mat-form-field>
+              <mat-label>Choose a date</mat-label>
+              <input matInput input="date" [matDatepicker]="picker">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <button type="button" (click)="onMoveToLastForm()" class="move">
+              <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+          </div>
+        </form>
+
+      </mat-step>
+      <mat-step [stepControl]=" lastFormGroup">
+
+        <form [formGroup]="lastFormGroup">
+          <div class="flex flex-row justify-around gap-3">
+            <mat-form-field class="example-chip-list">
+              <mat-chip-grid #chipGrid aria-label="Enter your hobby...">
+                @for (fruit of fruits(); track fruit) {
+                <mat-chip-row (removed)="remove(fruit)" [editable]="true" (edited)="edit(fruit, $event)"
+                  [aria-description]="'press enter to edit ' + fruit.name">
+                  {{fruit.name}}
+                  <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip-row>
+                }
+                <input [matChipInputFor]="chipGrid" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)" />
+              </mat-chip-grid>
+            </mat-form-field>
+          </div>
+          <div>
+            <button type="button" (click)="onMoveToLastForm()" class="move">
+              <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+          </div>
+        </form>
+
+      </mat-step>
+
+
+    </mat-stepper>
+
+    <!-- <div
+      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+      <mat-icon>alternate_email</mat-icon>
+      <input type="text" class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+        placeholder="Enter your Email" />
+    </div>
+    <div
+      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+      <mat-icon>lock</mat-icon>
+      <input type="password"
+        class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+        placeholder="Enter your Password" />
+    </div> -->
+
+    <!-- <button type="button" disabled="false"
+      class="mt-4 bgSecond text-white font-medium rounded-lg h-12 w-full cursor-pointer hover:bgSecond transition">
+      Sign In
+    </button> -->
+  </div>
+</div>

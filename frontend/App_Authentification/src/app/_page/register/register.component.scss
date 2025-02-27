@@ -1,0 +1,125 @@
+.custum-file-upload {
+    height: 200px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    gap: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #e8e8e8;
+    background-color: #212121;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px #e8e8e8;
+}
+
+.custum-file-upload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custum-file-upload .icon svg {
+    height: 80px;
+    fill: #e8e8e8;
+}
+
+.custum-file-upload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custum-file-upload .text span {
+    font-weight: 400;
+    color: #e8e8e8;
+}
+
+.custum-file-upload input {
+    display: none;
+}
+
+/* Gender selector made by: csozi | Website: www.csozi.hu*/
+
+.radio-input {
+    display: flex;
+    flex-wrap: wrap;
+    width: 320px;
+    height: fit-content;
+    gap: 10px;
+    scale: 0.7;
+}
+
+.radio-input input {
+    height: 100px;
+    width: 100px;
+    translate: 0px 55px;
+    opacity: 0;
+    z-index: 10;
+}
+
+.card {
+    height: 100px;
+    width: 100px;
+    border: solid darkgray;
+    background-color: lightgray;
+    border-radius: 10px;
+    translate: 0px -55px;
+    position: relative;
+    z-index: 9;
+    transition: 0.2s;
+    color: darkgray;
+}
+
+.logo {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    translate: -50% 0px;
+}
+
+.card .title {
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    font-size: 23px;
+    bottom: 0px;
+    font-weight: bold;
+}
+
+.i_female:hover~.female {
+    filter: brightness(1.1);
+}
+
+.i_male:hover~.male {
+    filter: brightness(1.1);
+}
+
+.i_no-gender:hover~.no-gender {
+    filter: brightness(1.1);
+}
+
+.i_female:checked~.female {
+    border: solid #ff87bf;
+    color: #ff87bf;
+    background-color: #ffb8d9;
+}
+
+.i_male:checked~.male {
+    border: solid #3d44ff;
+    color: #3d44ff;
+    background-color: #85a5ff;
+}
+
+.i_no-gender:checked~.no-gender {
+    border: solid #c9c600;
+    color: #c9c600;
+    background-color: #fffd82;
+}
+
+.example-chip-list {
+    width: 100%;
+}
+

@@ -1,4 +1,0 @@
-rmdir /s /q node_modules
-rmdir /s /q dist
-rmdir /s /q .angular
-rmdir /s /q package-lock.json

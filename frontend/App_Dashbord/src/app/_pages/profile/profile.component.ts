@@ -37,7 +37,7 @@ import { UserDTO } from 'src/app/_type/dto/user.dto';
 import e from 'express';
 import { UserComponent } from 'src/app/_components/user/user.component';
 import { iconsObject } from 'src/app/_type/icon/icon';
-import { SendComponent } from "../../_dialogs/send/send.component";
+import { SendComponent } from '../../_dialogs/send/send.component';
 
 @Component({
   selector: 'app-profile',
@@ -52,8 +52,8 @@ import { SendComponent } from "../../_dialogs/send/send.component";
     HttpClientModule,
     PostComponent,
     UserComponent,
-    SendComponent
-],
+    SendComponent,
+  ],
   providers: [
     UserService,
     PostService,
@@ -189,7 +189,7 @@ export class ProfileComponent {
 
   protected onOpenPhote() {
     this.dialog.openDialogPhote(
-      this.validatorService.isUserProfileDTOOrGroupDetaiDTO(this.profileDTO!)
+      this.validatorService.isUserProfileDTO(this.profileDTO!)
         ? (this.profileDTO?.user!.profile_picture as string)
         : (this.profileDTO!.group!.url as string)
     );
@@ -206,9 +206,7 @@ export class ProfileComponent {
       | 'bio'
       | 'highlight'
   ): any | undefined {
-    if (
-      this.validatorService.isUserProfileDTOOrGroupDetaiDTO(this.profileDTO!)
-    ) {
+    if (this.validatorService.isUserProfileDTO(this.profileDTO!)) {
       switch (property) {
         case 'url': {
           return this.profileDTO.user?.profile_picture;
@@ -235,9 +233,7 @@ export class ProfileComponent {
           return (this.profileDTO?.highlights as Highlight[]) || [];
         }
       }
-    } else if (
-      this.validatorService.isGroupDetailDTOORUserProfileDTO(this.profileDTO!)
-    ) {
+    } else if (this.validatorService.isGroupDetailDTO(this.profileDTO!)) {
       switch (property) {
         case 'url': {
           return this.profileDTO.group?.url;

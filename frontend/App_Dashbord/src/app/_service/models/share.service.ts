@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { UserDTO } from 'src/app/_type/dto/user.dto';
 import { CommentEnum } from 'src/app/_type/enum/comment.enum';
 import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { Share } from 'src/app/_type/models/share';
+import { Share, ShareId } from 'src/app/_type/models/share';
 import { User } from 'src/app/_type/models/user';
 import { environment } from 'src/app/environments/environment';
 
@@ -56,5 +56,9 @@ export class ShareService {
       .append('id', id)
       .append('type', type);
     return this.http.get<UserDTO[]>(`${this.apiUrl}/post/userDTO`, { params });
+  }
+
+  getSharetById(id: ShareId): Observable<Share> {
+    return this.http.get<Share>(`${this.apiUrl}/get?id=${id}`);
   }
 }
