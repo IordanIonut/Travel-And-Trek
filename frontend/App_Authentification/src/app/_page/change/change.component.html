@@ -1,0 +1,106 @@
+<div class="page">
+  <form
+    [formGroup]="form"
+    class="flex flex-col gap-4 bg-[#1f1f1f] p-8 w-[450px] rounded-2xl font-sans"
+  >
+    <label class="title">{{
+      isOTP ? "Change Password" : "OTP Verification"
+    }}</label>
+    @if(isOTP){
+    <div
+      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]"
+    >
+      <mat-icon>lock</mat-icon>
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+        class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+        placeholder="New Password"
+      />
+      <mat-icon
+        matSuffix
+        (click)="togglePasswordVisibility()"
+        class="cursor-pointer"
+      >
+        {{ showPassword ? "visibility_off" : "visibility" }}
+      </mat-icon>
+    </div>
+    <div
+      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]"
+    >
+      <mat-icon>lock</mat-icon>
+      <input
+        [type]="showConfirmPassword ? 'text' : 'password'"
+        formControlName="confirmPassword"
+        class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+        placeholder="Confirm now Password"
+      />
+      <mat-icon
+        matSuffix
+        (click)="toggleConfirmPasswordVisibility()"
+        class="cursor-pointer"
+      >
+        {{ showConfirmPassword ? "visibility_off" : "visibility" }}
+      </mat-icon>
+    </div>
+    <button
+      type="button"
+      (click)="onClickSignIn()"
+      class="mt-4 bgSecond text-white font-medium rounded-lg h-12 w-full cursor-pointer hover:bgSecond transition"
+    >
+      Submit
+    </button>
+    } @else {
+    <div
+      class="flex flex-col items-center justify-center relative rounded-xl p-4 [box-shadow:var(--shadow)] overflow-hidden"
+    >
+      <div
+        class="mb-6 w-full grid grid-flow-col grid-cols-6 items-center justify-center justify-items-center"
+      >
+        <div
+          *ngFor="
+            let control of ['opt1', 'opt2', 'opt3', 'opt4', 'opt5', 'opt6'];
+            let i = index
+          "
+        >
+          <input
+            class="aria-[disabled='true']:cursor-not-allowed aria-[disabled='true']:opacity-50 block focus:placeholder:opacity-0 placeholder:text-muted-foreground/80 placeholder:text-[24px] text-[20px] leading-[20px] font-bold text-center h-10 w-10 max-w-full rounded-md p-0 border border-input bg-white [box-shadow:var(--shadow)] transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-0 focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-[#2f81f7] focus-visible:ring-offset-0 placeholder:select-none"
+            spellcheck="false"
+            autocomplete="one-time-code"
+            placeholder="○"
+            aria-invalid="false"
+            type="tel"
+            [formControlName]="control"
+            inputmode="numeric"
+            maxlength="1"
+            [ngClass]="{
+              'border-red-500':
+                form.get(control)?.invalid && form.get(control)?.touched
+            }"
+          />
+        </div>
+      </div>
+
+      <span class="text-zinc-500 text-[12px] text-center"
+        >Please enter the 4-digits one time password (OTP) that we sent to your
+        registered email</span
+      >
+
+      <button
+        type="button"
+        (click)="verifyOTP()"
+        class="mt-4 bgSecond text-white font-medium rounded-lg h-12 w-full cursor-pointer hover:bgSecond transition"
+      >
+        Submit
+      </button>
+    </div>
+    }
+  </form>
+</div>
+<app-alert
+  *ngIf="showAlert"
+  [message]="alertMessage"
+  [subject]="errorMessage"
+  [mode]="mode"
+  (handleChangeValue)="showAlert = false"
+></app-alert>

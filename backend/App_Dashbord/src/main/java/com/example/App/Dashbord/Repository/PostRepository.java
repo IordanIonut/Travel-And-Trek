@@ -2,6 +2,7 @@ package com.example.App.Dashbord.Repository;
 
 import com.example.App.Dashbord.Embedded.PostId;
 import com.example.App.Dashbord.Enum.PostEnum;
+import com.example.App.Dashbord.Model.Media;
 import com.example.App.Dashbord.Model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -65,4 +66,6 @@ public interface PostRepository extends JpaRepository<Post, PostId> {
             """)
     List<Post> getPostByUserFriends(@Param("name") String name, @Param("type") PostEnum type, @Param("hashtags") List<String> hashtags, Pageable pageable);
 
+    @Query("SELECT DISTINCT(p) FROM Post p WHERE p.post_medias_id IS NOT NULL")
+    List<Post> findAllUserId();
 }

@@ -1,18 +1,30 @@
 <div class="page">
-  <form class="flex flex-col gap-4 bg-[#1f1f1f] p-8 w-[450px] rounded-2xl font-sans">
+  <form
+    [formGroup]="form"
+    class="flex flex-col gap-4 bg-[#1f1f1f] p-8 w-[450px] rounded-2xl font-sans"
+  >
     <label class="title">Welcome Back</label>
     <div
-      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]"
+    >
       <mat-icon>alternate_email</mat-icon>
-      <input type="text" class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
-        placeholder="Enter your Email" />
+      <input
+        formControlName="email"
+        type="text"
+        class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
+        placeholder="Enter your Email"
+      />
     </div>
     <div
-      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]">
+      class="flex items-center border border-gray-700 rounded-lg h-12 px-3 transition focus-within:border-efec bg-[#2b2b2b]"
+    >
       <mat-icon>lock</mat-icon>
-      <input type="password"
+      <input
+        formControlName="password"
+        type="password"
         class="ml-3 w-full bg-[#2b2b2b] text-white border-none focus:outline-none placeholder-gray-400"
-        placeholder="Enter your Password" />
+        placeholder="Enter your Password"
+      />
     </div>
 
     <div class="flex justify-between items-center text-white text-sm">
@@ -20,26 +32,39 @@
         <input type="checkbox" class="bgSecond" />
         <label>Remember me</label>
       </div>
-      <span class="textSecond cursor-pointer hover:underline">Forgot password?</span>
+      <span
+        class="textSecond cursor-pointer hover:underline"
+        [routerLink]="'/authentication/forgot-password'"
+        >Forgot password?</span
+      >
     </div>
 
-    <button type="button" (click)="onClickSignIn()"
-      class="mt-4 bgSecond text-white font-medium rounded-lg h-12 w-full cursor-pointer hover:bgSecond transition">
+    <button
+      type="button"
+      (click)="onClickSignIn()"
+      class="mt-4 bgSecond text-white font-medium rounded-lg h-12 w-full cursor-pointer hover:bgSecond transition"
+    >
       Sign In
     </button>
 
     <p class="text-center text-white text-sm">
       Don't have an account?
-      <span class="textSecond cursor-pointer hover:underline">Sign Up</span>
+      <span
+        class="textSecond cursor-pointer hover:underline"
+        [routerLink]="'/authentication/register'"
+        >Sign Up</span
+      >
     </p>
 
     <p class="text-center text-white text-sm my-2">Or With</p>
 
-    <div class="flex flex-col gap-3">
-      <button type="button" (click)="onClickGoogle()"
-        class="flex items-center justify-center gap-2 w-full h-12 border border-gray-700 rounded-lg text-white bg-[#2b2b2b] hover:border-efec transition">
-        <img [src]="google" alt="Google" class="w-[5rem] h-[5rem]" />
-      </button>
-    </div>
+    <div class="flex flex-col gap-3"><app-google></app-google></div>
   </form>
 </div>
+<app-alert
+  *ngIf="showAlert"
+  [message]="alertMessage"
+  [subject]="errorMessage"
+  [mode]="mode"
+  (handleChangeValue)="showAlert = false"
+></app-alert>

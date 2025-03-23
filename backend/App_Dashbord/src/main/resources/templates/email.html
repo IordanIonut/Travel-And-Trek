@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Message from Contact Form</title>
 </head>
 <body>
-$END$
+<table style="width: 100%; background-color: #f2f2f2;">
+    <tr>
+        <td style="padding: 20px;">
+            <img src="cid:logo" alt="Logo" style="max-width: 150px;">
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 20px;">
+            <h1 style="margin-bottom: 20px;">New Message from Contact Form</h1>
+            <p>A user has submitted a message through the contact form on your website. Below are the message details:</p>
+            <table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Name:</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">[[${name}]]</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Email:</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">[[${email}]]</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Subject:</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">[[${subject}]]</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">Message:</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">[[${message}]]</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 20px; text-align: center; background-color: #333; color: #fff;">
+            <p style="margin-bottom: 10px;">This email was sent automatically by your website's contact form. Please do not reply to this email.</p>
+            <p>&copy; 2025 Travel&Trek</p>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

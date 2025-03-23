@@ -27,6 +27,7 @@ import java.util.List;
 @Cacheable
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ID", nullable = false)
     private String id;
 
@@ -47,7 +48,7 @@ public class User {
     private String email;
 
     @Column(name = "LOCATION", nullable = false)
-    private String Location;
+    private String location;
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;

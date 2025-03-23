@@ -35,4 +35,7 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
                 ORDER BY p.create_at DESC, p.update_at DESC
             """)
     List<Post> getPostByTag(@Param("hashtags") List<String> hashtags, Pageable pageable);
+
+    @Query("SELECT distinct h.name FROM Hashtag h")
+    List<String> findAllTagsByName();
 }

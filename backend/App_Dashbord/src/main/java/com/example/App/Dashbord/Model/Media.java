@@ -2,6 +2,7 @@ package com.example.App.Dashbord.Model;
 
 import com.example.App.Dashbord.Embedded.MediaId;
 import com.example.App.Messenger.Model.Group;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,4 +46,9 @@ public class Media {
 
     @Column(name = "CREATE_AT", nullable = false)
     private LocalDateTime create_at;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STORY_ID", referencedColumnName = "id")
+    @JsonIgnore
+    private Story story;
 }

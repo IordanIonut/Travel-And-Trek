@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CButtonComponent } from './c-button.component';
+import { EmailComponent } from './email.component';
 
-describe('CButtonComponent', () => {
-  let component: CButtonComponent;
-  let fixture: ComponentFixture<CButtonComponent>;
+describe('EmailComponent', () => {
+  let component: EmailComponent;
+  let fixture: ComponentFixture<EmailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CButtonComponent]
+      imports: [EmailComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CButtonComponent);
+    fixture = TestBed.createComponent(EmailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

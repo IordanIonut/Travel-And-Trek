@@ -1,0 +1,31 @@
+/* In your styles.scss (or component-specific CSS file) */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Apply the fadeIn animation */
+.error-alert {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.error-alert.fade-out {
+  animation: fadeOut 0.5s ease-out;
+}

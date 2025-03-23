@@ -1,0 +1,177 @@
+<div class="page gap-4 p-4 h-full flex flex-col">
+  <!--!w-[100rem] -->
+  <div class="flex flex-row justify-between w-full gap-4">
+    <div class="flex flex-col">
+      <form [formGroup]="formMedia" class="flex flex-col items-center">
+        <label class="file-upload-label" for="file">
+          <div
+            class="file-upload-design flex flex-col items-center p-4 border rounded-md cursor-pointer"
+            [class.opacity-50]="mediaFiles.length > numberOfImages"
+          >
+            <svg height="1em" viewBox="0 0 640 512" class="mb-2">
+              <path
+                d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+              ></path>
+            </svg>
+            <p>Drag and Drop</p>
+            <p>or</p>
+            <span class="browse-button text-blue-500 font-semibold">
+              Browse file
+            </span>
+          </div>
+          @if (mediaFiles.length < numberOfImages) {
+          <input
+            id="file"
+            formControlName="media"
+            type="file"
+            accept="image/*,video/*,audio/*"
+            (change)="onFileSelected($event)"
+            class="hidden"
+          />
+          }
+        </label>
+      </form>
+
+      <form [formGroup]="formPost" class="flex flex-col gap-4 w-full">
+        <textarea
+          class="w-full h-40 p-2 border border-gray-300 rounded-md"
+          placeholder="What's on your mind?"
+        ></textarea>
+      </form>
+    </div>
+
+    <div class="flex flex-col w-full gap-4">
+      <div class="flex-auto flex justify-around">
+        @if(imagePreview !== null){
+        <img
+          [src]="imagePreview"
+          class="max-w-lg w-[40rem] h-auto object-contain"
+          crossorigin="anonymous"
+          draggable="false"
+        />
+        }@else {
+        <div class="main_wrapper">
+          <div class="main">
+            <div class="antenna">
+              <div class="antenna_shadow"></div>
+              <div class="a1"></div>
+              <div class="a1d"></div>
+              <div class="a2"></div>
+              <div class="a2d"></div>
+              <div class="a_base"></div>
+            </div>
+            <div class="tv">
+              <div class="cruve">
+                <svg
+                  class="curve_svg"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 189.929 189.929"
+                  xml:space="preserve"
+                >
+                  <path
+                    d="M70.343,70.343c-30.554,30.553-44.806,72.7-39.102,115.635l-29.738,3.951C-5.442,137.659,11.917,86.34,49.129,49.13
+        C86.34,11.918,137.664-5.445,189.928,1.502l-3.95,29.738C143.041,25.54,100.895,39.789,70.343,70.343z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="display_div">
+                <div class="screen_out">
+                  <div class="screen_out1">
+                    <div class="screen">
+                      <span class="notfound_text"> NOT FOUND</span>
+                    </div>
+                    <div class="screenM">
+                      <span class="notfound_text"> NOT FOUND</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="lines">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+              </div>
+              <div class="buttons_div">
+                <div class="b1"><div></div></div>
+                <div class="b2"></div>
+                <div class="speakers">
+                  <div class="g1">
+                    <div class="g11"></div>
+                    <div class="g12"></div>
+                    <div class="g13"></div>
+                  </div>
+                  <div class="g"></div>
+                  <div class="g"></div>
+                </div>
+              </div>
+            </div>
+            <div class="bottom">
+              <div class="base1"></div>
+              <div class="base2"></div>
+              <div class="base3"></div>
+            </div>
+          </div>
+          <div class="text_404">
+            <div class="text_4041">4</div>
+            <div class="text_4042">0</div>
+            <div class="text_4043">4</div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col w-1/5 max-h-[40rem] overflow-auto gap-2">
+      <div class="stack" *ngFor="let image of mediaFiles; let k = index">
+        <div class="card" (click)="onSelectImage(k)">
+          <div class="image">
+            <img
+              [src]="image"
+              alt="image"
+              class="w-full h-auto object-contain rounded-md"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-between w-fit gap-4">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      class="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition"
+    >
+      Submit
+    </button>
+
+    <button
+      mat-raised-button
+      color="warn"
+      type="reset"
+      class="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition"
+    >
+      Reset
+    </button>
+
+    <button
+      mat-raised-button
+      color="accent"
+      type="button"
+      class="px-4 py-2 rounded-md bg-gray-500 text-white hover:bg-gray-600 transition"
+    >
+      Cancel
+    </button>
+
+    <button
+      mat-raised-button
+      color="accent"
+      type="button"
+      class="px-4 py-2 rounded-md bg-gray-500 text-white hover:bg-gray-600 transition"
+    >
+      Save
+    </button>
+  </div>
+</div>

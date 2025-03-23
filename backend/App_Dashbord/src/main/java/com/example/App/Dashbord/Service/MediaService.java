@@ -30,7 +30,7 @@ public class MediaService {
 
     @Cacheable(value = "mediaCache", key = "'allUsers'")
     public List<Media> findAllUserIdMedia() {
-        return mediaRepository.findAllUserIdMedia();
+        return mediaRepository.findAllUserId();
     }
 
     @Cacheable(value = "mediaCache", key = "'allMediaByUser'")

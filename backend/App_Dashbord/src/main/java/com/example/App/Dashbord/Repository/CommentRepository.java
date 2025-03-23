@@ -1,6 +1,7 @@
 package com.example.App.Dashbord.Repository;
 
 import com.example.App.Dashbord.Embedded.CommentId;
+import com.example.App.Dashbord.Enum.CommentEnum;
 import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,6 @@ public interface CommentRepository extends JpaRepository<Comment, CommentId> {
     @Query("SELECT DISTINCT c FROM Comment c WHERE c.id = :id ")
     Optional<Comment> findCommentById(@Param("id") CommentId id);
 
+    @Query("SELECT DISTINCT c FROM Comment c WHERE c.id.type = :commentEnum")
+    List<Comment> findAllByCommentEnum(@Param("commentEnum") CommentEnum commentEnum);
 }

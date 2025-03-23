@@ -1,125 +1,129 @@
 .custum-file-upload {
-    height: 200px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: space-between;
-    gap: 20px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #e8e8e8;
-    background-color: #212121;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0px 48px 35px -48px #e8e8e8;
+  height: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  gap: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e8e8e8;
+  background-color: #212121;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 48px 35px -48px #e8e8e8;
 }
 
 .custum-file-upload .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .custum-file-upload .icon svg {
-    height: 80px;
-    fill: #e8e8e8;
+  height: 80px;
+  fill: #e8e8e8;
 }
 
 .custum-file-upload .text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .custum-file-upload .text span {
-    font-weight: 400;
-    color: #e8e8e8;
+  font-weight: 400;
+  color: #e8e8e8;
 }
 
 .custum-file-upload input {
-    display: none;
+  display: none;
 }
 
-/* Gender selector made by: csozi | Website: www.csozi.hu*/
 
-.radio-input {
-    display: flex;
-    flex-wrap: wrap;
-    width: 320px;
-    height: fit-content;
-    gap: 10px;
-    scale: 0.7;
+.example-chip-list {
+  width: 100%;
 }
 
-.radio-input input {
-    height: 100px;
-    width: 100px;
-    translate: 0px 55px;
-    opacity: 0;
-    z-index: 10;
+.container {
+  overflow: auto;
+  display: flex;
+  scroll-snap-type: x mandatory;
+  width: 55%;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .card {
-    height: 100px;
-    width: 100px;
-    border: solid darkgray;
-    background-color: lightgray;
-    border-radius: 10px;
-    translate: 0px -55px;
-    position: relative;
-    z-index: 9;
-    transition: 0.2s;
-    color: darkgray;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border-radius: 10px;
+//   padding: 2rem;
+  margin: 1rem;
+  width: 100%;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.logo {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    translate: -50% 0px;
+.container:hover > .card:not(:hover) {
+  opacity: 0.2;
 }
 
-.card .title {
-    width: 100%;
-    position: absolute;
-    text-align: center;
-    font-size: 23px;
-    bottom: 0px;
-    font-weight: bold;
+.card.active {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.7);
 }
 
-.i_female:hover~.female {
-    filter: brightness(1.1);
+.title {
+  width: 100%;
+  display: inline-block;
+  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  margin: 1rem auto;
+  cursor: pointer;
 }
 
-.i_male:hover~.male {
-    filter: brightness(1.1);
+#saved-name-container {
+  margin-top: 20px;
+  font-size: 1.2rem;
 }
 
-.i_no-gender:hover~.no-gender {
-    filter: brightness(1.1);
+#saved-name {
+  font-weight: bold;
+  color: #3498db;
 }
 
-.i_female:checked~.female {
-    border: solid #ff87bf;
-    color: #ff87bf;
-    background-color: #ffb8d9;
+.custom-file-upload {
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  border: 2px dashed #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  position: relative;
 }
 
-.i_male:checked~.male {
-    border: solid #3d44ff;
-    color: #3d44ff;
-    background-color: #85a5ff;
+.custom-file-upload input {
+  display: none;
 }
 
-.i_no-gender:checked~.no-gender {
-    border: solid #c9c600;
-    color: #c9c600;
-    background-color: #fffd82;
+.custom-file-upload img {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 5px;
 }
 
-.example-chip-list {
-    width: 100%;
+.mat-mdc-form-field-textarea-control{
+  overflow: hidden !important;
 }
-

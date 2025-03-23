@@ -21,7 +21,7 @@ public class AppDashbordApplication {
 		return "Greetings from Spring Boot!";
 	}
 
-	public String generateId() {
+	public static String generateId() {
 		return String.valueOf(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
 	}
 

@@ -1,6 +1,7 @@
 package com.example.App.Dashbord.Repository;
 
 import com.example.App.Dashbord.Embedded.MediaId;
+import com.example.App.Dashbord.Enum.LikeEnum;
 import com.example.App.Dashbord.Model.Media;
 import com.example.App.Dashbord.Model.User;
 import com.example.App.Messenger.Model.Group;
@@ -17,10 +18,10 @@ public interface MediaRepository extends JpaRepository<Media, MediaId> {
     Long findLastIdByType(@Param("type") String type);
 
     @Query("SELECT DISTINCT(m) FROM Media m WHERE m.media_user_id IS NOT NULL")
-    List<Media> findAllUserIdMedia();
+    List<Media> findAllUserId();
 
     @Query("SELECT DISTINCT(m) FROM Media m WHERE m.media_group_id IS NOT NULL")
-    List<Media> findAllGroupIdMedia();
+    List<Media> findAllGroupId();
 
     @Query("SELECT m FROM Media m WHERE m.media_user_id.id = :id")
     List<Media> findAllMediaByUserId(@Param("id") final String id);
@@ -28,6 +29,6 @@ public interface MediaRepository extends JpaRepository<Media, MediaId> {
     @Query("SELECT m FROM Media m WHERE m.media_group_id.id = :id")
     List<Media> findAllMediaByGroupId(@Param("id") final String id);
 
-    @Query(value = "SELECT * FROM MEDIA m WHERE m.user_id <> :id AND m.type = :type ", nativeQuery = true)
-    List<Media> findAllMediaWithoutUserId(@Param("id") final String id, @Param("type") final String type);
+    @Query("SELECT m FROM Media m WHERE m.media_user_id.id <> :id")
+    List<Media> findAllMediaWithoutUserId(@Param("id") final String id);
 }

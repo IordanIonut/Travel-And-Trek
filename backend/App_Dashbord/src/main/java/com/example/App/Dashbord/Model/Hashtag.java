@@ -18,7 +18,7 @@ public class Hashtag {
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "NAME", nullable = false, unique = true)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
 }

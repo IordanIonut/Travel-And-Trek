@@ -270,6 +270,8 @@ public class GenController {
     @PostMapping("/all")
     public ResponseEntity<Void> postAll(@RequestParam(value = "num", defaultValue = "1") final int number) {
         try {
+            LOG.info("------------START------------");
+            long startTime = System.currentTimeMillis();
             genService.generateFakeTag(number / 10);
             genService.generateFakeUser(number/ 5);
             genService.generateFakeGroup(number / 5);
@@ -277,17 +279,26 @@ public class GenController {
             genService.generateFakeTravelDestination(number);
             genService.generateFakeJournal(number);
             genService.generateFakeMedia(number);
-            genService.generateFakePost(number * 2);
+            genService.generateFakePost(number);
             genService.generateFakeStory(number);
             genService.generateFakeComment(number);
             genService.generateFakeShare(number);
-            genService.generateFakeFollower(number * 100);
+            genService.generateFakeFollower(number);
             genService.generateFakeLike(number);
             genService.generateFakeHighlight(number);
             genService.generateFakeMessage(number);
             genService.generateFakeMessageReadStatus(number);
             genService.generateFakeGroupMembers(number);
-            LOG.info("All()- location - Successful.");
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            long hours = duration / (1000 * 60 * 60);
+            long minutes = (duration % (1000 * 60 * 60)) / (1000 * 60);
+            long seconds = (duration % (1000 * 60)) / 1000;
+
+            String formattedDuration = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+            LOG.warn("All()- location - Successful....." + formattedDuration);
+            LOG.info("");
+            LOG.info("");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             LOG.error("Error posting all: " + e.getMessage(), e);

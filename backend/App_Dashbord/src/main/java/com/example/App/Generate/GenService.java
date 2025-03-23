@@ -31,16 +31,23 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
 public class GenService {
+    private static final Faker faker = new Faker();
+    private static final Random random = new Random();
+    @Autowired
+    private static final Logger LOG = LoggerFactory.getLogger(GenService.class);
     @Autowired
     private LocationMediaSearch locationMediaSearch;
     @Autowired
@@ -77,11 +84,6 @@ public class GenService {
     private TravelDestionationRepository travelDestionationRepository;
     @Autowired
     private JournalRepository journalRepository;
-
-    private static final Faker faker = new Faker();
-    private static final Random random = new Random();
-    @Autowired
-    private static final Logger LOG = LoggerFactory.getLogger(GenService.class);
 
     public Optional<Map<String, Object>> getGeoCode() {
         double[] coordinates = GenLatLot.generateRandomLandCoordinates();
@@ -164,95 +166,122 @@ public class GenService {
 
     @Transactional
     public void generateFakeUser(int number) {
-        if (userRepository.findUsers() < 1000) {
-            List<User> users = new ArrayList<>();
-            List<Hashtag> tagList = hashtagRepository.findAll();
+        try {
+            if(userRepository.count() < 1000) {
+                LOG.info("START--user");
+                long startTime = System.currentTimeMillis();
+                Set<User> users = new HashSet<>(number);
+                List<Hashtag> tagList = hashtagRepository.findAll();
+                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-            for (int i = 0; i < number; i++) {
-                LocalDate dateOfBirth = faker.date().birthday(18, 65).toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-                String email;
-                String name;
-                do {
-                    email = faker.internet().emailAddress();
-                    name = faker.name().username();
-                } while (userRepository.findUserByEmail(email).isPresent() || userRepository.findByName(name).isPresent());
+                while (users.size() < number) {
+                    String email;
+                    String name;
+                    do {
+                        email = faker.internet().emailAddress();
+                        name = faker.name().username();
+                    } while (userRepository.findUserByEmail(email).isPresent() || userRepository.findByName(name).isPresent());
 
-                User user = new User();
-                user.setId(generateId());
-                user.setName(name);
-                user.setEmail(email);
-                user.setLocation(faker.address().fullAddress());
-                user.setPassword(faker.internet().password());
-                user.setBio(faker.lorem().sentence());
-                user.setDate_create(LocalDateTime.now());
-                user.setProfile_picture("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
-                user.setGender(random.nextBoolean() ? GenderEnum.M : GenderEnum.F);
-                user.setDate_of_birth(dateOfBirth);
-                user.setDate_last_update(LocalDateTime.now());
-                String qrData = "user-" + user.getName();
-                user.setQr_code(qrData);
-                List<Hashtag> selectTag = tagList.stream().limit(Math.min(random.nextInt(6), 5)).collect(Collectors.toList());
-                user.setUser_hashtag_id(random.nextBoolean() ? null : selectTag);
+                    User user = new User();
+                    user.setId(generateId());
+                    user.setName(name);
+                    user.setEmail(email);
+                    user.setLocation(faker.address().fullAddress());
+                    user.setPassword(passwordEncoder.encode("123asd,./A"));
+                    user.setBio(faker.lorem().sentence());
+                    user.setDate_create(this.getDate(10, 20).atStartOfDay());
+                    user.setProfile_picture("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
+                    user.setGender(random.nextBoolean() ? GenderEnum.M : GenderEnum.F);
+                    user.setDate_of_birth(this.getDate(20, 65));
+                    user.setDate_last_update(LocalDateTime.now());
+                    String qrData = "user-" + user.getName();
+                    user.setQr_code(qrData);
+                    List<Hashtag> selectTag = getRandomSubset(tagList, random, 6);
+                    user.setUser_hashtag_id(random.nextBoolean() ? null : selectTag);
 
-                users.add(user);
+                    if (users.stream().noneMatch(existingUser -> existingUser.getEmail().equals(user.getEmail()) || existingUser.getName().equals(user.getName()))) {
+                        users.add(user);
+                    }
+                }
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                LOG.info("size users: " + users.size() + " duration: " + duration);
+                userRepository.saveAll(users);
             }
-            // Save all users at once
-            userRepository.saveAll(users);
+        } catch (Exception e) {
+            System.err.println("Error generating users batch: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Transactional
     public void generateFakeTag(int number) {
         if (hashtagRepository.count() < 2000) {
+            long startTime = System.currentTimeMillis();
+            LOG.info("START--tag");
+            Set<String> existingNames = new HashSet<>(hashtagRepository.findAllTagsByName());
+            List<Hashtag> hashtagsToSave = new ArrayList<>(number);
+
             for (int i = 0; i < number; i++) {
                 String name;
-             do {
+//                do {
                     name = faker.lorem().word();
-                } while (hashtagRepository.findByName(name).isPresent() || name.length() < 3);
+//                } while (existingNames.contains(name) || name.length() < 3);
+
+                existingNames.add(name);
 
                 Hashtag tag = new Hashtag();
                 tag.setId(generateId());
                 tag.setName(name);
-                hashtagRepository.save(tag);
+                hashtagsToSave.add(tag);
             }
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LOG.info("size tag: " + hashtagsToSave.size() + " duration: " + duration);
+            hashtagRepository.saveAll(hashtagsToSave);
         }
     }
+
 
     @Transactional
     public void generateFakeMedia(int number) {
         try {
-            List<User> users = userRepository.findAll();
-            List<Group> groups = groupRepository.findAll();
-            List<Media> mediaBatch = new ArrayList<>(number);
-            Random random = new Random();
-            MediaEnum[] mediaTypes = MediaEnum.values();
+            if(mediaRepository.count() < 10000) {
+                long startTime = System.currentTimeMillis();
+                LOG.info("START--media");
+                Set<Media> mediaBatch = new HashSet<>(number);
+                MediaEnum[] mediaTypes = MediaEnum.values();
+                List<User> users = userRepository.findAll();
+                List<Group> groups = groupRepository.findAll();
 
+                while (mediaBatch.size() < number) {
+                    boolean randomBoolean = random.nextBoolean();
+                    MediaEnum randomMediaType = mediaTypes[random.nextInt(mediaTypes.length)];
+                    MediaId mediaId = new MediaId();
+                    mediaId.setId(generateId());
+                    mediaId.setType(randomMediaType);
 
-            for (int i = 0; i < number; i++) {
-                boolean randomBoolean = random.nextBoolean();
-                MediaEnum randomMediaType = mediaTypes[random.nextInt(mediaTypes.length)];
+                    User user = new User();
+                    user.setId(users.get(random.nextInt(users.size())).getId());
+                    Group group = new Group();
+                    group.setId(groups.get(random.nextInt(groups.size())).getId());
 
-                MediaId mediaId = new MediaId();
-                mediaId.setId(generateId());
-                mediaId.setType(randomMediaType);
-
-                User user = new User();
-                user.setId(users.get(random.nextInt(users.size())).getId());
-                Group group = new Group();
-                group.setId(groups.get(random.nextInt(groups.size())).getId());
-
-                Media media = new Media();
-                media.setId(mediaId);
-                media.setMedia_user_id(randomBoolean ? user : null);
-                media.setMedia_group_id(!randomBoolean ? group : null);
-                media.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
-                media.setCreate_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-                double[] val = GenLatLot.generateRandomLandCoordinates();
-                media.setLongitude(val[1]);
-                media.setLatitude(val[0]);
-                mediaBatch.add(media);
+                    Media media = new Media();
+                    media.setId(mediaId);
+                    media.setMedia_user_id(randomBoolean ? user : null);
+                    media.setMedia_group_id(!randomBoolean ? group : null);
+                    media.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
+                    media.setCreate_at(this.getDate(10, 20).atStartOfDay());
+                    double[] val = GenLatLot.generateRandomLandCoordinates();
+                    media.setLongitude(val[1]);
+                    media.setLatitude(val[0]);
+                    mediaBatch.add(media);
+                }
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                LOG.info("size media: " + mediaBatch.size() + " duration: " + duration);
+                mediaRepository.saveAll(mediaBatch);
             }
-            mediaRepository.saveAll(mediaBatch);
         } catch (Exception e) {
             System.err.println("Error generating media batch: " + e.getMessage());
             e.printStackTrace();
@@ -262,26 +291,21 @@ public class GenService {
     @Transactional
     public void generateFakeHighlight(int number) {
         try {
-            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
-            if (listUsersMedia.isEmpty()) {
-                System.err.println("No users available to associate with media.");
-                return;
-            }
-            List<Highlight> highlightBatch = new ArrayList<>(number);
+            long startTime = System.currentTimeMillis();
+            LOG.info("START--highlight");
+            List<Media> listUsersMedia = mediaRepository.findAllUserId();
+            Set<Highlight> highlightBatch = new HashSet<>(number);
 
-            for (int i = 0; i < number; i++) {
-                int randomUserIndex = random.nextInt(listUsersMedia.size());
-                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
+            while (highlightBatch.size() < number) {
+                Media randomMedia = listUsersMedia.get(random.nextInt(listUsersMedia.size()));
+                String userId = randomMedia.getMedia_user_id().getId();
+                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(userId);
                 if (userMediaList.isEmpty()) continue;
-
-                List<Media> selectedMediaList = userMediaList.stream()
-                        .limit(Math.min(random.nextInt(6), 5) + 1)
-                        .collect(Collectors.toList());
+                List<Media> selectedMediaList = getRandomSubset(userMediaList, random, 6);
 
                 User user = new User();
-                user.setId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
+                user.setId(userId);
 
-                LocalDateTime date =faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
                 Highlight highlight = new Highlight();
                 highlight.setId(generateId());
                 highlight.setHighlight_user_id(user);
@@ -289,12 +313,14 @@ public class GenService {
                 highlight.setImage("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                 highlight.setName(faker.hipster().word());
                 highlight.setVisibility(faker.random().nextBoolean());
-                highlight.setCreated_at(date);
-                highlight.setUpdated_at(date);
+                highlight.setCreated_at(this.getDate(10, 20).atStartOfDay());
+                highlight.setUpdated_at(this.getDate(10, 20).atStartOfDay());
 
                 highlightBatch.add(highlight);
             }
-
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LOG.info("size media: " + highlightBatch.size() + " duration: " + duration);
             highlightRepository.saveAll(highlightBatch);
         } catch (Exception e) {
             System.err.println("Error generating highlight  batch: " + e.getMessage());
@@ -305,143 +331,101 @@ public class GenService {
     @Transactional
     public void generateFakeStory(int number) {
         try {
-            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
-            Random random = new Random();
-            List<Story> storyBatch = new ArrayList<>(number);
+            long startTime = System.currentTimeMillis();
+            LOG.info("START--story");
+            List<Media> listUsersMedia = mediaRepository.findAllUserId();
+            Set<Story> storyBatch = new HashSet<>(number);
 
-            for (int i = 0; i < number; i++) {
-                int randomUserIndex = random.nextInt(listUsersMedia.size());
-                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
-                if (userMediaList.isEmpty())
-                    continue;
-
-                Media randomMedia = userMediaList.get(random.nextInt(userMediaList.size()));
-
-                User user = new User();
-                user.setId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
-                Media media = new Media();
-                media.setId(new MediaId(randomMedia.getId().getId(), randomMedia.getId().getType()));
+            while (storyBatch.size() < number) {
+                Media randomMedia = listUsersMedia.get(random.nextInt(listUsersMedia.size()));
+                String userId = randomMedia.getMedia_user_id().getId();
+                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(userId);
+                if (userMediaList.isEmpty()) continue;
+                List<Media> selectedMediaList = getRandomSubset(userMediaList, random, 6);
 
                 Story story = new Story();
                 story.setId(generateId());
-                story.setStory_media_id(media);
+                story.setStory_medias_id(selectedMediaList);
+
+                User user = new User();
+                user.setId(userId);
                 story.setStory_user_id(user);
-                story.setCreate_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+                story.setCreate_at(this.getDate(10, 20).atStartOfDay());
                 story.setExpiration(false);
                 story.setExpiration_time(LocalDateTime.now().plusDays(1));
 
-                //System.out.println("Story: " + story);
                 storyBatch.add(story);
             }
-
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LOG.info("size story: " + storyBatch.size() + " duration: " +duration);
             storyRepository.saveAll(storyBatch);
         } catch (Exception e) {
-            LOG.error("Error generating stories: " + e.getMessage(), e);
+            LOG.error("Error generating stories", e);
         }
     }
+
 
     @Transactional
     public void generateFakePost(int number) {
         try {
-            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
-            List<Media> listGroupsMedia = mediaRepository.findAllGroupIdMedia();
+            if(postRepository.count() < 10000) {
+                long startTime = System.currentTimeMillis();
+                LOG.info("START--post");
+                List<Media> listUsersMedia = mediaRepository.findAllUserId();
+                List<Media> listGroupsMedia = mediaRepository.findAllGroupId();
+                List<Hashtag> tagList = hashtagRepository.findAll();
+                List<User> listUsers = userRepository.findAll();
+                PostEnum[] postTypes = PostEnum.values();
+                Set<Post> postBatch = new HashSet<>(number);
 
-            List<Hashtag> tagList = hashtagRepository.findAll();
-            List<User> listUsers = userRepository.findAll();
+                for (int i = 0; i < number; i++) {
+                    boolean isUserPost = random.nextBoolean();
+                    Media randomMedia = isUserPost ? listUsersMedia.get(random.nextInt(listUsersMedia.size())) : listGroupsMedia.get(random.nextInt(listGroupsMedia.size()));
 
-            if (listUsersMedia.isEmpty()) {
-                System.err.println("No users available to generate posts.");
-                return;
-            }
-            if(listGroupsMedia.isEmpty()) {
-                System.err.println("No groups available to generate posts.");
-                return;
-            }
+                    String entityId = isUserPost ? randomMedia.getMedia_user_id().getId() : randomMedia.getMedia_group_id().getId();
+                    List<Media> mediaList = isUserPost ? mediaRepository.findAllMediaByUserId(entityId) : mediaRepository.findAllMediaByGroupId(entityId);
 
-            Random random = new Random();
-            List<Post> postBatch = new ArrayList<>(number);
-            PostEnum[] postTypes = PostEnum.values();
+                    PostEnum randomType = postTypes[random.nextInt(postTypes.length)];
 
-            for (int i = 0; i < number; i++) {
-                int randomUserIndex = random.nextInt(listUsersMedia.size());
-                int randomGroupIndex = random.nextInt(listGroupsMedia.size());
-                boolean randomBoolean = random.nextBoolean();
-                List<Media> userMediaList = randomBoolean ?
-                        mediaRepository.findAllMediaByUserId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId()) :
-                        mediaRepository.findAllMediaByGroupId(listGroupsMedia.get(randomGroupIndex).getMedia_group_id().getId());
+                    if (mediaList.isEmpty() && randomType != PostEnum.TEXT) continue;
 
-                if (userMediaList.isEmpty() && !postTypes[i % postTypes.length].equals(PostEnum.TEXT)) continue;
-                Post post = new Post();
-                PostEnum randomType = postTypes[random.nextInt(postTypes.length)];
+                    Post post = new Post();
+                    PostId postId = new PostId(generateId(), randomType);
+                    post.setId(postId);
 
-                PostId postId = new PostId();
-                postId.setId(generateId());
-                postId.setType(randomType);
-                post.setId(postId);
+                    if (isUserPost) {
+                        User user = new User();
+                        user.setId(entityId);
+                        post.setPost_user_id(user);
+                    } else {
+                        Group group = new Group();
+                        group.setId(entityId);
+                        post.setPost_group_id(group);
+                    }
 
-                User user = new User();
-                user.setId(listUsersMedia.get(randomUserIndex).getMedia_user_id().getId());
-                post.setPost_user_id(randomBoolean ? user : null);
+                    post.setDescription(faker.lorem().paragraph(2));
+                    post.setVisible(true);
 
-                Group group = new Group();
-                group.setId(listGroupsMedia.get(randomGroupIndex).getMedia_group_id().getId());
-                post.setPost_group_id(!randomBoolean ? group : null);
+                    LocalDateTime date = faker.date().birthday(18, 19).toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate().atStartOfDay();
+                    post.setCreate_at(date);
+                    post.setUpdate_at(date);
 
-                post.setDescription(faker.lorem().paragraph(2));
-                post.setVisible(random.nextBoolean());
+                    if (random.nextBoolean()) post.setTagged_users(getRandomSubset(listUsers, random, 3));
+                    if (random.nextBoolean()) post.setPost_hashtag_id(getRandomSubset(tagList, random, 5));
 
-                LocalDateTime date = faker.date().birthday(18, 19).toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate().atStartOfDay();
+                    post.setPost_medias_id(getMediaForPostType(randomType, mediaList));
 
-                post.setCreate_at(LocalDateTime.from(date));
-                post.setUpdate_at(LocalDateTime.from(date));
-
-                List<User> tags = listUsers.stream()
-                        .limit(Math.min(random.nextInt(4), 3))
-                        .collect(Collectors.toList());
-
-                List<Hashtag> selectedTags = tagList.stream()
-                        .limit(Math.min(random.nextInt(6), 5))
-                        .collect(Collectors.toList());
-
-                post.setPost_hashtag_id(random.nextBoolean() ? null : selectedTags);
-                post.setTagged_users(random.nextBoolean() ? null : tags);
-
-                if (randomType == PostEnum.TEXT) {
-//                    List<Media> selectedTextMedia = userMediaList.stream()
-//                            .filter(media -> media.getId().getType() == MediaEnum.TEXT)
-//                            .limit(1) // Only one text media
-//                            .collect(Collectors.toList());
-                    post.setPost_medias_id(null);
-
-                } else if (randomType == PostEnum.REEL) {
-                    // Reel posts can have only video media
-                    List<Media> selectedVideoMedia = userMediaList.stream()
-                            .filter(media -> media.getId().getType() == MediaEnum.VIDEO)
-                            .limit(1)
-                            .collect(Collectors.toList());
-                    post.setPost_medias_id(selectedVideoMedia);
-
-                } else {
-                    List<Media> selectedMediaList = userMediaList.stream()
-                            .limit(Math.min(random.nextInt(6), 5) + 1)
-                            .collect(Collectors.toList());
-                    post.setPost_medias_id(selectedMediaList);
+                    postBatch.add(post);
                 }
 
-                if (randomType != PostEnum.TEXT) {
-                    List<String> mediaIds = userMediaList.stream()
-                            .map(media -> media.getId().getId())
-                            .collect(Collectors.toList());
-//                    Long count = postRepository.countPostsByUserIdAndMediaIds(randomUserId, mediaIds);
-//                    if (count > 0) continue;
-                }
-
-                postBatch.add(post);
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                LOG.info("size post: " + postBatch.size() + " duration: " + duration);
+                postRepository.saveAll(postBatch);
             }
-
-            postRepository.saveAll(postBatch);
         } catch (Exception e) {
             LOG.error("Error generating posts: " + e.getMessage(), e);
         }
@@ -450,110 +434,116 @@ public class GenService {
     @Transactional
     public void generateFakeComment(int number) {
         try {
-            Faker faker = new Faker();
-            Random random = new Random();
-            Boolean source;
-
-            List<Media> listUsersMedia = mediaRepository.findAllUserIdMedia();
-            if (listUsersMedia.isEmpty()) {
-                System.err.println("No users available to generate comments.");
-                return;
-            }
-
-            List<Comment> existingComments = commentRepository.findAll();
-            List<Comment> commentBatch = new ArrayList<>(number);
-
-            for (int i = 0; i < number; i++) {
-                String randomUserId = listUsersMedia.get(random.nextInt(listUsersMedia.size())).getMedia_user_id().getId();
-                List<Media> userMediaList = mediaRepository.findAllMediaByUserId(randomUserId);
-                List<Post> userPosts = postRepository.findAllPostByUserId(randomUserId);
-                List<Journal> userJournal = journalRepository.findAllJournalByUser(randomUserId);
-
-                if (userMediaList.isEmpty() || userPosts.isEmpty() || userJournal.isEmpty()) continue;
-
-                Media selectedMedia = userMediaList.get(random.nextInt(userMediaList.size()));
-                Post selectedPost = userPosts.get(random.nextInt(userPosts.size()));
-                Journal selectJournal = userJournal.get(random.nextInt(userJournal.size()));
-
-                Comment comment = new Comment();
+            if(commentRepository.count() < 10000) {
+                long startTime = System.currentTimeMillis();
+                LOG.info("START--comment");
+                Set<Comment> commentBatch = new HashSet<>(number);
+                List<Media> listUsersMedia = mediaRepository.findAllUserId();
                 CommentEnum[] commentTypes = CommentEnum.values();
-                CommentEnum randomType = commentTypes[random.nextInt(commentTypes.length)];
 
-                CommentId commentId = new CommentId();
-                commentId.setId(generateId());
-                commentId.setType(randomType);
-                comment.setId(commentId);
+                Map<String, List<Media>> userMediaMap = new HashMap<>();
+                Map<String, List<Post>> userPostsMap = new HashMap<>();
+                Map<String, List<Journal>> userJournalMap = new HashMap<>();
 
-                User user = new User();
-                user.setId(randomUserId);
+                for (Media media : listUsersMedia) {
+                    String userId = media.getMedia_user_id().getId();
+                    userMediaMap.putIfAbsent(userId, mediaRepository.findAllMediaByUserId(userId));
+                    userPostsMap.putIfAbsent(userId, postRepository.findAllPostByUserId(userId));
+                    userJournalMap.putIfAbsent(userId, journalRepository.findAllJournalByUser(userId));
+                }
 
-                comment.setComment_user_id(user);
-                comment.setComment_post_id(randomType == CommentEnum.POST ? selectedPost : null);
-                comment.setComment_media_id(randomType == CommentEnum.MEDIA ? selectedMedia : null);
-                comment.setComment_journal_id(randomType == CommentEnum.JOURNAL ? selectJournal : null);
-                comment.setMessage(faker.lorem().sentence());
-                comment.setCreate_at(LocalDateTime.now());
+                for (int i = 0; i < number; i++) {
+                    CommentEnum randomType = commentTypes[random.nextInt(commentTypes.length)];
+                    String randomUserId = listUsersMedia.get(random.nextInt(listUsersMedia.size())).getMedia_user_id().getId();
 
-                source = faker.random().nextBoolean();
-                comment.setComment_source_id(source && !existingComments.isEmpty() ? existingComments.get(random.nextInt(existingComments.size())) : null);
+                    List<Media> userMediaList = userMediaMap.get(randomUserId);
+                    List<Post> userPosts = userPostsMap.get(randomUserId);
+                    List<Journal> userJournal = userJournalMap.get(randomUserId);
 
-                //System.out.println("Comment: " + comment);
-                commentBatch.add(comment);
+                    if (userMediaList.isEmpty() || userPosts.isEmpty() || userJournal.isEmpty()) continue;
+
+                    Media selectedMedia = userMediaList.get(random.nextInt(userMediaList.size()));
+                    Post selectedPost = userPosts.get(random.nextInt(userPosts.size()));
+                    Journal selectJournal = userJournal.get(random.nextInt(userJournal.size()));
+
+                    Comment comment = new Comment();
+                    CommentId commentId = new CommentId();
+                    commentId.setId(generateId());
+                    commentId.setType(randomType);
+                    comment.setId(commentId);
+
+                    User user = new User();
+                    user.setId(randomUserId);
+
+                    comment.setComment_user_id(user);
+                    comment.setComment_post_id(randomType == CommentEnum.POST ? selectedPost : null);
+                    comment.setComment_media_id(randomType == CommentEnum.MEDIA ? selectedMedia : null);
+                    comment.setComment_journal_id(randomType == CommentEnum.JOURNAL ? selectJournal : null);
+                    comment.setMessage(faker.lorem().sentence());
+                    comment.setCreate_at(LocalDateTime.now());
+
+                    List<Comment> existingComments = commentRepository.findAllByCommentEnum(randomType);
+                    Boolean source = faker.random().nextBoolean();
+                    comment.setComment_source_id(source && !existingComments.isEmpty() ? existingComments.get(random.nextInt(existingComments.size())) : null);
+
+                    commentBatch.add(comment);
+                }
+
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                LOG.info("size comment: " + commentBatch.size() + " duration: " + duration);
+                commentRepository.saveAll(commentBatch);
             }
-
-            commentRepository.saveAll(commentBatch);
         } catch (Exception e) {
             LOG.error("Error generating comments: " + e.getMessage(), e);
         }
     }
 
+
     @Transactional
     public void generateFakeFollower(int number) {
         try {
-            Faker faker = new Faker();
-            Random random = new Random();
-            List<String> listUsers = userRepository.allUsers();
+            if(followerRepository.count() < 10000) {
+                long startTime = System.currentTimeMillis();
+                LOG.info("START--follower");
+                List<String> listUsers = userRepository.allUsers();
+                Set<Follower> followerBatch = new HashSet<>(number);
 
-            if (listUsers.size() < 2) {
-                System.err.println("Not enough users available to generate followers.");
-                return;
+                for (int i = 0; i < number; i++) {
+                    String randomUserId = listUsers.get(random.nextInt(listUsers.size())).toString();
+                    String randomUserIdSend;
+
+                    do {
+                        randomUserIdSend = listUsers.get(random.nextInt(listUsers.size())).toString();
+                    } while (randomUserId.equals(randomUserIdSend));
+
+                    FollowerStatusEnum randomStatus = FollowerStatusEnum.values()[random.nextInt(FollowerStatusEnum.values().length)];
+                    FollowerId followerId = new FollowerId();
+                    followerId.setId(generateId());
+                    followerId.setStatus(FollowerStatusEnum.ACCEPTED);
+
+                    User user = new User();
+                    user.setId(randomUserId);
+
+                    User userSend = new User();
+                    userSend.setId(randomUserIdSend);
+
+                    Follower follower = new Follower();
+                    follower.setId(followerId);
+                    follower.setFollower_user_id(user);
+                    follower.setFollower_user_id_follower(userSend);
+                    follower.setCreated_at(this.getDate(0, 5).atStartOfDay());
+
+                    Long count = followerRepository.findFollowerIfExists(randomUserId, randomUserIdSend);
+                    if (count > 0) continue;
+
+                    followerBatch.add(follower);
+                }
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                LOG.info("size follower: " + followerBatch.size() + " duration: " + duration);
+                followerRepository.saveAll(followerBatch);
             }
-
-            List<Follower> followerBatch = new ArrayList<>(number);
-
-            for (int i = 0; i < number; i++) {
-                String randomUserId = listUsers.get(random.nextInt(listUsers.size())).toString();
-                String randomUserIdSend;
-
-                do {
-                    randomUserIdSend = listUsers.get(random.nextInt(listUsers.size())).toString();
-                } while (randomUserId.equals(randomUserIdSend));
-
-                FollowerStatusEnum randomStatus = FollowerStatusEnum.values()[random.nextInt(FollowerStatusEnum.values().length)];
-                FollowerId followerId = new FollowerId();
-                followerId.setId(generateId());
-                followerId.setStatus(FollowerStatusEnum.ACCEPTED);
-
-                User user = new User();
-                user.setId(randomUserId);
-
-                User userSend = new User();
-                userSend.setId(randomUserIdSend);
-
-                Follower follower = new Follower();
-                follower.setId(followerId);
-                follower.setFollower_user_id(user);
-                follower.setFollower_user_id_follower(userSend);
-                follower.setCreated_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
-
-                Long count = followerRepository.findFollowerIfExists(randomUserId, randomUserIdSend);
-                if (count > 0) continue;
-
-                //System.out.println("Follower: " + follower);
-                followerBatch.add(follower);
-            }
-
-            followerRepository.saveAll(followerBatch);
         } catch (Exception e) {
             LOG.error("Error generating followers: " + e.getMessage(), e);
         }
@@ -562,20 +552,22 @@ public class GenService {
     @Transactional
     public void generateFakeLike(int number) {
         try {
-            Faker faker = new Faker();
-            Random random = new Random();
-
+            long startTime = System.currentTimeMillis();
+            LOG.info("START--like");
             List<String> listUsers = userRepository.allUsers();
-            if (listUsers.isEmpty()) {
-                System.err.println("No users available to generate likes.");
-                return;
-            }
-
             List<Like> likeBatch = new ArrayList<>(number);
 
-            for (int i = 0; i < number; i++) {
-                String randomUserId = listUsers.get(random.nextInt(listUsers.size())).toString();
+            Map<String, List<Media>> userMediaMap = new HashMap<>();
+            Map<String, List<Post>> userPostsMap = new HashMap<>();
+            List<Comment> allComments = commentRepository.findAll();
 
+            for (String userId : listUsers) {
+                userMediaMap.put(userId, mediaRepository.findAllMediaWithoutUserId(userId));
+                userPostsMap.put(userId, postRepository.findAllPostWithoutUserId(userId));
+            }
+
+            for (int i = 0; i < number; i++) {
+                String randomUserId = listUsers.get(random.nextInt(listUsers.size()));
                 LikeContentEnum randomTypeContent = LikeContentEnum.values()[random.nextInt(LikeContentEnum.values().length)];
                 LikeEnum randomType = LikeEnum.values()[random.nextInt(LikeEnum.values().length)];
 
@@ -583,10 +575,6 @@ public class GenService {
                 likeId.setId(generateId());
                 likeId.setType(randomType);
                 likeId.setContent(randomTypeContent);
-
-                List<Media> mediaList = mediaRepository.findAllMediaWithoutUserId(randomUserId, randomType.toString());
-                List<Post> postList = postRepository.findAllPostWithoutUserId(randomUserId);
-                List<Comment> commentList = commentRepository.findAll();
 
                 User user = new User();
                 user.setId(randomUserId);
@@ -600,226 +588,283 @@ public class GenService {
                 Comment commentId = null;
 
                 switch (randomType) {
-                    case REEL, TEXT:
+                    case REEL:
+                        List<Media> mediaList = userMediaMap.get(randomUserId);
                         if (!mediaList.isEmpty()) {
                             mediaId = mediaList.get(random.nextInt(mediaList.size()));
                             like.setLike_media_id(mediaId);
                         }
                         break;
                     case POST:
+                        List<Post> postList = userPostsMap.get(randomUserId);
                         if (!postList.isEmpty()) {
                             postId = postList.get(random.nextInt(postList.size()));
                             like.setLike_post_id(postId);
                         }
                         break;
-                    case COMMENT:
-                        if (!commentList.isEmpty()) {
-                            commentId = commentList.get(random.nextInt(commentList.size()));
+                    case COMMENT, TEXT:
+                        if (!allComments.isEmpty()) {
+                            commentId = allComments.get(random.nextInt(allComments.size()));
                             like.setLike_comment_id(commentId);
                         }
                         break;
                 }
 
-                like.setCreate_at(faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+                like.setCreate_at(this.getDate(0, 4).atStartOfDay());
+
                 Long count = likeRepository.findLikeIfExists(randomUserId,
                         mediaId == null ? null : mediaId.getId(),
                         postId == null ? null : postId.getId(),
                         commentId == null ? null : commentId.getId());
+
                 if (count > 0) continue;
 
-                //System.out.println("Like: " + like);
                 likeBatch.add(like);
             }
-
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LOG.info("size like: " + likeBatch.size() + " duration: " +duration);
             likeRepository.saveAll(likeBatch);
         } catch (Exception e) {
             LOG.error("Error generating likes: " + e.getMessage(), e);
         }
     }
 
+
     @Transactional
     public void generateFakeShare(int number) {
         try {
-            Faker faker = new Faker();
-            Random random = new Random();
+            long startTime = System.currentTimeMillis();
+            LOG.info("START--share");
 
-            List<String> listUsers = userRepository.allUsers();
-            List<Media> mediaList = mediaRepository.findAll();
-            List<Post> postList = postRepository.findAll();
-            List<Story> storyList = storyRepository.findAll();
+            Map<String, List<Media>> mediaByUser = mediaRepository.findAll().stream()
+                    .filter(media -> media.getMedia_user_id() != null)
+                    .collect(Collectors.groupingBy(media -> media.getMedia_user_id().getId()));
 
-            if (listUsers.isEmpty()) {
-                System.err.println("No users available to generate shares.");
-                return;
-            }
+            Map<String, List<Post>> postByUser = postRepository.findAll().stream()
+                    .filter(post -> post.getPost_user_id() != null)
+                    .collect(Collectors.groupingBy(post -> post.getPost_user_id().getId()));
+            Map<String, List<Story>> storyByUser = storyRepository.findAll().stream()
+                    .filter(story -> story.getStory_user_id() != null)
+                    .collect(Collectors.groupingBy(story -> story.getStory_user_id().getId()));
 
-            List<Share> shareBatch = new ArrayList<>(number);
+            Set<Share> shareBatch = new HashSet<>(number);
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            LocalDateTime currentTime = this.getDate(0, 4).atStartOfDay();
 
             for (int i = 0; i < number; i++) {
-                String randomUserId = listUsers.get(random.nextInt(listUsers.size())).toString();
-                String randomUserIdShared;
-
-                do {
-                    randomUserIdShared = listUsers.get(random.nextInt(listUsers.size())).toString();
-                } while (randomUserId.equals(randomUserIdShared));
-
                 ShareEnum randomType = ShareEnum.values()[random.nextInt(ShareEnum.values().length)];
-
-                ShareId shareId = new ShareId();
-                shareId.setId(generateId());
-                shareId.setType(randomType);
-
-                User user = new User();
-                user.setId(randomUserId);
-
-                User userShared = new User();
-                userShared.setId(randomUserIdShared);
-
-                LocalDateTime date = faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
                 Share share = new Share();
-                share.setShareId(shareId);
-                share.setShare_user_id(user);
-                share.setShare_user_id_sharled(userShared);
-                share.setUpdate_at(date);
-                share.setCreate_at(date);
+                share.setShareId(new ShareId(generateId(), randomType));
+
+                String randomUserId = null;
+                String randomUserIdShared = "";
 
                 switch (randomType) {
                     case MEDIA:
-                        if (!mediaList.isEmpty()) {
-                            Media media = mediaList.get(random.nextInt(mediaList.size()));
-                            share.setShare_media_id(media);
-                        }
+                        randomUserId = getRandomUserIdWithContentMedia(mediaByUser);
                         break;
                     case POST:
-                        if (!postList.isEmpty()) {
-                            Post post = postList.get(random.nextInt(postList.size()));
-                            share.setShare_post_id(post);
-                        }
+                        randomUserId = getRandomUserIdWithContentPost(postByUser);
                         break;
                     case STORY:
-                        if (!storyList.isEmpty()) {
-                            Story story = storyList.get(random.nextInt(storyList.size()));
-                            share.setShare_story_id(story);
-                        }
+                        randomUserId = getRandomUserIdWithContentStory(storyByUser);
                         break;
                 }
-                share.setDescription(faker.lorem().paragraph(1));
 
-                //System.out.println("Share: " + share);
+                if (randomUserId == null) {
+                    continue;
+                }
+
+                do {
+                    randomUserIdShared = getRandomUserIdWithContentBasedOnType(mediaByUser, postByUser, storyByUser, randomType);
+                } while (randomUserId.equals(randomUserIdShared));
+
+                User userId = new User();
+                userId.setId(randomUserId);
+                User userIdShared = new User();
+                userIdShared.setId(randomUserIdShared);
+
+                share.setShare_user_id(userId);
+                share.setShare_user_id_sharled(userIdShared);
+                share.setUpdate_at(currentTime);
+                share.setCreate_at(currentTime);
+
+                switch (randomType) {
+                    case MEDIA -> {
+                        List<Media> mediaList = mediaByUser.get(randomUserId);
+                        if (mediaList != null && !mediaList.isEmpty()) {
+                            share.setShare_media_id(mediaList.get(random.nextInt(mediaList.size())));
+                        }
+                    }
+                    case POST -> {
+                        List<Post> postList = postByUser.get(randomUserId);
+                        if (postList != null && !postList.isEmpty()) {
+                            share.setShare_post_id(postList.get(random.nextInt(postList.size())));
+                        }
+                    }
+                    case STORY -> {
+                        List<Story> storyList = storyByUser.get(randomUserId);
+                        if (storyList != null && !storyList.isEmpty()) {
+                            share.setShare_story_id(storyList.get(random.nextInt(storyList.size())));
+                        }
+                    }
+                }
+
+                share.setDescription(faker.lorem().paragraph(1));
                 shareBatch.add(share);
             }
 
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LOG.info("Size of generated shares: " + shareBatch.size() + " Duration: " + duration);
             shareRepository.saveAll(shareBatch);
         } catch (Exception e) {
-            LOG.error("Error generating shares: " + e.getMessage(), e);
+            LOG.error("Error generating shares: {}", e.getMessage(), e);
         }
     }
 
     @Transactional
     public void generateFakeGroup(int number) {
-        List<Group> groups = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        LOG.info("START--group");
+
+        Set<Group> groups = new HashSet<>(number);
         for (int i = 0; i < number; i++) {
             String uniqueName;
             do {
                 uniqueName = faker.superhero().name() + '-' + faker.name().fullName();
             } while (groupRepository.existsByName(uniqueName).isPresent());
-            LocalDateTime date = faker.date().birthday(18, 65)
-                    .toInstant().atZone(ZoneId.systemDefault())
-                    .toLocalDate().atStartOfDay();
             Group group = new Group();
             group.setId(generateId());
             group.setName(uniqueName);
             group.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
-            group.setUpdated_at(date);
-            group.setCreate_at(date);
+            group.setUpdated_at(getDate(10, 30).atStartOfDay());
+            group.setCreate_at(getDate(10, 30).atStartOfDay());
+            group.setDescription(faker.lorem().sentence());
             groups.add(group);
         }
-
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        LOG.info("size group: " + groups.size() + " duration: " +duration);
         groupRepository.saveAll(groups);
     }
 
 
     @Transactional
     public void generateFakeGroupMembers(int number) {
-        List<GroupMembership> groupMemberships = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        LOG.info("START--groupMembers");
+
+        Set<GroupMembership> groupMemberships = new HashSet<>(number);
         GroupMembershipEnum[] roles = GroupMembershipEnum.values();
         List<User> users = userRepository.findAll();
         List<Group> groups = groupRepository.findAll();
-
         Set<String> existingMemberships = groupMembershipRepository.findAll().stream().map(m -> m.getUser_id().getId() + "_" + m.getGroup_id().getId()).collect(Collectors.toSet());
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        LocalDateTime joinedAt = getDate(10, 30).atStartOfDay();
+
         for (int i = 0; i < number; i++) {
             User user = users.get(random.nextInt(users.size()));
             Group group = groups.get(random.nextInt(groups.size()));
 
             String membershipKey = user.getId() + "_" + group.getId();
-            if (existingMemberships.contains(membershipKey)) {
+            if (!existingMemberships.add(membershipKey)) {
                 continue;
             }
 
-            GroupMembershipId groupMembershipId = new GroupMembershipId();
-            groupMembershipId.setId(generateId());
-            groupMembershipId.setRole(roles[random.nextInt(roles.length)]);
-
             GroupMembership groupMembership = new GroupMembership();
-            groupMembership.setId(groupMembershipId);
-            groupMembership.setJoined_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            groupMembership.setId(new GroupMembershipId(generateId(), roles[random.nextInt(roles.length)]));
+            groupMembership.setJoined_at(joinedAt);
             groupMembership.setUser_id(user);
             groupMembership.setGroup_id(group);
 
             groupMemberships.add(groupMembership);
-            existingMemberships.add(membershipKey);
         }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        LOG.info("size groupMembership: " + groupMemberships.size() + " duration: " +duration);
         groupMembershipRepository.saveAll(groupMemberships);
     }
 
     @Transactional
     public void generateFakeMessage(int number) {
-        List<Message> messages = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        LOG.info("START--message");
+
+        Set<Message> messages = new HashSet<>(number);
         MessageEnum[] messageEnums = MessageEnum.values();
+        ThreadLocalRandom random = ThreadLocalRandom.current();
 
         List<User> users = userRepository.findAll();
-        List<Post> posts = postRepository.findAll();
-        List<Story> stories = storyRepository.findAll();
-        List<Group> groups = groupRepository.findAll();
-        List<User> finds;
-        for (int i = 0; i < number; i++) {
-            MessagesId messagesId = new MessagesId();
-            messagesId.setId(generateId());
-            MessageEnum m = messageEnums[random.nextInt(messageEnums.length)];
-            messagesId.setType(m);
-            User user;
-            do {
-                user = users.get(random.nextInt(users.size()));
-                finds = followerRepository.findUsers(user.getName(),  FollowerStatusEnum.values()[random.nextInt(FollowerStatusEnum.values().length)]);
-            }while (finds.isEmpty() || finds.size() == 1);
+        if (users.isEmpty()) {
+            LOG.warn("No users available for message generation.");
+            return;
+        }
 
-            LocalDateTime date = faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
+        List<Post> allPosts = new ArrayList<>(postRepository.findAll());
+        List<Story> allStories = new ArrayList<>(storyRepository.findAll());
+        Map<String, List<User>> followersByUser = users.stream().collect(Collectors.toMap(User::getId, user -> followerRepository.findUsers(user.getName(), FollowerStatusEnum.ACCEPTED)));
+
+        while (messages.size() < number) {
+            User sender;
+            List<User> potentialRecipients;
+
+            do {
+                sender = users.get(random.nextInt(users.size()));
+                potentialRecipients = followersByUser.getOrDefault(sender.getId(), Collections.emptyList());
+            } while (potentialRecipients.isEmpty());
+
+            User recipient = potentialRecipients.get(random.nextInt(potentialRecipients.size()));
+
+            MessagesId messagesId = new MessagesId(generateId(), messageEnums[random.nextInt(messageEnums.length)]);
+            LocalDateTime date = this.getDate(10, 30).atStartOfDay();
+
             Message message = new Message();
             message.setId(messagesId);
             message.setContent(faker.lorem().paragraph(2));
             message.setCreated_at(date);
             message.setUpdated_at(date);
+            message.setSender_id(sender);
+            message.setRecipient_id(recipient);
 
-            message.setGroup_id(faker.random().nextBoolean() ? groups.get(random.nextInt(groups.size())) : null);
-            message.setPost_id(m == MessageEnum.POST ? posts.get(random.nextInt(posts.size())) : null);
-            message.setStory_id(m == MessageEnum.STORY ? stories.get(random.nextInt(stories.size())) : null);
-            message.setSender_id(user);
-            message.setRecipient_id(finds.get(random.nextInt(finds.size())));
-
+            switch (messagesId.getType()) {
+                case TEXT, IMAGE, FILE -> {
+                    continue;
+                }
+                case POST -> {
+                    if (!allPosts.isEmpty()) {
+                        message.setPost_id(allPosts.get(random.nextInt(allPosts.size())));
+                    }
+                }
+                case STORY -> {
+                    if (!allStories.isEmpty()) {
+                        message.setStory_id(allStories.get(random.nextInt(allStories.size())));
+                    }
+                }
+            }
             messages.add(message);
         }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        LOG.info("size message: " + messages.size() + " duration: " +duration);
         messageRepository.saveAll(messages);
     }
 
     @Transactional
     public void generateFakeMessageReadStatus(int number) {
-        List<MessageReadStatus> messageReadStatuses = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        LOG.info("START--message read status");
+
+        Set<MessageReadStatus> messageReadStatuses = new HashSet<>(number);
         List<Message> messages = messageRepository.findAll();
         for (int i = 0; i < number; i++) {
             MessageReadStatus message = new MessageReadStatus();
             message.setId(generateId());
             message.setIs_read(faker.random().nextBoolean());
-            message.setRead_at(faker.date().birthday(18, 65).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay());
+            message.setRead_at(this.getDate(10, 30).atStartOfDay());
 
             Message m = messages.get(random.nextInt(messages.size()));
             message.setMessage_id(m);
@@ -827,12 +872,19 @@ public class GenService {
 
             messageReadStatuses.add(message);
         }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        LOG.info("size message read status: " + messageReadStatuses.size() + " duration: " +duration);
         messageReadStatusRepository.saveAll(messageReadStatuses);
     }
 
     @Transactional
     public void generateFakeHobby(int number) {
-        List<Hobby> hobbies = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        LOG.info("START--hobby");
+
+        Set<Hobby> hobbies = new HashSet<>(number);
         for (int i = 0; i < number; i++) {
             Hobby hobby = new Hobby();
             hobby.setId(generateId());
@@ -841,12 +893,19 @@ public class GenService {
 
             hobbies.add(hobby);
         }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        LOG.info("size hobbie: " + hobbies.size() + " duration: " +duration);
         hobbyRepository.saveAll(hobbies);
     }
 
     @Transactional
     public void generateFakeTravelDestination(int number) {
-        List<TravelDestination> travelDestinations = new ArrayList<TravelDestination>();
+        long startTime = System.currentTimeMillis();
+        LOG.info("START--travel destination");
+
+        Set<TravelDestination> travelDestinations = new HashSet<>(number);
         for (int i = 0; i < number; i++) {
             TravelDestination travelDestination = new TravelDestination();
             travelDestination.setId(generateId());
@@ -856,37 +915,132 @@ public class GenService {
 
             travelDestinations.add(travelDestination);
         }
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        LOG.info("size travel destination: " + travelDestinations.size() + " duration: " +duration);
         travelDestionationRepository.saveAll(travelDestinations);
     }
 
     @Transactional
     public void generateFakeJournal(int number) {
-        List<Journal> journals = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        LOG.info("START--journal");
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        Set<Journal> journals = new HashSet<>(number);
+
         List<User> users = userRepository.findAll();
         List<Hobby> hobbies = hobbyRepository.findAll();
         List<TravelDestination> travelDestinations = travelDestionationRepository.findAll();
-        for (int i = 0; i < number; i++) {
+        if (users.isEmpty()) {
+            LOG.warn("No users found. Skipping journal generation.");
+            return;
+        }
 
-            List<Hobby> selectHobby = hobbies.stream().limit(Math.min(random.nextInt(6), 5)).collect(Collectors.toList());
-            List<TravelDestination> selectTravelDestination = travelDestinations.stream().limit(Math.min(random.nextInt(6), 5)).collect(Collectors.toList());
-            LocalDateTime date = faker.date().birthday(0, 4).toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
+        for (int i = 0; i < number; i++) {
+            User user = users.get(random.nextInt(users.size()));
+            int hobbyCount = Math.min(6, hobbies.size());
+            int travelCount = Math.min(6, travelDestinations.size());
+
+            List<Hobby> selectHobby = getRandomSubset(hobbies, random, hobbyCount);
+            List<TravelDestination> selectTravelDestination = getRandomSubset(travelDestinations, random, travelCount);
+
+            LocalDateTime date = this.getDate(10, 30).atStartOfDay();
+
             Journal journal = new Journal();
             journal.setId(generateId());
             journal.setTittle(faker.dune().title());
             journal.setContent(faker.lorem().sentence());
             journal.setCreate_at(date);
             journal.setUpdate_at(date);
-            journal.setUser_id(users.get(random.nextInt(users.size())));
+            journal.setUser_id(user);
             journal.setHobby_ids(selectHobby);
             journal.setTravel_destination_ids(selectTravelDestination);
 
             journals.add(journal);
         }
+
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        LOG.info("size journal: " + journals.size() + " duration: " +duration);
         journalRepository.saveAll(journals);
     }
 
     public String generateId() {
         return String.valueOf(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+    }
+
+
+    private <T> List<T> getRandomSubset(List<T> list, Random random, int maxSize) {
+        if (list.isEmpty()) return Collections.emptyList();
+        Collections.shuffle(list);
+        return list.subList(0, Math.min(random.nextInt(maxSize + 1), list.size()));
+    }
+
+    private LocalDate getDate(int start, int end) {
+        return faker.date().birthday(10, 20).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private List<Media> getMediaForPostType(PostEnum type, List<Media> mediaList) {
+        if (mediaList.isEmpty()) return Collections.emptyList();
+
+        switch (type) {
+            case TEXT:
+                return null;
+
+            case REEL:
+                return mediaList.stream().filter(media -> media.getId().getType() == MediaEnum.VIDEO).limit(1).collect(Collectors.toList());
+
+            case POST:
+                return getRandomSubset(mediaList, new Random(), 6);
+
+            default:
+                return null;
+        }
+    }
+
+    private String getRandomUserIdWithContentMedia(Map<String, List<Media>> mediaByUser) {
+        List<String> usersWithContent = new ArrayList<>(mediaByUser.keySet());
+        if (!usersWithContent.isEmpty()) {
+            return usersWithContent.get(ThreadLocalRandom.current().nextInt(usersWithContent.size()));
+        } else {
+            return null;
+        }
+    }
+
+    private String getRandomUserIdWithContentPost(Map<String, List<Post>> postByUser) {
+        List<String> usersWithContent = new ArrayList<>(postByUser.keySet());
+        if (!usersWithContent.isEmpty()) {
+            return usersWithContent.get(ThreadLocalRandom.current().nextInt(usersWithContent.size()));
+        } else {
+            return null;
+        }
+    }
+
+    private String getRandomUserIdWithContentStory(Map<String, List<Story>> storyByUser) {
+        List<String> usersWithContent = new ArrayList<>(storyByUser.keySet());
+        if (!usersWithContent.isEmpty()) {
+            return usersWithContent.get(ThreadLocalRandom.current().nextInt(usersWithContent.size()));
+        } else {
+            return null;
+        }
+    }
+
+    private String getRandomUserIdWithContentBasedOnType(Map<String, List<Media>> mediaByUser,
+                                                         Map<String, List<Post>> postByUser,
+                                                         Map<String, List<Story>> storyByUser,
+                                                         ShareEnum randomType) {
+        switch (randomType) {
+            case MEDIA:
+                return getRandomUserIdWithContentMedia(mediaByUser);
+            case POST:
+                return getRandomUserIdWithContentPost(postByUser);
+            case STORY:
+                return getRandomUserIdWithContentStory(storyByUser);
+            default:
+                return null;
+        }
     }
 
 }

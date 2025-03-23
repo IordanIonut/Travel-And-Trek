@@ -1,5 +1,6 @@
 package com.example.App.Dashbord.Repository;
 
+import com.example.App.Dashbord.Model.Post;
 import com.example.App.Dashbord.Model.Story;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,4 +34,9 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
             "ORDER BY s.expiration_time DESC")
     List<Story> findFriendsStory(@Param("name") String name, Pageable pageable);
 
+    @Query("SELECT s FROM Story s WHERE s.story_user_id.id = :user")
+    List<Story> findAllStoryByUserId(@Param("user")String user);
+
+    @Query("SELECT DISTINCT(s) FROM Story s WHERE s.story_user_id IS NOT NULL")
+    List<Story> findAllUserId();
 }

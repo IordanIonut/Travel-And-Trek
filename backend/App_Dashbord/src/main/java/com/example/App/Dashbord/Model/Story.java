@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,13 +35,8 @@ public class Story {
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "id")
     private Group story_group_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "MEDIA_ID_STORY", referencedColumnName = "id", nullable = false),
-            @JoinColumn(name = "MEDIA_TYPE_STORY", referencedColumnName = "type", nullable = false)
-    })
-    @JsonIgnoreProperties({ "media_user_id"})
-    private Media story_media_id;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "story", cascade = CascadeType.ALL)
+    private List<Media> story_medias_id;
 
     @Column(name = "CREATE_AT", nullable = false)
     private LocalDateTime create_at;

@@ -1,4 +1,4 @@
-package com.example.App.Login;
+package com.example.App.Authentication;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,6 +54,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(csrf -> csrf.disable()).authorizeRequests(auth -> auth.requestMatchers("/auth/login", "/auth/register", "/auth/test/login", "/auth/test/register", "/api/user/val/email", "/api/user/val/name").permitAll().anyRequest().authenticated()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();
+        return http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(csrf -> csrf.disable()).authorizeRequests(auth -> auth.requestMatchers("/auth/login", "/auth/register", "/auth/test/login", "/auth/test/register", "/api/user/val/email", "/api/user/val/name", "api/sendEmail/reset", "/api/user/password/update", "/api/location/*").permitAll().anyRequest().authenticated()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 }

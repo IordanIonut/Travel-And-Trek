@@ -109,4 +109,38 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/val/name")
+    public ResponseEntity<Boolean> findUserByNameVal(@RequestParam("name") final String name) {
+        try {
+            LOG.info("findUserByNameVal()- user - Successful.");
+            return ResponseEntity.ok(this.userService.findUserByNameVal(name));
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve findUserByNameVal(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/val/email")
+    public ResponseEntity<Boolean> findUserByEmailVal(@RequestParam("email") final String email) {
+        try {
+            LOG.info("findUserByEmailVal()- user - Successful.");
+            return ResponseEntity.ok(this.userService.findUserByEmailVal(email));
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve findUserByEmailVal(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PutMapping("/password/update")
+    public ResponseEntity<Void> updateUserPassword(@RequestParam("email") final String email, @RequestParam("password") final String password) {
+        try {
+            this.userService.updateUserPassword(email, password);
+            LOG.info("updateUserPassword()- user - Successful.");
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve updateUserPassword(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }

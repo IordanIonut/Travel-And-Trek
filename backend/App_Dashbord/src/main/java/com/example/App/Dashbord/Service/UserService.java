@@ -73,12 +73,17 @@ public class UserService {
         return new UserDTO().generateUserDTO(userRepository.findUsersBySearch(search), userRepository.findMutualFriends(name), page, size);
     }
 
+    @Cacheable(value = "userCache", key = "'findUserByNameVal::'+#name")
+    public Boolean findUserByNameVal(final String name){
+        return this.userRepository.findByName(name).isPresent();
+    }
 
+    @Cacheable(value ="userCache", key = "'findUserByEmailVal::'+#email")
+    public Boolean findUserByEmailVal(final String email){
+        return this.userRepository.findByEmail(email).isPresent();
+    }
 
-
-
-
-
-
-
+    public void updateUserPassword(final String email , final String password){
+            this.userRepository.updateUserPassword(email, password);
+    }
 }

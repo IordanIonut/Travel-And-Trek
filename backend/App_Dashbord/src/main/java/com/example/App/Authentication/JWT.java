@@ -1,4 +1,4 @@
-package com.example.App.Login;
+package com.example.App.Authentication;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,10 +17,17 @@ public class JWT {
     @Value("${jwt.secret}")
     private String secretKey;
     private final long EXPIRATION_TIME = 100000 * 60 * 60;
+    private final long EXPIRATION_OTP = 100 * 600 * 1000;
 
     public String generateToken(String username, String email) {
         return Jwts.builder().setSubject(username).claim("password", email).
                 setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS256, getSigningKey()).compact();
+    }
+
+    public String generateTokenCode(String code, String email) {
+        return Jwts.builder().setSubject(code).claim("email", email).
+                setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_OTP))
                 .signWith(SignatureAlgorithm.HS256, getSigningKey()).compact();
     }
 
