@@ -5,22 +5,36 @@
 @import "./_theme/scss/themes";
 @import "./_theme/scss/material";
 
+:root {
+  --bg-color: $bgPrimary;
+}
+
+body {
+  background-color: var(--bg-color);
+}
+
+
 @layer utilities {
   .hide-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;
+
     &::-webkit-scrollbar {
       display: none;
     }
+
     &::-webkit-scrollbar-thumb {
       display: none;
     }
+
     overflow: auto;
   }
+
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
 }
+
 html,
 body {
   user-select: none;
@@ -31,6 +45,7 @@ body {
   width: 100%;
   background-color: var(--bgPrimary);
 }
+
 body {
   user-select: none;
   -webkit-user-select: none;
@@ -39,6 +54,7 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
 
 :root {
   --nav-bar-width: 70px;
@@ -80,7 +96,7 @@ body {
 }
 
 .story-com {
-  @apply rounded-[15px] p-2 flex flex-row gap-1 items-center justify-start self-stretch shrink-0 relative overflow-y-auto mb-3;
+  @apply rounded-[15px] flex flex-row gap-1 items-center justify-start self-stretch shrink-0 relative overflow-y-auto mb-3;
 }
 
 .width-page {
@@ -108,7 +124,7 @@ mat-dialog-container {
 }
 
 .page-dialog {
-  @apply h-max flex bgPrimary overflow-y-auto p-3 flex-col;
+  @apply h-max flex bgPrimary overflow-y-auto pt-3 px-5 pb-6 flex-col;
   max-height: 80vh;
   overflow-y: scroll;
   background: #101414 !important;
@@ -156,6 +172,7 @@ mat-dialog-container {
   @apply clEfec;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
+
 .mat-icon:hover,
 mat-icon.clicked {
   // box-shadow: 0 0 10px 4px rgba(170, 54, 54, 0.3);
@@ -173,4 +190,331 @@ mat-icon.clicked {
 
 .icon-butoon {
   @apply m-2;
+}
+
+
+
+body.cyan-theme {
+  // @include apply-theme($cyan-theme);
+  transition: background-color 0.3s ease;
+}
+
+:root {
+  --bg-color: #101414;
+}
+
+body {
+
+  background-color: var(--bg-color);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.icons {
+  @apply rounded-3xl p-2 flex flex-col gap-2.5 items-start justify-start shrink-0 relative;
+}
+
+.story {
+  @apply rounded-[45px] shrink-0 w-[50px] h-[50px] relative;
+}
+
+.story-body {
+  @apply rounded-[50px] border-solid p-0.5 flex flex-row gap-2.5 items-center justify-start shrink-0 relative;
+  border-width: 3px !important;
+}
+
+.story-header {
+  @apply p-1.5 flex flex-col gap-px items-center justify-center shrink-0 relative;
+}
+
+.story-body-name {
+  @apply pr-2.5 pl-2.5 flex flex-row gap-[15px] items-center justify-start self-stretch shrink-0 relative;
+}
+
+.story-name {
+  @apply textCom text-left text-base truncate w-[50px] font-normal relative flex items-center justify-start;
+}
+
+.dash-style-input {
+  .mat-mdc-form-field {
+    @apply bgEfec;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label {
+    @apply textCl;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+    @apply caret-efec textCom;
+  }
+
+  mat-label {
+    @apply textPrimary;
+  }
+
+  .mdc-text-field--filled {
+    @apply rounded-[15px];
+  }
+
+  .mdc-line-ripple::before {
+    @apply border-b-0 border-2;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    @apply bgPrimary;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+    @apply border-card-input;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+    @apply border-efec;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label {
+    @apply textPrimary;
+  }
+
+  .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+    @apply textPrimary;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label {
+    @apply textCom;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper,
+  .mat-mdc-form-field-bottom-align::before {
+    @apply hidden;
+  }
+}
+
+.dash-style-toogle {
+  .mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+    @apply bgCom;
+  }
+
+  .mat-button-toggle-label-content {
+    @apply textCom;
+  }
+
+  .mat-button-toggle:first-child {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+
+  .mat-button-toggle:last-child {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+}
+
+.dash-style-button {
+  .mdc-button__label {
+    @apply textPrimary text-lg;
+  }
+
+  .mat-mdc-outlined-button .mat-mdc-button-ripple,
+  .mat-mdc-outlined-button .mdc-button__ripple {
+    @apply border-card;
+  }
+
+  .mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before {
+    @apply bgEfec;
+  }
+}
+
+//AutoComplete panel
+.cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above) div.mat-mdc-autocomplete-panel {
+  @apply bgPrimary;
+  max-height: max-content !important;
+}
+
+.mat-mdc-option .mdc-list-item__primary-text {
+  color: white !important;
+}
+
+.mat-mdc-option.mdc-list-item:hover {
+  background: white !important;
+}
+
+.dash-style-tab-group {
+  .mat-mdc-tab {
+    .mdc-tab__text-label {
+      @apply textCom;
+    }
+  }
+
+  .mat-mdc-tab-label-container {
+    border-bottom-width: 0px !important;
+    margin-bottom: 10px !important;
+    flex-grow: 0;
+  }
+
+  .mat-mdc-tab .mdc-tab-indicator__content--underline {
+    @apply border-efec;
+  }
+
+  .mat-mdc-tab-body-content {
+    overflow: visible !important;
+  }
+
+  .mat-mdc-tab-group {
+    width: 25rem !important;
+    display: flex !important;
+    flex-direction: column-reverse;
+  }
+
+  .mat-mdc-tab-header {
+    display: inline !important;
+  }
+
+  .mat-mdc-tab-body.mat-mdc-tab-body-active {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.hashtag {
+  @apply border rounded-lg;
+  border-color: var(--clPrimary);
+  color: var(--nav-bar-width);
+}
+
+.icon.mat-icon {
+  @apply clSecond;
+}
+
+
+
+///
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
+
+
+.skeleton-color {
+  @apply bg-gray-300 animate-pulse;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeleton-circle {
+  @apply w-16 h-16 rounded-full shadow-md animate-pulse;
+  background-size: 200% 100%;
+  position: relative;
+}
+
+.skeleton-text {
+  @apply w-80 h-4 mt-3 rounded-md shadow-sm animate-pulse;
+  background-size: 200% 100%;
+}
+
+.skeleton-button {
+  @apply flex flex-col items-center justify-center p-4 max-w-40 w-24 h-8 rounded-md animate-pulse;
+}
+
+.skeleton-line {
+  @apply w-2 h-full rounded-[4px] relative flex animate-pulse;
+}
+
+.skeleton-box {
+  @apply flex flex-col items-center justify-center p-4 max-w-40 mx-auto animate-pulse;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .skeleton-circle {
+    @apply w-12 h-12;
+  }
+
+  .skeleton-text {
+    @apply w-14 h-3;
+  }
+}
+
+/////////////
+
+.page-auth {
+  width: 100vw !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.move {
+  @apply mt-4 bgSecond text-white font-medium rounded-lg h-12 w-full cursor-pointer hover:bgSecond transition;
+}
+
+.title {
+  @apply textSecond text-3xl font-semibold;
+}
+
+.mat-stepper-vertical,
+.mat-stepper-horizontal {
+  background-color: transparent !important;
+}
+
+.mat-step-icon-selected {
+  background-color: transparent !important;
+}
+
+.mat-horizontal-stepper-header {
+  display: flex !important;
+  height: 72px !important;
+  overflow: hidden !important;
+  align-items: center !important;
+  padding: 0 14px !important;
+  height: var(--mat-stepper-header-height) !important;
+  justify-content: center !important;
+  flex-direction: column-reverse !important;
+  flex-wrap: nowrap !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: transparent !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label {
+  @apply clSecond;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  @apply clSecond caret-efec;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+  @apply clSecond border-efec;
 }

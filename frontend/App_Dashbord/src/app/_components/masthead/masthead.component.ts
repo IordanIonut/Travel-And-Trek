@@ -1,25 +1,33 @@
 import {
   Component,
   ElementRef,
+  SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  FilterSeach,
+  iconsObject,
+  JwtService,
+  MaterialModule,
+  SearchDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
-import { FilterSeach } from 'src/app/_type/filters/filter';
 import { UserService } from 'src/app/_service/models/user.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SearchDTO } from 'src/app/_type/dto/search.dto';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { iconsObject } from 'src/app/_type/icon/icon';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from 'src/app/_service/common/skeleton.service';
 
 @Component({
   selector: 'app-masthead',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule, NgFor],
+  imports: [MaterialModule, ReactiveFormsModule, NgFor, NgIf],
   templateUrl: './masthead.component.html',
   styleUrl: './masthead.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -33,7 +41,7 @@ export class MastheadComponent {
     type: 'Search...',
     id: 'Search...',
   };
-
+  profile!: string;
   iconsObject = iconsObject;
   @ViewChild('masthead') masthead!: ElementRef;
   @ViewChild('img', { static: false })
@@ -63,17 +71,18 @@ export class MastheadComponent {
     { value: 'tag', icon: 'tag', name: 'Tag' },
   ];
   options!: SearchDTO[];
-
+  params!: any;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private dialog: DialogService,
     private shadow: ShadowService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private _jwtService: JwtService,
+    protected _skeletonService: SkeletonService
   ) {
-    this.selectValue = this.filters[0];
-
+    this.profile = this._jwtService.getUserInfo()?.img!;
     this.formSearch = this.fb.group({
       search: [''],
     });
@@ -86,16 +95,22 @@ export class MastheadComponent {
           type: params['type'],
           id: 'Search...',
         };
+      this.selectValue = this.filters.find((f) => f.value === params['type'])!;
+      if (this.selectValue === undefined) {
+        this.selectValue = this.filters[0];
+      }
+      this.params = params;
     });
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     if (this.img !== undefined && this.con !== undefined) {
       const image = this.img.nativeElement;
       const content = this.con.nativeElement;
       image.crossOrigin = 'anonymous';
-      if (image.complete) this.shadow.applyShadowStory(image, content);
-      else
+      if (image.complete) {
+        this.shadow.applyShadowStory(image, content);
+      } else
         image.addEventListener('load', () => {
           this.shadow.applyShadowStory(image, content);
         });
@@ -165,6 +180,7 @@ export class MastheadComponent {
         0,
         10
       )
+      .pipe(setLoadingOnRequest(this._skeletonService))
       .subscribe({
         next: (data: SearchDTO[]) => {
           this.options = data;

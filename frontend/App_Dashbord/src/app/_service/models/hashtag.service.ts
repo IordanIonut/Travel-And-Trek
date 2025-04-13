@@ -1,17 +1,17 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { Post } from 'src/app/_type/models/post';
-import { Share } from 'src/app/_type/models/share';
-import { User } from 'src/app/_type/models/user';
-import { environment } from 'src/app/environments/environment';
+import {
+  Environment,
+  Post,
+  UserDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HashtagService {
-  private apiUrl = environment.baseUrl + '/hashtags';
+  private apiUrl = Environment.baseUrl + '/api/hashtags';
 
   constructor(private http: HttpClient) {}
 

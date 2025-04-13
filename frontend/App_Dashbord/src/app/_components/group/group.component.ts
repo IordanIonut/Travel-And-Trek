@@ -1,20 +1,25 @@
 import { NgFor, NgIf, SlicePipe } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { error } from 'console';
 import { FollowerStatusIconPipe } from 'src/app/_pipe/follower-status-icon.pipe';
+import { SkeletonService } from 'src/app/_service/common/skeleton.service';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { FollowService } from 'src/app/_service/models/follower.service';
 import { GroupMembershipService } from 'src/app/_service/models/group-membership.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
-import { GroupDTO } from 'src/app/_type/dto/group.dto';
-import { GenderEnum } from 'src/app/_type/enum/gender.enum';
-import { GroupMembershipEnum } from 'src/app/_type/enum/group-membership.enum';
-import { GroupMembership } from 'src/app/_type/models/group-membership';
-import { Hastag } from 'src/app/_type/models/hashtag';
-import { User } from 'src/app/_type/models/user';
-import { environment } from 'src/app/environments/environment';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  GroupDTO,
+  GroupMembership,
+  GroupMembershipEnum,
+  JwtService,
+  MaterialModule,
+  User,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 
 @Component({
@@ -49,8 +54,11 @@ export class GroupComponent {
     private shadow: ShadowService,
     private groupMembershipService: GroupMembershipService,
     private dialogService: DialogService,
-    private router: Router
-  ) {}
+    private _jwtService: JwtService,
+    private router: Router,
+    protected _skeletonService: SkeletonService
+  ) {
+  }
 
   ngOnInit(): void {
     this.length = this.group.friends.length + this.group.followers.length;
@@ -106,21 +114,16 @@ export class GroupComponent {
     } else if (this.group.groupMembership === null) {
       console.log('send');
 
-      const u: User = {
-        ...environment.user,
-        date_create: new Date(environment.user.date_create),
-        date_of_birth: new Date(environment.user.date_of_birth),
-        date_last_update: new Date(environment.user.date_last_update),
-        gender: environment.user.gender === 'M' ? GenderEnum.M : GenderEnum.F,
-      };
-
       const groupMembership: GroupMembership = {
         id: {
           id: '',
           role: GroupMembershipEnum.PENDING,
         },
         group_id: this.group.group,
-        user_id: u,
+        user_id: {
+          id: '',
+          name: this._jwtService.getUserInfo()!.name!,
+        } as User,
         joined_at: new Date(),
       };
 

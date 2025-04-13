@@ -1,13 +1,14 @@
 import { NgFor } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { error } from 'console';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserComponent } from 'src/app/_components/user/user.component';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from 'src/app/_service/common/skeleton.service';
 import { ShareService } from 'src/app/_service/models/share.service';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { PostId } from 'src/app/_type/models/post';
-import { environment } from 'src/app/environments/environment';
+import { JwtService, PostId, UserDTO } from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
   selector: 'app-shares',
@@ -21,7 +22,10 @@ export class SharesComponent {
   id!: PostId;
   data!: UserDTO[];
   constructor(
+    private _dialogRef: MatDialogRef<SharesComponent>,
     private shareService: ShareService,
+    private _jwtService: JwtService,
+    private _skeletonService: SkeletonService,
     @Inject(MAT_DIALOG_DATA) data: { id: PostId }
   ) {
     this.id = data.id;
@@ -29,9 +33,17 @@ export class SharesComponent {
 
   ngOnInit() {
     this.shareService
-      .findUsersLikesByPost(environment.user.name, this.id.id, this.id.type)
+      .findUsersLikesByPost(
+        this._jwtService.getUserInfo()!.name!,
+        this.id.id,
+        this.id.type
+      )
+      .pipe(setLoadingOnRequest(this._skeletonService))
       .subscribe({
         next: (data: UserDTO[]) => {
+          if (data.length === 0) {
+            this._dialogRef.close();
+          }
           this.data = [...data];
         },
         error: (error: Error) => {

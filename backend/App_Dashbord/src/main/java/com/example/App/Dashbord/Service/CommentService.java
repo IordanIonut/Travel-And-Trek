@@ -5,6 +5,7 @@ import com.example.App.Dashbord.Embedded.CommentId;
 import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Repository.CommentRepository;
 import com.example.App.Dashbord.Model.Comment;
+import com.example.App.Dashbord.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ import java.util.Optional;
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private static final Logger LOG = LoggerFactory.getLogger(CommentService.class);
 
@@ -45,6 +50,7 @@ public class CommentService {
     @CacheEvict(value = "commentCache",  allEntries = true)
     public void postComment(Comment comment){
         comment.getId().setId(new AppDashbordApplication().generateId());
+        comment.getComment_user_id().setId(userRepository.findByName(comment.getComment_user_id().getName()).get().getId());
         commentRepository.save(comment);
         LOG.info("Comment successfully saved with ID: {}", comment);
     }

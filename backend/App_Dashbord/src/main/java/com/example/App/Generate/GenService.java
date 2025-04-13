@@ -42,6 +42,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import static com.example.App.Generate.LocationMediaSearch.fetchRandomPixabayVideoUrl;
+
 @Service
 public class GenService {
     private static final Faker faker = new Faker();
@@ -167,7 +169,7 @@ public class GenService {
     @Transactional
     public void generateFakeUser(int number) {
         try {
-            if(userRepository.count() < 1000) {
+            if(userRepository.count() < 100) {
                 LOG.info("START--user");
                 long startTime = System.currentTimeMillis();
                 Set<User> users = new HashSet<>(number);
@@ -188,7 +190,7 @@ public class GenService {
                     user.setEmail(email);
                     user.setLocation(faker.address().fullAddress());
                     user.setPassword(passwordEncoder.encode("123asd,./A"));
-                    user.setBio(faker.lorem().sentence());
+                    user.setBio(faker.lorem().paragraphs(3).stream().limit(300).toString());
                     user.setDate_create(this.getDate(10, 20).atStartOfDay());
                     user.setProfile_picture("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                     user.setGender(random.nextBoolean() ? GenderEnum.M : GenderEnum.F);
@@ -246,7 +248,7 @@ public class GenService {
     @Transactional
     public void generateFakeMedia(int number) {
         try {
-            if(mediaRepository.count() < 10000) {
+            if(mediaRepository.count() < 5000) {
                 long startTime = System.currentTimeMillis();
                 LOG.info("START--media");
                 Set<Media> mediaBatch = new HashSet<>(number);
@@ -270,7 +272,7 @@ public class GenService {
                     media.setId(mediaId);
                     media.setMedia_user_id(randomBoolean ? user : null);
                     media.setMedia_group_id(!randomBoolean ? group : null);
-                    media.setUrl("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
+                    media.setUrl(randomMediaType.equals(MediaEnum.PHOTO) ? "https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600" : fetchRandomPixabayVideoUrl());
                     media.setCreate_at(this.getDate(10, 20).atStartOfDay());
                     double[] val = GenLatLot.generateRandomLandCoordinates();
                     media.setLongitude(val[1]);
@@ -300,8 +302,9 @@ public class GenService {
                 Media randomMedia = listUsersMedia.get(random.nextInt(listUsersMedia.size()));
                 String userId = randomMedia.getMedia_user_id().getId();
                 List<Media> userMediaList = mediaRepository.findAllMediaByUserId(userId);
-                if (userMediaList.isEmpty()) continue;
-                List<Media> selectedMediaList = getRandomSubset(userMediaList, random, 6);
+                if (userMediaList.isEmpty()) {
+                    continue;
+                }
 
                 User user = new User();
                 user.setId(userId);
@@ -309,7 +312,7 @@ public class GenService {
                 Highlight highlight = new Highlight();
                 highlight.setId(generateId());
                 highlight.setHighlight_user_id(user);
-                highlight.setHighlight_medias(selectedMediaList);
+                highlight.setHighlight_medias(userMediaList);
                 highlight.setImage("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                 highlight.setName(faker.hipster().word());
                 highlight.setVisibility(faker.random().nextBoolean());
@@ -320,7 +323,7 @@ public class GenService {
             }
             long endTime = System.currentTimeMillis();
             long duration = endTime - startTime;
-            LOG.info("size media: " + highlightBatch.size() + " duration: " + duration);
+            LOG.info("size highlight: " + highlightBatch.size() + " duration: " + duration);
             highlightRepository.saveAll(highlightBatch);
         } catch (Exception e) {
             System.err.println("Error generating highlight  batch: " + e.getMessage());
@@ -340,16 +343,17 @@ public class GenService {
                 Media randomMedia = listUsersMedia.get(random.nextInt(listUsersMedia.size()));
                 String userId = randomMedia.getMedia_user_id().getId();
                 List<Media> userMediaList = mediaRepository.findAllMediaByUserId(userId);
-                if (userMediaList.isEmpty()) continue;
+                if (userMediaList.isEmpty()) {
+                    continue;
+                }
                 List<Media> selectedMediaList = getRandomSubset(userMediaList, random, 6);
 
                 Story story = new Story();
                 story.setId(generateId());
-                story.setStory_medias_id(selectedMediaList);
-
                 User user = new User();
                 user.setId(userId);
                 story.setStory_user_id(user);
+                story.setStory_medias(selectedMediaList);
                 story.setCreate_at(this.getDate(10, 20).atStartOfDay());
                 story.setExpiration(false);
                 story.setExpiration_time(LocalDateTime.now().plusDays(1));
@@ -365,11 +369,10 @@ public class GenService {
         }
     }
 
-
     @Transactional
     public void generateFakePost(int number) {
         try {
-            if(postRepository.count() < 10000) {
+            if(postRepository.count() < 1000) {
                 long startTime = System.currentTimeMillis();
                 LOG.info("START--post");
                 List<Media> listUsersMedia = mediaRepository.findAllUserId();
@@ -434,7 +437,7 @@ public class GenService {
     @Transactional
     public void generateFakeComment(int number) {
         try {
-            if(commentRepository.count() < 10000) {
+            if(commentRepository.count() < 1000) {
                 long startTime = System.currentTimeMillis();
                 LOG.info("START--comment");
                 Set<Comment> commentBatch = new HashSet<>(number);
@@ -503,7 +506,7 @@ public class GenService {
     @Transactional
     public void generateFakeFollower(int number) {
         try {
-            if(followerRepository.count() < 10000) {
+            if(followerRepository.count() < 1000) {
                 long startTime = System.currentTimeMillis();
                 LOG.info("START--follower");
                 List<String> listUsers = userRepository.allUsers();
@@ -823,7 +826,7 @@ public class GenService {
 
             Message message = new Message();
             message.setId(messagesId);
-            message.setContent(faker.lorem().paragraph(2));
+            message.setContent(faker.lorem().paragraph(1));
             message.setCreated_at(date);
             message.setUpdated_at(date);
             message.setSender_id(sender);
@@ -971,12 +974,14 @@ public class GenService {
         return String.valueOf(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
     }
 
-
     private <T> List<T> getRandomSubset(List<T> list, Random random, int maxSize) {
         if (list.isEmpty()) return Collections.emptyList();
         Collections.shuffle(list);
-        return list.subList(0, Math.min(random.nextInt(maxSize + 1), list.size()));
+        int subsetSize = Math.min(random.nextInt(maxSize + 1), list.size());
+        if (subsetSize == 0) subsetSize = 1;
+        return list.subList(0, subsetSize);
     }
+
 
     private LocalDate getDate(int start, int end) {
         return faker.date().birthday(10, 20).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

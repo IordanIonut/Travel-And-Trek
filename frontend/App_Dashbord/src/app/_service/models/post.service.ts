@@ -1,16 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { Hastag } from 'src/app/_type/models/hashtag';
-import { Post, PostId } from 'src/app/_type/models/post';
-import { environment } from 'src/app/environments/environment';
+import { Environment, Post, PostEnum, PostId } from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  private apiUrl = environment.baseUrl + '/post';
+  private apiUrl = Environment.baseUrl + '/api/post';
   constructor(private http: HttpClient) {}
 
   getPostByProfileType(
@@ -84,9 +81,10 @@ export class PostService {
     const params = new HttpParams()
       .append('name', name)
       .append('type', type)
-      .append('hashtags', hashtags.map((item) => item).join(','))
+      .append('hashtags', (hashtags ?? []).map((item) => item).join(','))
       .append('index', index)
       .append('number', number);
+
     return this.http.get<Post[]>(`${this.apiUrl}/find/data`, { params });
   }
 }

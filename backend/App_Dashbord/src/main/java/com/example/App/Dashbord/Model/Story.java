@@ -35,8 +35,17 @@ public class Story {
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "id")
     private Group story_group_id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "story", cascade = CascadeType.ALL)
-    private List<Media> story_medias_id;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "STORY_MEDIA",
+            joinColumns = @JoinColumn(name = "STORY_ID", referencedColumnName = "id"),
+            inverseJoinColumns = {
+                    @JoinColumn(name = "MEDIA_ID_MEDIA", referencedColumnName = "id"),
+                    @JoinColumn(name = "MEDIA_TYPE_MEDIA", referencedColumnName = "type")
+            }
+    )
+    @JsonIgnoreProperties({ "media_user_id"})
+    private List<Media> story_medias;
 
     @Column(name = "CREATE_AT", nullable = false)
     private LocalDateTime create_at;

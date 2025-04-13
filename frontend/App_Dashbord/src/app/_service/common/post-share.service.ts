@@ -3,11 +3,9 @@ import { DialogService } from '../dialog/dialog.service';
 import { ShadowService } from '../shadow/shadow.service';
 import { ValidationModelService } from '../validator/validation-model.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Share } from 'src/app/_type/models/share';
-import { Post } from 'src/app/_type/models/post';
-import { User } from 'src/app/_type/models/user';
 import { isPlatformBrowser } from '@angular/common';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
+import { Post, Share, User } from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',

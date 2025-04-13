@@ -1,15 +1,22 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommentComponent } from 'src/app/_components/comment/comment.component';
 import { CommentService } from 'src/app/_service/models/comment.service';
-import { PostId } from 'src/app/_type/models/post';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Comment,
+  MaterialModule,
+  PostId,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { NgFor } from '@angular/common';
-import { Comment } from 'src/app/_type/models/commet';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from 'src/app/_service/common/skeleton.service';
+import { LikesComponent } from '../likes/likes.component';
 
 @Component({
   selector: 'app-comments',
@@ -30,8 +37,10 @@ export class CommentsComponent {
   comments!: Comment[];
 
   constructor(
+    private _dialogRef: MatDialogRef<CommentsComponent>,
     private commnetService: CommentService,
     private dialogService: DialogService,
+    protected _skeletonService: SkeletonService,
     @Inject(MAT_DIALOG_DATA) data: { id: PostId }
   ) {
     this.id = data.id;
@@ -45,14 +54,20 @@ export class CommentsComponent {
   }
 
   private onfetchData() {
-    this.commnetService.findCommentsByPost(this.id.id, this.id.type).subscribe({
-      next: (data: Comment[]) => {
-        this.comments = data;
-      },
-      error: (error: Error) => {
-        console.log(error);
-      },
-    });
+    this.commnetService
+      .findCommentsByPost(this.id.id, this.id.type)
+      .pipe(setLoadingOnRequest(this._skeletonService))
+      .subscribe({
+        next: (data: Comment[]) => {
+          if (data.length === 0) {
+            this._dialogRef.close();
+          }
+          this.comments = data;
+        },
+        error: (error: Error) => {
+          console.log(error);
+        },
+      });
   }
 
   protected onComment(event: MouseEvent) {

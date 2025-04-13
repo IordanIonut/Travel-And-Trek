@@ -1,17 +1,17 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GroupDetailDTO } from 'src/app/_type/dto/group.detail.dto';
-import { GroupDTO } from 'src/app/_type/dto/group.dto';
-import { SearchDTO } from 'src/app/_type/dto/search.dto';
-import { Group } from 'src/app/_type/models/group';
-import { environment } from 'src/app/environments/environment';
+import {
+  Environment,
+  GroupDetailDTO,
+  GroupDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
-  private apiUrl = environment.baseUrl + '/group';
+  private apiUrl = Environment.baseUrl + '/api/group';
   constructor(private http: HttpClient) {}
 
   findGroupsByName(

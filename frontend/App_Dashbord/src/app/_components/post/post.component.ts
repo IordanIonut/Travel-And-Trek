@@ -6,27 +6,30 @@ import {
   Inject,
   Input,
   PLATFORM_ID,
+  SimpleChanges,
   ViewChild,
   ViewChildren,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import ColorThief from 'colorthief';
-import { LikesComponent } from 'src/app/_dialogs/likes/likes.component';
 import { PostShareService } from 'src/app/_service/common/post-share.service';
+import { SkeletonService } from 'src/app/_service/common/skeleton.service';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { CommentService } from 'src/app/_service/models/comment.service';
 import { LikeService } from 'src/app/_service/models/like.service';
 import { ShareService } from 'src/app/_service/models/share.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { ShareEnum } from 'src/app/_type/enum/share.enum';
-import { iconsObject } from 'src/app/_type/icon/icon';
-import { Post, PostId } from 'src/app/_type/models/post';
-import { Share } from 'src/app/_type/models/share';
-import { User } from 'src/app/_type/models/user';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  iconsObject,
+  MaterialModule,
+  Post,
+  PostEnum,
+  Share,
+  ShareEnum,
+  User,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
 
 @Component({
@@ -85,8 +88,17 @@ export class PostComponent {
     private elementRef: ElementRef,
     private dialog: MatDialog,
     private postShareService: PostShareService,
+    protected _skeletonService: SkeletonService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+    // this._skeletonService.setLoading(true);
+  }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['data']) {
+  //     this._skeletonService.setLoading(!this.data);
+  //   }
+  // }
 
   ngOnInit(): void {}
 
@@ -107,7 +119,7 @@ export class PostComponent {
     );
   }
 
-  ngOnChanges(): void {
+  ngOnChangesVideo(): void {
     this.postShareService.checkAutoplay(this.videoPlayer, this.run, this.index);
   }
 
@@ -148,7 +160,6 @@ export class PostComponent {
   private time = 500;
 
   protected onOpenPost() {
-    console.log(this.getProperty('id'));
     if (this.getProperty('id').type === 'REEL') {
       this.pauseVideo(this.videoPlayer.nativeElement);
     }

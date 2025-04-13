@@ -7,18 +7,21 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import ColorThief from 'colorthief';
-import { interval, Subscription, take } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
-import { Highlight } from 'src/app/_type/models/highlight';
-import { Media } from 'src/app/_type/models/media';
-import { CdkDragMove, DragDropModule } from '@angular/cdk/drag-drop';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import {
+  Highlight,
+  iconsObject,
+  JwtService,
+  MaterialModule,
+  Media,
+  Story,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { HammerModule } from '@angular/platform-browser';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgFor } from '@angular/common';
-import { iconsObject } from 'src/app/_type/icon/icon';
 import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
-import { Story } from 'src/app/_type/models/story';
 
 @Component({
   selector: 'app-highlight',
@@ -43,7 +46,7 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   iconsObject = iconsObject;
   highlights!: Highlight[] | Story[];
   index!: number;
-
+  profile!: string;
   images!: Media[];
 
   get currentImage(): Media {
@@ -51,14 +54,12 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   }
 
   constructor(
-    private elementRef: ElementRef,
     private shadow: ShadowService,
     private validatorModelService: ValidationModelService,
     @Inject(MAT_DIALOG_DATA) public data: { data: Highlight[]; index: number }
   ) {
     this.highlights = data.data;
     this.index = data.index;
-
     this.onPostPosition(data.data[data.index]);
   }
 
@@ -125,11 +126,13 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
 
   onPostPosition(highlight: Highlight | Story) {
     this.currentIndex = 0;
-    if (this.validatorModelService.isHighlight(highlight))
+    if (this.validatorModelService.isHighlight(highlight)) {
       this.images = highlight.highlight_medias;
-    else if (this.validatorModelService.isStory(highlight)) {
+      this.profile = highlight.image;
+    } else if (this.validatorModelService.isStory(highlight)) {
       this.images = [];
-      this.images.push(highlight.story_media_id);
+      this.images = highlight.story_medias;
+      this.profile = highlight.story_user_id?.profile_picture;
     }
     this.onProgress();
   }
@@ -143,16 +146,16 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
     }
 
     this.remainingTime = totalDuration;
-    this.progress = 0;
+    this.progress = 43;
 
-    this.subscription = interval(tickInterval)
-      .pipe(take(totalDuration))
-      .subscribe((elapsedSeconds) => {
-        this.remainingTime = totalDuration - elapsedSeconds - 1;
-        this.progress = ((elapsedSeconds + 1) / totalDuration) * 100;
-        if (elapsedSeconds + 1 === totalDuration) {
-          this.onSwipeLeft();
-        }
-      });
+    // this.subscription = interval(tickInterval)
+    //   .pipe(take(totalDuration))
+    //   .subscribe((elapsedSeconds) => {
+    //     this.remainingTime = totalDuration - elapsedSeconds - 1;
+    //     this.progress = ((elapsedSeconds + 1) / totalDuration) * 100;
+    //     if (elapsedSeconds + 1 === totalDuration) {
+    //       this.onSwipeLeft();
+    //     }
+    //   });
   }
 }

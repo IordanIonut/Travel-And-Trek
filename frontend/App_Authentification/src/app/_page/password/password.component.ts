@@ -1,6 +1,6 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
+import { AlertComponent, Environment, MailService, Mode, SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
 import { RouterLink } from '@angular/router';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { GOOGLE_LOGO_URL } from 'src/app/_constant/constant';
@@ -10,13 +10,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Environment } from 'src/environments/environment.local';
-import { AlertComponent } from 'src/app/_components/alert/alert.component';
 import { UserService } from 'src/app/_service/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
-import { MailService } from 'src/app/_service/mail.service';
-import { Mode } from 'src/app/_components/_model/Mode';
 import { GoogleComponent } from 'src/app/_components/google/google.component';
 
 @Component({
@@ -157,7 +153,6 @@ export class PasswordComponent {
     this.errorMessage = subject;
     this.showAlert = true;
     this.mode = mode;
-
     setTimeout(() => {
       this.showAlert = false;
     }, duration);

@@ -1,16 +1,19 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CommentEnum } from 'src/app/_type/enum/comment.enum';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { Comment, CommentId } from 'src/app/_type/models/commet';
-import { environment } from 'src/app/environments/environment';
+import {
+  Comment,
+  CommentEnum,
+  CommentId,
+  Environment,
+  PostEnum,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
-  private apiUrl = environment.baseUrl + '/comment';
+  private apiUrl = Environment.baseUrl + '/api/comment';
 
   constructor(private http: HttpClient) {}
 

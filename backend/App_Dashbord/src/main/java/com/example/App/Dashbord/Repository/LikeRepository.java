@@ -40,17 +40,17 @@ public interface LikeRepository extends JpaRepository<Like, LikeId> {
                        @Param("likeType") LikeEnum likeType,
                        @Param("content") LikeContentEnum content);
 
-    @Query("SELECT DISTINCT COUNT(l.id.id) FROM Like l WHERE l.like_post_id.id.id = :id AND l.like_post_id.id.type = :type")
+    @Query("SELECT DISTINCT COUNT(l) FROM Like l WHERE l.like_post_id.id.id = :id AND l.like_post_id.id.type = :type")
     Long findCountLikesByPost(@Param("id") String id, @Param("type") PostEnum type);
 
-    @Query("SELECT DISTINCT COUNT(l.id.id) FROM Like l WHERE l.like_comment_id.id.id = :id AND l.like_comment_id.id.type = :type")
+    @Query("SELECT DISTINCT COUNT(l) FROM Like l WHERE l.like_comment_id.id.id = :id AND l.like_comment_id.id.type = :type")
     Long findCountLikesByComment(@Param("id") String id, @Param("type") CommentEnum type);
 
     @Query("SELECT DISTINCT l.id.content FROM Like l WHERE l.like_post_id.id.id = :id AND l.like_post_id.id.type = :type ")
-    LikeContentEnum findContentLikesByPost(@Param("id") String id, @Param("type") PostEnum type);
+    List<LikeContentEnum> findContentLikesByPost(@Param("id") String id, @Param("type") PostEnum type);
 
     @Query("SELECT DISTINCT l.id.content FROM Like l WHERE l.like_comment_id.id.id = :id AND l.like_comment_id.id.type = :type ")
-    LikeContentEnum findContentLikesByComment(@Param("id") String id, @Param("type") CommentEnum type);
+    List<LikeContentEnum> findContentLikesByComment(@Param("id") String id, @Param("type") CommentEnum type);
 
     @Query("SELECT DISTINCT l.like_user_id FROM Like l WHERE l.like_post_id.id.id = :id AND l.like_post_id.id.type = :type  AND (:content IS NULL OR l.id.content = :content) ")
     List<User> findUsersLikesByPost(@Param("id") String id, @Param("type") PostEnum type, @Param("content") LikeContentEnum content);

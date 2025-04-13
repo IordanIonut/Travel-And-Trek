@@ -61,6 +61,16 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "./node_modules/travel-and-trek-app-core/projects/app-core/src/lib/_environment/environment.local.ts",
+                  "with": "./node_modules/travel-and-trek-app-core/projects/app-core/src/lib/_environment/environment.local.ts"
+                }
+              ],
+              "optimization": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -73,6 +83,9 @@
             },
             "development": {
               "buildTarget": "App_Dashbord:build:development"
+            },
+            "local": {
+              "buildTarget": "App_Dashbord:build:local"
             }
           },
           "defaultConfiguration": "development"

@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Story } from 'src/app/_type/models/story';
-import { environment } from 'src/app/environments/environment';
+import { Environment, Story } from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StoryService {
-  private apiUrl = environment.baseUrl + '/story';
+  private apiUrl = Environment.baseUrl + '/api/story';
 
   constructor(private http: HttpClient) {}
 

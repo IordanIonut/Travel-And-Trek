@@ -8,8 +8,16 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { APP_NAME, GOOGLE_LOGO_URL } from 'src/app/_constant/constant';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  AlertComponent,
+  AppInitService,
+  Environment,
+  GenderEnum,
+  JwtService,
+  MaterialModule,
+  Mode,
+  User,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import {
   FormBuilder,
@@ -33,18 +41,13 @@ import {
   passwordMatchValidator,
   passwordValidator,
 } from 'src/app/_validator/password.validator';
-import { Environment } from 'src/environments/environment.local';
-import { AlertComponent } from 'src/app/_components/alert/alert.component';
 import { adultValidator } from 'src/app/_validator/age.validator';
 import { UserService } from 'src/app/_service/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
-import { User } from 'src/app/_components/_model/user';
-import { AuthService } from 'src/app/_service/auth.service';
-import { JwtService } from 'src/app/_service/jwt.service';
-import { Mode } from 'src/app/_components/_model/Mode';
 import { GoogleComponent } from 'src/app/_components/google/google.component';
 import { RouterModule } from '@angular/router';
+import { AuthService } from 'src/app/_service/auth.service';
 
 export interface Hobby {
   name: string;
@@ -73,7 +76,7 @@ export interface Hobby {
   encapsulation: ViewEncapsulation.None,
 })
 export class RegisterComponent {
-  name = APP_NAME;
+  name!: string;
 
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
@@ -110,8 +113,11 @@ export class RegisterComponent {
     private _cdr: ChangeDetectorRef,
     private _userService: UserService,
     private _authService: AuthService,
+    private _appInitService: AppInitService,
     private _jwt: JwtService
   ) {
+    this.name = this._appInitService.APP_NAME;
+
     this.firstFormGroup = this._fb.group(
       {
         name: ['', [Validators.required]],
@@ -432,17 +438,18 @@ export class RegisterComponent {
         bio: this.lastFormGroup.value.bio,
         date_create: new Date(),
         profile_picture: this.secondFormGroup.value.profile,
-        gender: this.thirdFormGroup.value.gender === 'Female' ? 'F' : 'M',
+        gender:
+          this.thirdFormGroup.value.gender === 'Female'
+            ? GenderEnum.F
+            : GenderEnum.M,
         date_of_birth: this.thirdFormGroup.value.dateOfBirth,
         date_last_update: new Date(),
         qr_code: 'user-' + this.firstFormGroup.value.name,
         location: 'wqeqweqewqeqwe',
       };
-      console.log(user);
       this._authService.register(user).subscribe({
         next: (data: any) => {
-          // this._jwt.saveToken(data.token);
-
+          this._jwt.saveToken(data.token);
           this.showAlertMessage(
             'Save Account',
             'Account has been saved with successful.',

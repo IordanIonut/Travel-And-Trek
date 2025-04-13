@@ -1,25 +1,28 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { error } from 'console';
 import { CommentService } from 'src/app/_service/models/comment.service';
 import { LikeService } from 'src/app/_service/models/like.service';
 import { ShareService } from 'src/app/_service/models/share.service';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { Post, PostId } from 'src/app/_type/models/post';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Comment,
+  CommentEnum,
+  CommentId,
+  iconsObject,
+  JwtService,
+  Like,
+  LikeContentEnum,
+  LikeDTO,
+  LikeEnum,
+  MaterialModule,
+  Post,
+  PostEnum,
+  PostId,
+  User,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { MatDividerModule } from '@angular/material/divider';
 import { NgClass, NgIf, NgStyle } from '@angular/common';
-import { iconsObject } from 'src/app/_type/icon/icon';
-import { LikeEnum } from 'src/app/_type/enum/like.enum';
-import { LikeContentEnum } from 'src/app/_type/enum/like.content.enum';
-import { Like } from 'src/app/_type/models/like';
-import { environment } from 'src/app/environments/environment';
-import { User } from 'src/app/_type/models/user';
-import { LikeDTO } from 'src/app/_type/dto/like.dto';
-import { Comment, CommentId } from 'src/app/_type/models/commet';
 import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
-import { CommentEnum } from 'src/app/_type/enum/comment.enum';
 
 @Component({
   selector: 'app-see-value',
@@ -56,6 +59,7 @@ export class SeeValueComponent {
     private shareService: ShareService,
     private commentService: CommentService,
     private validation: ValidationModelService,
+    private _jwtService: JwtService,
     @Inject(MAT_DIALOG_DATA)
     data: { id: PostId; type: 'LIKE' | 'SHARE' | 'COMMENT'; isComment: boolean }
   ) {
@@ -72,7 +76,8 @@ export class SeeValueComponent {
         content: like,
       },
       like_user_id: {
-        id: environment.user.id,
+        id: '',
+        name: this._jwtService.getUserInfo()!.name!,
       } as User,
       like_media_id: null,
       like_post_id: is

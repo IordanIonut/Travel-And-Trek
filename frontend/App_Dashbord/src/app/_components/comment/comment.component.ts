@@ -11,8 +11,8 @@ import {
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { CommentService } from 'src/app/_service/models/comment.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
-import { Comment, CommentId } from 'src/app/_type/models/commet';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import { Comment, MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import { CommentId } from 'travel-and-trek-app-core/dist/app-core/lib/_model/_class/commet';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 
 @Component({

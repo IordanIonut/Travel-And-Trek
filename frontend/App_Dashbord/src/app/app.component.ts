@@ -5,7 +5,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import { SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
 import { Page } from 'travel-and-trek-app-core/dist/app-core';
@@ -20,7 +20,6 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
     CommonModule,
     MaterialModule,
     NavbarComponent,
-    RouterLink,
     RouterModule,
   ],
   providers: [SetThemeService],
@@ -31,7 +30,7 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
 export class AppComponent {
   pages: Page[] = [
     { icon: 'home', route: '/dashbord/feet' },
-    { icon: 'add', route: '/dashbord/create-post' },
+    { icon: 'add', route: '' },
     { icon: 'movie', route: '/dashbord/reel' },
     { icon: 'message', route: '' },
   ];

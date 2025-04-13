@@ -26,7 +26,6 @@
     "@angular/router": "^18.1.0",
     "@angular/ssr": "^18.1.4",
     "@auth0/angular-jwt": "^5.2.0",
-    "angularx-social-login": "^4.1.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.4",
     "core-library": "^1.0.0",
@@ -56,6 +55,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ng-packagr": "^18.2.0",
     "npm-force-resolutions": "^0.0.10",
     "typescript": "^5.5.4",
     "zone.js": "^0.14.10"

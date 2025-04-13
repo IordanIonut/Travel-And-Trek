@@ -37,6 +37,7 @@ public class LikeService {
     @CacheEvict(value = "likeCache", allEntries = true)
     @Transactional
     public void postLike(Like like) {
+        like.getLike_user_id().setId(userRepository.findByName(like.getLike_user_id().getName()).get().getId());
         Optional<Like> existingLike = this.likeRepository.findLIfExists(like.getLike_user_id().getId(), like.getLike_media_id() != null ? like.getLike_media_id().getId() : null, like.getLike_post_id() != null ? like.getLike_post_id().getId() : null, like.getLike_comment_id() != null ? like.getLike_comment_id().getId() : null);
         if (existingLike.isPresent()) {
             Like existing = existingLike.get();
@@ -55,9 +56,9 @@ public class LikeService {
     @Cacheable(value = "likeCache", key = "'findCountLikesByPost::'+#id+'::'+#value+'::'+'::'+#type")
     public LikeDTO findCountLikesByPost(String id, String value, String type) {
         if (type.equals("POST"))
-            return new LikeDTO(this.likeRepository.findCountLikesByPost(id, PostEnum.valueOf(value)), this.likeRepository.findContentLikesByPost(id, PostEnum.valueOf(value)));
+            return new LikeDTO(this.likeRepository.findCountLikesByPost(id, PostEnum.valueOf(value)), this.likeRepository.findContentLikesByPost(id, PostEnum.valueOf(value)).get(0));
         else if (type.equals("COMMENT"))
-            return new LikeDTO(this.likeRepository.findCountLikesByComment(id, CommentEnum.valueOf(value)), this.likeRepository.findContentLikesByComment(id, CommentEnum.valueOf(value)));
+            return new LikeDTO(this.likeRepository.findCountLikesByComment(id, CommentEnum.valueOf(value)), this.likeRepository.findContentLikesByComment(id, CommentEnum.valueOf(value)).get(0));
         return null;
     }
 

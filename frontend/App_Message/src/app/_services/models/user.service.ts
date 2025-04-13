@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserDTO } from 'src/app/_type/models/dto/user-dto';
 import { Message } from 'src/app/_type/models/message';
-import { environment } from 'src/app/environments/environment';
+import { Environment } from 'travel-and-trek-app-core/dist/app-core';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = environment.baseUrl + '/user';
+  private apiUrl = Environment.baseUrl + '/api/user';
   constructor(private http: HttpClient) {}
 
   findUserByName(name: String): Observable<UserDTO> {

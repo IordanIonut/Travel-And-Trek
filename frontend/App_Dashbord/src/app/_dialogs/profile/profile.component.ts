@@ -9,19 +9,22 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import ColorThief from 'colorthief';
-import { Http2SecureServer } from 'http2';
+import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { UserService } from 'src/app/_service/models/user.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
-import { UserProfileDTO } from 'src/app/_type/dto/user-profile.dto';
-import { environment } from 'src/app/environments/environment';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  JwtService,
+  MaterialModule,
+  UserProfileDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
+
+type ElementType = 'settings' | 'qr_code' | 'logout';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [MaterialModule, NgFor, NgIf, HttpClientModule],
-  providers: [UserService, ShadowService],
+  providers: [UserService, ShadowService, JwtService],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -29,7 +32,7 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 export class ProfileComponent {
   userDTO?: UserProfileDTO;
   type!: string;
-  elemnts: string[] = ['settings', 'qr_code', 'logout'];
+  elemnts: ElementType[] = ['settings', 'qr_code', 'logout'];
 
   @ViewChild('con', { static: false })
   con!: ElementRef<HTMLElement>;
@@ -40,18 +43,24 @@ export class ProfileComponent {
     private dialog: MatDialog,
     private router: Router,
     private userService: UserService,
+    private _dialogService: DialogService,
     private shadowService: ShadowService,
+    private _jwtService: JwtService,
     @Inject(MAT_DIALOG_DATA) public data: { name: string; type: string }
   ) {
     this.type = data.type;
-    this.userService.findUserByName(data.name).subscribe({
-      next: (data: UserProfileDTO) => {
-        this.userDTO = data;
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+    this.userService
+      .findUserByName(
+        data.name === 'name' ? this._jwtService.getUserInfo()!.name! : data.name
+      )
+      .subscribe({
+        next: (data: UserProfileDTO) => {
+          this.userDTO = data;
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 
   ngAfterViewInit(): void {
@@ -76,7 +85,7 @@ export class ProfileComponent {
           type: 'user',
           name:
             this.userDTO?.user.name === null
-              ? environment.user.name
+              ? this._jwtService.getUserInfo()!.name!
               : this.userDTO?.user.name,
         },
       })
@@ -88,5 +97,25 @@ export class ProfileComponent {
 
   onClose() {
     this.dialog.closeAll();
+  }
+
+  onMake(make: ElementType) {
+    console.log(make);
+    switch (make) {
+      case 'settings': {
+        break;
+      }
+      case 'logout': {
+        this._jwtService.logout();
+        break;
+      }
+      case 'qr_code': {
+        this._dialogService.openDialogQrCode(
+          'user',
+          this._jwtService.getUserInfo()?.name!
+        );
+        break;
+      }
+    }
   }
 }

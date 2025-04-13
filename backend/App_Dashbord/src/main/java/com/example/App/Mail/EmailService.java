@@ -38,7 +38,7 @@ public class EmailService {
         Context context = new Context();
         context.setVariable("code", randomNumber);
         context.setVariable("email", email);
-        context.setVariable("link", "http://localhost:4200/authentication/change-password?token="+jwt.generateTokenCode(randomNumber+"",email));
+        context.setVariable("link", "http://localhost:4200/authentication/change-password?token="+jwt.generateToken(randomNumber+"",email));
         String emailContent = templateEngine.process("reset.html", context);
         messageHelper.setText(emailContent, true);
 

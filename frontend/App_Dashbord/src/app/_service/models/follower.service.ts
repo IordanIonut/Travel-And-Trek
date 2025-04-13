@@ -1,18 +1,17 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GroupDTO } from 'src/app/_type/dto/group.dto';
-import { SearchDTO } from 'src/app/_type/dto/search.dto';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { Follow } from 'src/app/_type/models/follow';
-import { User } from 'src/app/_type/models/user';
-import { environment } from 'src/app/environments/environment';
+import {
+  Environment,
+  Follow,
+  UserDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FollowService {
-  private apiUrl = environment.baseUrl + '/follower';
+  private apiUrl = Environment.baseUrl + '/api/follower';
   constructor(private http: HttpClient) {}
 
   postCreateFollower(follow: Follow): Observable<any> {

@@ -35,10 +35,13 @@ public class LoginController {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Email already in use"));
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encode password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setId(AppDashbordApplication.generateId());
         userRepository.save(user);
-        String token = jwtUtil.generateToken(user.getName(), user.getPassword());
+        String token = jwtUtil.generateToken(user.getName(), user.getProfile_picture(), user.getEmail(), user.getUser_hashtag_id()
+                .stream()
+                .map(e -> e.getName())
+                .toArray(String[]::new));
 
         return ResponseEntity.ok(Map.of("token", token));
     }
@@ -46,38 +49,15 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
-            String token = jwtUtil.generateToken(userDetails.getUsername(), userDetails.getPassword());
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+            );
+            CustomUserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
+            String token = jwtUtil.generateToken(userDetails.getName(), userDetails.getProfilePicture(), userDetails.getEmail(), userDetails.getHastag());
 
             return ResponseEntity.ok(Map.of("token", token));
         } catch (Exception e) {
             return ResponseEntity.status(401).body(Map.of("error", "Invalid email or password"));
         }
-    }
-
-    @PostMapping("/test/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-            );
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-            String token = jwtUtil.generateToken(userDetails.getUsername(), userDetails.getPassword());
-            System.out.println("token: "+ token);
-            return ResponseEntity.ok(Map.of("token", token));
-        } catch (Exception e) {
-            return ResponseEntity.status(401).body("Authentication failed: " + e.getMessage());
-        }
-    }
-
-
-    @PostMapping("/test/register")
-    public ResponseEntity<?> register1(@RequestBody User user) {
-        user.setId(AppDashbordApplication.generateId());
-        userRepository.save(user);
-        String token = jwtUtil.generateToken(user.getName(), user.getPassword());
-        return ResponseEntity.ok(Map.of("token", token));
     }
 }

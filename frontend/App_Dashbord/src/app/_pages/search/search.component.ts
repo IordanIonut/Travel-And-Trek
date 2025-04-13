@@ -1,30 +1,31 @@
 import { NgFor, NgIf, SlicePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
 import { MastheadComponent } from 'src/app/_components/masthead/masthead.component';
-import { FilterSeach } from 'src/app/_type/filters/filter';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Environment,
+  FilterSeach,
+  GroupDTO,
+  JwtService,
+  MaterialModule,
+  Post,
+  UserDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { GroupComponent } from '../../_components/group/group.component';
-import { PlaceComponent } from '../../_components/place/place.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from 'src/app/_service/models/user.service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { GroupService } from 'src/app/_service/models/group.service';
-import { environment } from 'src/app/environments/environment';
-import { error } from 'console';
-import { GroupDTO } from 'src/app/_type/dto/group.dto';
-import { Post } from 'src/app/_type/models/post';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import { PostService } from 'src/app/_service/models/post.service';
 import { PostComponent } from 'src/app/_components/post/post.component';
-import { errorMonitor } from 'events';
-import { Hastag } from 'src/app/_type/models/hashtag';
 import { HashtagService } from 'src/app/_service/models/hashtag.service';
-import { env } from 'process';
-import { User } from 'src/app/_type/models/user';
 import { LikeService } from 'src/app/_service/models/like.service';
 import { UserComponent } from 'src/app/_components/user/user.component';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from 'src/app/_service/common/skeleton.service';
 
 @Component({
   selector: 'app-search',
@@ -96,8 +97,12 @@ export class SearchComponent {
     private groupService: GroupService,
     private postService: PostService,
     private hashtagService: HashtagService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private _jwtService: JwtService,
+    protected _skeletonService: SkeletonService
+  ) {
+    this._skeletonService.setLoading(true);
+  }
 
   ngOnInit(): void {}
 
@@ -160,11 +165,12 @@ export class SearchComponent {
     ) {
       this.userService
         .findUsersAndFriendsByName(
-          environment.user.name,
+          this._jwtService.getUserInfo()!.name!,
           this.search,
           this.indexPeoples,
-          environment.number
+          Environment.number
         )
+        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: UserDTO[]) => {
             if (this.indexPeoples === 0) {
@@ -191,11 +197,12 @@ export class SearchComponent {
     ) {
       this.groupService
         .findGroupsByName(
-          environment.user.name,
+          this._jwtService.getUserInfo()!.name!,
           this.search,
           this.indexGroups,
-          environment.number
+          Environment.number
         )
+        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: GroupDTO[]) => {
             if (this.indexPeoples === 0) {
@@ -220,7 +227,8 @@ export class SearchComponent {
       (isPost && (!this.posts || this.posts[this.indexPosts].data.length === 0))
     ) {
       this.postService
-        .getPostBySearch(this.search, this.indexPosts, environment.number)
+        .getPostBySearch(this.search, this.indexPosts, Environment.number)
+        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             if (this.indexPosts === 0) {
@@ -246,7 +254,8 @@ export class SearchComponent {
         (!this.tagsPost || this.tagsPost[this.indexTags].data.length === 0))
     ) {
       this.hashtagService
-        .getPostByTag([...this.search], this.indexTags, environment.number)
+        .getPostByTag([...this.search], this.indexTags, Environment.number)
+        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             // console.log(data);
@@ -269,11 +278,12 @@ export class SearchComponent {
         });
       this.hashtagService
         .getUserByTag(
-          environment.user.name,
+          this._jwtService.getUserInfo()!.name!,
           [...this.search],
           this.indexTags,
-          environment.number
+          Environment.number
         )
+        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: UserDTO[]) => {
             // console.log(data);

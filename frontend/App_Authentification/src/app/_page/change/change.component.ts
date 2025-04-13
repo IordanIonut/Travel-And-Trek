@@ -5,18 +5,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { GOOGLE_LOGO_URL } from 'src/app/_constant/constant';
 import {
   passwordMatchValidator,
   passwordValidator,
 } from 'src/app/_validator/password.validator';
-import { Environment } from 'src/environments/environment.local';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
-import { AlertComponent } from '../../_components/alert/alert.component';
+import {
+  AlertComponent,
+  Environment,
+  JwtService,
+  MaterialModule,
+  Mode,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JwtService } from 'src/app/_service/jwt.service';
-import { Mode } from 'src/app/_components/_model/Mode';
 import { UserService } from 'src/app/_service/user.service';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -30,7 +31,7 @@ import { HttpClientModule } from '@angular/common/http';
     AlertComponent,
     HttpClientModule,
   ],
-  providers: [UserService],
+  providers: [UserService, JwtService],
   templateUrl: './change.component.html',
   styleUrl: './change.component.scss',
 })
@@ -171,8 +172,10 @@ export class ChangeComponent {
     this.errorMessage = subject;
     this.showAlert = true;
     this.mode = mode;
+    console.log('1212312');
     setTimeout(() => {
       this.showAlert = false;
+      console.log('asdasda');
     }, duration);
   }
 

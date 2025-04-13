@@ -1,16 +1,18 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SearchDTO } from 'src/app/_type/dto/search.dto';
-import { UserProfileDTO } from 'src/app/_type/dto/user-profile.dto';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { environment } from 'src/app/environments/environment';
+import {
+  Environment,
+  SearchDTO,
+  UserDTO,
+  UserProfileDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = environment.baseUrl + '/user';
+  private apiUrl = Environment.baseUrl + '/api/user';
 
   constructor(private http: HttpClient) {}
 

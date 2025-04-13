@@ -3,23 +3,26 @@ import {
   Component,
   ElementRef,
   NgZone,
-  QueryList,
   ViewChild,
-  ViewChildren,
   ViewEncapsulation,
 } from '@angular/core';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Environment,
+  JwtService,
+  MaterialModule,
+  Post,
+  PostEnum,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { MastheadComponent } from '../../_components/masthead/masthead.component';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { PostComponent } from 'src/app/_components/post/post.component';
 import { UserService } from 'src/app/_service/models/user.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { PostService } from 'src/app/_service/models/post.service';
-import { environment } from 'src/app/environments/environment';
-import { error } from 'console';
-import { Post } from 'src/app/_type/models/post';
-import { animate } from '@angular/animations';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from 'src/app/_service/common/skeleton.service';
 
 @Component({
   selector: 'app-reel',
@@ -30,6 +33,7 @@ import { PostEnum } from 'src/app/_type/enum/post.enum';
     PostComponent,
     HttpClientModule,
     NgFor,
+    NgIf,
   ],
   providers: [UserService, PostService],
   templateUrl: './reel.component.html',
@@ -47,13 +51,17 @@ export class ReelComponent {
   constructor(
     private cdr: ChangeDetectorRef,
     private postService: PostService,
-    private ngZone: NgZone
-  ) {
-    this.fetchData();
-  }
+    private ngZone: NgZone,
+    private _jwtService: JwtService,
+    protected _skeletonService: SkeletonService
+  ) {}
 
   ngAfterViewInit(): void {
     this.detectVisibleElement();
+  }
+
+  ngOnInit(): void {
+    this.fetchData();
   }
 
   protected onScroll(event: any) {
@@ -72,11 +80,15 @@ export class ReelComponent {
   }
 
   detectVisibleElement(): void {
-    const container = this.scrollContainer.nativeElement;
+    const container = this.scrollContainer.nativeElement!;
     const children = container.querySelectorAll('app-post');
 
-    children.forEach((child: HTMLElement) => {
-      const rect = child.getBoundingClientRect();
+    children.forEach((child: any) => {
+      const nativeEl = child?.shadowRoot?.firstChild || child;
+      const rect = nativeEl?.getBoundingClientRect?.();
+
+      if (!rect) return;
+
       const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
 
       if (isVisible) {
@@ -94,12 +106,13 @@ export class ReelComponent {
     if (this.isLoading || !this.posts || this.posts.length === 0) {
       this.postService
         .getPostByUserFriends(
-          environment.user.name,
+          this._jwtService.getUserInfo()?.name!,
           PostEnum.REEL,
-          environment.user.user_hashtag_id,
+          [],
           this.index,
-          environment.number
+          Environment.number
         )
+        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             if (this.index === 0) {

@@ -1,19 +1,22 @@
-import { Portal } from '@angular/cdk/portal';
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import {
   Component,
   ElementRef,
   Input,
   QueryList,
+  SimpleChanges,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
+import { SkeletonService } from 'src/app/_service/common/skeleton.service';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
-import { Highlight } from 'src/app/_type/models/highlight';
-import { Story } from 'src/app/_type/models/story';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Highlight,
+  MaterialModule,
+  Story,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
   selector: 'app-story',
@@ -24,7 +27,7 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
   styleUrl: './story.component.scss',
 })
 export class StoryComponent {
-  @Input() highlight: Highlight[] | Story[] = [];
+  @Input() highlight: Story[] | Highlight[] = [];
 
   @ViewChildren('imgStory') images!: QueryList<ElementRef>;
   @ViewChildren('conStory') buttons!: QueryList<ElementRef>;
@@ -32,10 +35,17 @@ export class StoryComponent {
   constructor(
     private dialog: DialogService,
     private shadow: ShadowService,
-    private validationModelService: ValidationModelService
+    private validationModelService: ValidationModelService,
+    protected _skeletonService: SkeletonService
   ) {}
 
-  ngOnInit(): void {}
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['highlight']) {
+  //     this._skeletonService.setLoading(
+  //       !this.highlight || this.highlight.length === 0
+  //     );
+  //   }
+  // }
 
   ngAfterViewInit(): void {
     this.images.changes.subscribe(() => this.processElements());

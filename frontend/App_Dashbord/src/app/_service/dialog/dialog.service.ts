@@ -9,16 +9,19 @@ import { NotificationComponent } from 'src/app/_dialogs/notification/notificatio
 import { PhotoComponent } from 'src/app/_dialogs/photo/photo.component';
 import { PostComponent } from 'src/app/_dialogs/post/post.component';
 import { ProfileComponent } from 'src/app/_dialogs/profile/profile.component';
+import { QrCodeComponent } from 'src/app/_dialogs/qr-code/qr-code.component';
 import { SeeValueComponent } from 'src/app/_dialogs/see-value/see-value.component';
 import { SendComponent } from 'src/app/_dialogs/send/send.component';
 import { SharesComponent } from 'src/app/_dialogs/shares/shares.component';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { FilterSeach } from 'src/app/_type/filters/filter';
-import { CommentId } from 'src/app/_type/models/commet';
-import { Highlight } from 'src/app/_type/models/highlight';
-import { Post, PostId } from 'src/app/_type/models/post';
-import { Share } from 'src/app/_type/models/share';
-import { Story } from 'src/app/_type/models/story';
+import {
+  CommentId,
+  FilterSeach,
+  Highlight,
+  Post,
+  PostId,
+  Share,
+  Story,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
 
 @Injectable({
@@ -27,6 +30,8 @@ import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_ty
 export class DialogService {
   width = 400;
   height = 33;
+  maxHeight: string = '98vh';
+  maxWidth: string = 'max-content';
   private dialogRef: any;
   constructor(private dialog: MatDialog) {}
 
@@ -35,6 +40,8 @@ export class DialogService {
       width: `${this.width}px`,
       height: `${this.height}rem`,
       data: { message: 'Hello, this is a dialog!' },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -48,6 +55,8 @@ export class DialogService {
       width: `${this.width}px`,
       height: `${this.height}rem`,
       data: { message: 'Hello, this is a dialog!' },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -60,6 +69,8 @@ export class DialogService {
     const dialogRef = this.dialog.open(ProfileComponent, {
       width: `${this.width}px`,
       data: { name: name, type: type },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -73,6 +84,8 @@ export class DialogService {
       width: 'auto',
       height: 'auto',
       data: { image },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
     });
     dialogRef.afterClosed().subscribe();
   }
@@ -83,6 +96,8 @@ export class DialogService {
   ): void {
     const dialogRef = this.dialog.open(HighlightComponent, {
       width: 'auto',
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       height: 'auto',
       data: { data: highlight, index: position },
     });
@@ -98,6 +113,8 @@ export class DialogService {
       width: `${this.width}px`,
       height: 'auto',
       data: { data: data },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x}px`,
@@ -125,6 +142,8 @@ export class DialogService {
       height: '5px',
       minWidth: 'fit-content',
       data: { id: id, type: type, isComment },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -139,6 +158,8 @@ export class DialogService {
       width: 'auto',
       height: 'auto',
       data: { id: id },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -152,6 +173,8 @@ export class DialogService {
       width: 'auto',
       height: 'auto',
       data: { id: id },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -166,6 +189,8 @@ export class DialogService {
       minWidth: '50rem',
       height: 'auto',
       data: { id: id },
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       position: {
         top: `${position.pos_y}px`,
         left: `${position.pos_x - this.width}px`,
@@ -184,6 +209,8 @@ export class DialogService {
       width: 'auto',
       minWidth: 'auto',
       height: 'auto',
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       data: { postId: postId, commentId: commentId, parent: parent },
       position: {
         top: `${position.pos_y}px`,
@@ -197,8 +224,23 @@ export class DialogService {
     const dialogRef = this.dialog.open(PostComponent, {
       width: '50rem',
       minWidth: '50rem',
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
       height: 'auto',
       data: { data: data },
+    });
+    dialogRef.afterClosed().subscribe(() => {});
+    return dialogRef.afterClosed();
+  }
+
+  openDialogQrCode(type: 'user' | 'group', name: string): any {
+    const dialogRef = this.dialog.open(QrCodeComponent, {
+      width: 'auto',
+      minWidth: 'auto',
+      height: 'auto',
+      maxHeight: this.maxHeight,
+      maxWidth: this.maxWidth,
+      data: { type: type, name: name },
     });
     dialogRef.afterClosed().subscribe(() => {});
     return dialogRef.afterClosed();

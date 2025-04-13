@@ -1,18 +1,20 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { CommentEnum } from 'src/app/_type/enum/comment.enum';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { Share, ShareId } from 'src/app/_type/models/share';
-import { User } from 'src/app/_type/models/user';
-import { environment } from 'src/app/environments/environment';
+import {
+  CommentEnum,
+  Environment,
+  PostEnum,
+  Share,
+  ShareId,
+  UserDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShareService {
-  private apiUrl = environment.baseUrl + '/share';
+  private apiUrl = Environment.baseUrl + '/api/share';
 
   constructor(private http: HttpClient) {}
 

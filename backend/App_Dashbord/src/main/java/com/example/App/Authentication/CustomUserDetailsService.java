@@ -11,12 +11,16 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 @Service
 public class CustomUserDetailsService  implements UserDetailsService {
-    @Autowired private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
-                .map(user -> new User(user.getEmail(), user.getPassword(), Collections.emptyList()))
+                .map(user -> new CustomUserDetails(user.getEmail(), user.getPassword(), user.getName(), user.getProfile_picture(), user.getUser_hashtag_id()
+                        .stream()
+                        .map(e -> e.getName())
+                        .toArray(String[]::new), Collections.emptyList()))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

@@ -1,18 +1,27 @@
-import { NgFor, NgIf, SlicePipe } from '@angular/common';
+import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FollowerStatusIconPipe } from 'src/app/_pipe/follower-status-icon.pipe';
+import { SkeletonService } from 'src/app/_service/common/skeleton.service';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { FollowService } from 'src/app/_service/models/follower.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { FollowerStatusEnum } from 'src/app/_type/enum/follower.status.enum';
-import { GenderEnum } from 'src/app/_type/enum/gender.enum';
-import { Follow } from 'src/app/_type/models/follow';
-import { Hastag } from 'src/app/_type/models/hashtag';
-import { User } from 'src/app/_type/models/user';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Follow,
+  FollowerStatusEnum,
+  GenderEnum,
+  Hastag,
+  MaterialModule,
+  User,
+  UserDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 
 @Component({
@@ -24,6 +33,7 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
     SlicePipe,
     HttpClientModule,
     NgIf,
+    NgClass,
     NgFor,
   ],
   providers: [],
@@ -32,6 +42,7 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
 })
 export class UserComponent {
   @Input() people!: UserDTO;
+  @Input() shared: boolean = false;
 
   @ViewChild('con', { static: false })
   con!: ElementRef<HTMLElement>;
@@ -48,8 +59,16 @@ export class UserComponent {
     private followService: FollowService,
     private dialogService: DialogService,
     private router: Router,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    protected _skeletonService: SkeletonService
   ) {
+    this._skeletonService.setLoading(true);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['people']) {
+      this._skeletonService.setLoading(!this.people);
+    }
   }
 
   ngOnInit(): void {

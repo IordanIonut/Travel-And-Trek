@@ -1,15 +1,21 @@
 import { NgFor } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserComponent } from 'src/app/_components/user/user.component';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from 'src/app/_service/common/skeleton.service';
 import { LikeService } from 'src/app/_service/models/like.service';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { LikeContentEnum } from 'src/app/_type/enum/like.content.enum';
-import { iconsObject } from 'src/app/_type/icon/icon';
-import { PostId } from 'src/app/_type/models/post';
-import { environment } from 'src/app/environments/environment';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  iconsObject,
+  JwtService,
+  LikeContentEnum,
+  MaterialModule,
+  PostId,
+  UserDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
   selector: 'app-likes',
@@ -22,14 +28,17 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 export class LikesComponent {
   id!: PostId;
   iconsObject = iconsObject;
-  
+
   all!: UserDTO[];
   like!: UserDTO[];
   favorite!: UserDTO[];
   funny!: UserDTO[];
 
   constructor(
+    private _dialogRef: MatDialogRef<LikesComponent>,
     private likeService: LikeService,
+    private _jwtService: JwtService,
+    private _skeletonService: SkeletonService,
     @Inject(MAT_DIALOG_DATA) data: { id: PostId }
   ) {
     this.id = data.id;
@@ -46,13 +55,17 @@ export class LikesComponent {
       case 0: {
         this.likeService
           .findUsersLikesByPost(
-            environment.user.name,
+            this._jwtService.getUserInfo()!.name!,
             this.id.id,
             this.id.type,
             null
           )
+          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
+              if (data.length === 0) {
+                this._dialogRef.close();
+              }
               this.all = [...data];
             },
             error: (error: Error) => {
@@ -64,13 +77,17 @@ export class LikesComponent {
       case 1: {
         this.likeService
           .findUsersLikesByPost(
-            environment.user.name,
+            this._jwtService.getUserInfo()!.name!,
             this.id.id,
             this.id.type,
             LikeContentEnum.LIKE
           )
+          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
+              if (data.length === 0) {
+                this._dialogRef.close();
+              }
               this.like = [...data];
             },
             error: (error: Error) => {
@@ -82,13 +99,17 @@ export class LikesComponent {
       case 2: {
         this.likeService
           .findUsersLikesByPost(
-            environment.user.name,
+            this._jwtService.getUserInfo()!.name!,
             this.id.id,
             this.id.type,
             LikeContentEnum.LOVE
           )
+          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
+              if (data.length === 0) {
+                this._dialogRef.close();
+              }
               this.favorite = [...data];
             },
             error: (error: Error) => {
@@ -100,13 +121,18 @@ export class LikesComponent {
       case 3: {
         this.likeService
           .findUsersLikesByPost(
-            environment.user.name,
+            this._jwtService.getUserInfo()!.name!,
             this.id.id,
             this.id.type,
             LikeContentEnum.FUNNY
           )
+          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
+              if (data.length === 0) {
+                this._dialogRef.close();
+              }
+
               this.funny = [...data];
             },
             error: (error: Error) => {

@@ -9,6 +9,9 @@
     "strictNullChecks": false,
     "baseUrl": "./",
     "paths": {
+      "app-authentication": [
+        "./dist/app-authentication"
+      ],
       "travel-and-trek-app-core": ["./node_modules/travel-and-trek-app-core"],
       "travel-and-trek-app-core/*": ["node_modules/travel-and-trek-app-core/*"]
     },

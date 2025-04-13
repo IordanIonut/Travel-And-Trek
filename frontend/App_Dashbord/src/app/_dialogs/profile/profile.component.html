@@ -7,11 +7,7 @@
     <div
       class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
     >
-      <button
-        (click)="onProfilePage()"
-        class="story-body" 
-        #con
-      >
+      <button (click)="onProfilePage()" class="story-body" #con>
         <img
           #img
           id="img"
@@ -105,7 +101,7 @@
           *ngFor="let item of elemnts; let i = index"
           class="flex flex-row items-center"
         >
-          <div class="element">
+          <div class="element" (click)="onMake(item)">
             <mat-icon class="clEfec">{{ item }}</mat-icon>
           </div>
           <div *ngIf="i < elemnts.length - 1" class="line"></div>

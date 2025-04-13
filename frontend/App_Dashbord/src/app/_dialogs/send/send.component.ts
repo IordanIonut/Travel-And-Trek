@@ -7,21 +7,24 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { error } from 'console';
-import { response } from 'express';
 import { CommentService } from 'src/app/_service/models/comment.service';
-import { CommentEnum } from 'src/app/_type/enum/comment.enum';
-import { iconsObject } from 'src/app/_type/icon/icon';
-import { Comment, CommentId } from 'src/app/_type/models/commet';
-import { Post, PostId } from 'src/app/_type/models/post';
-import { User } from 'src/app/_type/models/user';
-import { environment } from 'src/app/environments/environment';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Comment,
+  CommentEnum,
+  CommentId,
+  iconsObject,
+  JwtService,
+  MaterialModule,
+  Post,
+  PostId,
+  User,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
   selector: 'app-send',
   standalone: true,
   imports: [MaterialModule, ReactiveFormsModule, HttpClientModule],
+  providers: [],
   templateUrl: './send.component.html',
   styleUrl: './send.component.scss',
 })
@@ -36,6 +39,7 @@ export class SendComponent {
   constructor(
     private fb: FormBuilder,
     private commentService: CommentService,
+    private _jwtService: JwtService,
     private dialogRef: MatDialogRef<SendComponent>,
     @Inject(MAT_DIALOG_DATA)
     data: {
@@ -62,7 +66,8 @@ export class SendComponent {
           type: CommentEnum.POST,
         },
         comment_user_id: {
-          id: environment.user.id,
+          id: '',
+          name: this._jwtService.getUserInfo()!.name!,
         } as User,
         comment_post_id: {
           id: {

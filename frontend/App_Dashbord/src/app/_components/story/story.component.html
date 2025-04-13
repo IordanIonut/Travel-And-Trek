@@ -1,35 +1,53 @@
-<div class="story-com width-page flex !flex-col !h-[90.5vh]">
-  <!-- Your Story-->
-  <div class="story-header">
-    <div class="border-efec story-body">
-      <div
-        class="textCom text-center text-2xl flex items-center justify-center story"
-      >
-        +
+<div class="story-com width-page flex !flex-col !h-[91vh] hide-scrollbar">
+  <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+    <!-- Your Story-->
+    <div class="story-header">
+      <div class="border-efec story-body">
+        <div
+          class="textCom text-center text-2xl flex items-center justify-center story"
+          id="imgStory"
+          #imgStory
+        >
+          +
+        </div>
+      </div>
+      <div class="story-body-name">
+        <div class="story-name">Your Story</div>
       </div>
     </div>
-    <div class="story-body-name">
-      <div class="story-name">Your Story</div>
-    </div>
-  </div>
 
-  <!-- Firiend Story-->
-  <div
-    *ngFor="let item of getFilteredItems(); let k = index"
-    class="story-header"
-  >
-    <button #conStory id="conStory" class="story-body" (click)="openDiaglog(k)">
-      <img
-        id="imgStory"
-        #imgStory
-        draggable="false"
-        class="story max-w-max"
-        style="object-fit: cover"
-        src="{{ getProperty('image', item) }}"
-      />
-    </button>
-    <div class="story-body-name">
-      <div class="story-name">{{ getProperty("name", item) }}</div>
+    <!-- Firiend Story-->
+    <div
+      *ngFor="let item of getFilteredItems(); let k = index"
+      class="story-header"
+    >
+      <button
+        #conStory
+        id="conStory"
+        class="story-body"
+        (click)="openDiaglog(k)"
+      >
+        <img
+          id="imgStory"
+          #imgStory
+          draggable="false"
+          class="story max-w-max"
+          style="object-fit: cover"
+          src="{{ getProperty('image', item) }}"
+        />
+      </button>
+      <div class="story-body-name">
+        <div class="story-name">{{ getProperty("name", item) }}</div>
+      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #skeletonLoader>
+    <div *ngFor="let _ of [1, 2, 3, 4, 5, 6, 7]" class="story-header">
+      <div class="story-body skeleton-circle skeleton-color"></div>
+      <div class="story-body-name">
+        <div class="skeleton-text skeleton-color"></div>
+      </div>
+    </div>
+  </ng-template>
 </div>

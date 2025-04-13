@@ -16,6 +16,7 @@ import { Page } from '../../_types/public-api';
 import { SetThemeService } from '../../_theme/public-api';
 import { MaterialModule } from '../../_materials/material.module';
 import { Position } from '../../_types/_frontend/position';
+import { AppInitService } from '../../_share/public-api';
 
 @Component({
   selector: 'lib-navbar',
@@ -39,14 +40,17 @@ export class NavbarComponent {
   @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
   @ViewChild('centerCircle') centerCircle!: ElementRef;
 
+  icon!: string;
   constructor(
     private router: Router,
+    private _appInitService: AppInitService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private setThemeService: SetThemeService
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.setThemeService.setTheme('cyan-theme');
     }
+    this.icon = this._appInitService.LOGO;
   }
 
   ngOnInit() {
@@ -103,7 +107,6 @@ export class NavbarComponent {
           centerCircle.style.left = `${centerX}px`;
           centerCircle.style.top = `${centerY}px`;
           centerCircle.style.transform = 'translate(-50%, -50%)';
-
         }
       } catch (e) {
         console.error('Error getting bounding rect:', e);

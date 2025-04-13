@@ -72,44 +72,44 @@ public class FollowerService {
 
 
     //HOME SUGGESTION FRIENDS
-//    @Cacheable(value ="followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
-//    public List<UserDTO> findUserSuggestions(String name,  List<String> hashtags,  int index, int number){
-//        List<User> f = followerRepository.findUserSuggestions(name, hashtags);
-//        LOG.info(f.size()+"");
-//        return new UserDTO().generateUserDTO(f, userRepository.findMutualFriends(name), index, number);
-//    }
-
-    @Cacheable(value = "followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
-    public List<UserDTO> findUserSuggestions(String name, List<String> hashtags, int index, int number) {
-        List<User> suggestedUsers = this.followerRepository.findCommonFollowers(name);
-        List<Follower> mutualFollowers = userRepository.findMutualFriends(name);
-
-        List<UserDTO> userDTOs = new ArrayList<>();
-
-        for (User user : suggestedUsers) {
-            List<User> mutualFriends = new ArrayList<>();
-            FollowerStatusEnum statusEnum = null;
-
-            for (Follower follower : mutualFollowers) {
-                if (follower.getFollower_user_id().equals(user) || follower.getFollower_user_id_follower().equals(user)) {
-                    User mutualFriend = follower.getFollower_user_id().equals(user)
-                            ? follower.getFollower_user_id_follower()
-                            : follower.getFollower_user_id();
-
-                    if (!mutualFriends.contains(mutualFriend)) {
-                        mutualFriends.add(mutualFriend);
-                        statusEnum = follower.getId().getStatus();
-
-                        if (mutualFriends.size() == 7) {
-                            break;
-                        }
-                    }
-                }
-            }
-            userDTOs.add(new UserDTO(user, mutualFriends, statusEnum));
-        }
-        userDTOs.sort(Comparator.comparingInt(dto -> -dto.getFriends().size()));
-
-        return userDTOs;
+    @Cacheable(value ="followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
+    public List<UserDTO> findUserSuggestions(String name,  List<String> hashtags,  int index, int number){
+        List<User> f = followerRepository.findUserSuggestions(name, hashtags);
+        LOG.info(f.size()+"");
+        return new UserDTO().generateUserDTO(f, userRepository.findMutualFriends(name), index, number);
     }
+
+//    @Cacheable(value = "followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
+//    public List<UserDTO> findUserSuggestions(String name, List<String> hashtags, int index, int number) {
+//        List<User> suggestedUsers = this.followerRepository.findCommonFollowers(name);
+//        List<Follower> mutualFollowers = userRepository.findMutualFriends(name);
+//
+//        List<UserDTO> userDTOs = new ArrayList<>();
+//
+//        for (User user : suggestedUsers) {
+//            List<User> mutualFriends = new ArrayList<>();
+//            FollowerStatusEnum statusEnum = null;
+//
+//            for (Follower follower : mutualFollowers) {
+//                if (follower.getFollower_user_id().equals(user) || follower.getFollower_user_id_follower().equals(user)) {
+//                    User mutualFriend = follower.getFollower_user_id().equals(user)
+//                            ? follower.getFollower_user_id_follower()
+//                            : follower.getFollower_user_id();
+//
+//                    if (!mutualFriends.contains(mutualFriend)) {
+//                        mutualFriends.add(mutualFriend);
+//                        statusEnum = follower.getId().getStatus();
+//
+//                        if (mutualFriends.size() == 7) {
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//            userDTOs.add(new UserDTO(user, mutualFriends, statusEnum));
+//        }
+//        userDTOs.sort(Comparator.comparingInt(dto -> -dto.getFriends().size()));
+//
+//        return userDTOs.subList(index, number);
+//    }
 }

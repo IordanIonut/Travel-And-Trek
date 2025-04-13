@@ -1,25 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  AlertComponent,
+  Environment,
+  JwtService,
+  MaterialModule,
+  Mode,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { RouterModule } from '@angular/router';
-import { GOOGLE_LOGO_URL } from 'src/app/_constant/constant';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AlertComponent } from 'src/app/_components/alert/alert.component';
 import { passwordValidator } from 'src/app/_validator/password.validator';
-import { Environment } from 'src/environments/environment.local';
-import { AuthService } from 'src/app/_service/auth.service';
-import { error } from 'console';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtService } from 'src/app/_service/jwt.service';
-import { Mode } from 'src/app/_components/_model/Mode';
-import { GoogleSigninService } from 'src/app/_components/google/google.service';
-import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { GoogleComponent } from 'src/app/_components/google/google.component';
+import { AuthService } from 'src/app/_service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -112,7 +110,7 @@ export class LoginComponent {
             this._jwt.saveToken(data.token);
             this.showAlertMessage(
               'Login Success',
-              'Password or Email are wrong. Pleas try again.',
+              'Login successfully.',
               Environment.duration,
               Mode.SUCCESS
             );
@@ -140,7 +138,6 @@ export class LoginComponent {
     this.errorMessage = subject;
     this.showAlert = true;
     this.mode = mode;
-
     setTimeout(() => {
       this.showAlert = false;
     }, duration);

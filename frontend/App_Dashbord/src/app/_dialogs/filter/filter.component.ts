@@ -1,8 +1,10 @@
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { Component, Inject, Input, Output, EventEmitter } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FilterSeach } from 'src/app/_type/filters/filter';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  FilterSeach,
+  MaterialModule,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
   selector: 'app-filter',
@@ -14,7 +16,7 @@ import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 export class FilterComponent {
   filters!: FilterSeach[];
   select!: FilterSeach;
-  @Output() selectionChanged  = new EventEmitter<FilterSeach>(); 
+  @Output() selectionChanged = new EventEmitter<FilterSeach>();
 
   constructor(
     public dialogRef: MatDialogRef<FilterComponent>,
@@ -22,12 +24,11 @@ export class FilterComponent {
   ) {
     this.filters = data.data;
     this.select = data.data[0];
-    this.selectionChanged .emit(data.data[0]);
+    this.selectionChanged.emit(data.data[0]);
   }
 
   onSelectValue(value: FilterSeach) {
     this.select = value;
-    this.selectionChanged .emit(value);
+    this.selectionChanged.emit(value);
   }
-
 }

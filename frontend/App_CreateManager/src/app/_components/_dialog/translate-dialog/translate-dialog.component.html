@@ -1,0 +1,68 @@
+<div class="page-dialog flex justify-center items-center bg-gray-100 p-4">
+  <mat-card
+    class="translate-box max-w-4xl w-full bg-white shadow-lg rounded-lg p-6"
+  >
+    <form [formGroup]="form">
+      <div class="language-selection flex justify-between gap-4">
+        <mat-form-field appearance="fill" class="w-1/2">
+          <mat-label>Select Language</mat-label>
+          <mat-select formControlName="detect">
+            <mat-option *ngFor="let lang of languages" [value]="lang.language">
+              <div class="flex items-center">
+                <img
+                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
+                  class="language-flag w-5 h-4 mr-2"
+                />
+                {{ lang.name }}
+              </div>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-1/2">
+          <mat-label>Translate To</mat-label>
+          <mat-select formControlName="to" (selectionChange)="onChange($event)">
+            <mat-option *ngFor="let lang of languages" [value]="lang">
+              <div class="flex items-center">
+                <img
+                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
+                  class="language-flag w-5 h-4 mr-2"
+                />
+                {{ lang.name }}
+              </div>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="input-section mt-6">
+        <mat-form-field appearance="fill" class="w-full">
+          <textarea
+            matInput
+            formControlName="text"
+            class="w-full p-3 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="output-section mt-6">
+        <mat-form-field appearance="fill" class="w-full">
+          <textarea
+            matInput
+            formControlName="translate"
+            readonly
+            class="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-500"
+          ></textarea>
+        </mat-form-field>
+      </div>
+      <div class="translate-actions mt-6 flex justify-center gap-4">
+        <button
+          type="button"
+          class="bg-blue-500 text-white py-2 px-6 rounded-full hover:bg-blue-600 transition duration-200"
+        >
+          Send
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

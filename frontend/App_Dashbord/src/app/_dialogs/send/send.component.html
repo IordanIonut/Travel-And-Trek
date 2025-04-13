@@ -1,6 +1,6 @@
 <div class="page-dialog">
   <div class="card flex items-center !w-[30vw]">
-    <div class="relative p-4 w-full max-w-xl max-h-full">
+    <div class="relative w-full max-w-xl max-h-full">
       <div class="relative rounded-lg shadow">
         <form [formGroup]="form" class="p-2 md:p-3">
           <div class="relative mb-4">
@@ -115,7 +115,7 @@
                   <button
                     type="submit"
                     (click)="onSend()"
-                    class="inline-flex flex-shrink-0 justify-center items-center size-10 rounded-lg text-white bg-blue-400 hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-2"
+                    class="inline-flex flex-shrink-0 justify-center items-center size-10 rounded-lg text-white focus:z-10 focus:outline-none focus:ring-2"
                   >
                     <mat-icon>{{ iconsObject["SEND"].type }}</mat-icon>
                   </button>

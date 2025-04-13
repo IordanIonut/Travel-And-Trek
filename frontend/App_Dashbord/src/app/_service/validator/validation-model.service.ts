@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
-import { GroupDetailDTO } from 'src/app/_type/dto/group.detail.dto';
-import { UserProfileDTO } from 'src/app/_type/dto/user-profile.dto';
-import { CommentEnum } from 'src/app/_type/enum/comment.enum';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { ShareEnum } from 'src/app/_type/enum/share.enum';
-import { CommentId } from 'src/app/_type/models/commet';
-import { Group } from 'src/app/_type/models/group';
-import { Highlight } from 'src/app/_type/models/highlight';
-import { Post, PostId } from 'src/app/_type/models/post';
-import { Share, ShareId } from 'src/app/_type/models/share';
-import { Story } from 'src/app/_type/models/story';
-import { User } from 'src/app/_type/models/user';
+import {
+  CommentEnum,
+  CommentId,
+  Group,
+  GroupDetailDTO,
+  Highlight,
+  Post,
+  PostEnum,
+  PostId,
+  Share,
+  ShareEnum,
+  ShareId,
+  Story,
+  User,
+  UserProfileDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +67,6 @@ export class ValidationModelService {
   }
 
   isStory(data: Story | Highlight | undefined): data is Story {
-    return (data as Story).expiration_time !== undefined;
+    return (data as Story).story_medias !== undefined;
   }
 }

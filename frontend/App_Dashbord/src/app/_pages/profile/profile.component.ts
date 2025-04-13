@@ -1,43 +1,47 @@
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  Environment,
+  FilterSeach,
+  FollowerStatusEnum,
+  GroupDetailDTO,
+  Hastag,
+  Highlight,
+  iconsObject,
+  JwtService,
+  MaterialModule,
+  Post,
+  PostEnum,
+  Share,
+  UserDTO,
+  UserProfileDTO,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { MastheadComponent } from '../../_components/masthead/masthead.component';
 import { PostComponent } from '../../_components/post/post.component';
 import { StoryComponent } from '../../_components/story/story.component';
-import { PlaceComponent } from '../../_components/place/place.component';
 import { DialogService } from 'src/app/_service/dialog/dialog.service';
-import { FilterSeach } from 'src/app/_type/filters/filter';
 import { UserService } from 'src/app/_service/models/user.service';
 import { HttpClientModule } from '@angular/common/http';
-import { environment } from 'src/app/environments/environment';
 import { PostService } from 'src/app/_service/models/post.service';
-import { Post } from 'src/app/_type/models/post';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
 import { ShareService } from 'src/app/_service/models/share.service';
-import { Share } from 'src/app/_type/models/share';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
-import { UserProfileDTO } from 'src/app/_type/dto/user-profile.dto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GroupService } from 'src/app/_service/models/group.service';
-import { GroupDetailDTO } from 'src/app/_type/dto/group.detail.dto';
 import { error } from 'console';
 import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
-import { User } from 'src/app/_type/models/user';
-import { Hastag } from 'src/app/_type/models/hashtag';
-import { Highlight } from 'src/app/_type/models/highlight';
 import { FollowService } from 'src/app/_service/models/follower.service';
-import { FollowerStatusEnum } from 'src/app/_type/enum/follower.status.enum';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import e from 'express';
 import { UserComponent } from 'src/app/_components/user/user.component';
-import { iconsObject } from 'src/app/_type/icon/icon';
-import { SendComponent } from '../../_dialogs/send/send.component';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from 'src/app/_service/common/skeleton.service';
+
+type ElementType = 'settings' | 'qr_code' | 'logout';
 
 @Component({
   selector: 'app-profile',
@@ -52,7 +56,6 @@ import { SendComponent } from '../../_dialogs/send/send.component';
     HttpClientModule,
     PostComponent,
     UserComponent,
-    SendComponent,
   ],
   providers: [
     UserService,
@@ -99,7 +102,7 @@ export class ProfileComponent {
   isLoadingText: boolean = false;
   isLoadingMedia: boolean = false;
 
-  elemnts: string[] = ['settings', 'qr_code', 'logout'];
+  elemnts: ElementType[] = ['settings', 'qr_code', 'logout'];
   filters: FilterSeach[] = [
     {
       value: '1',
@@ -127,7 +130,6 @@ export class ProfileComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private dialog: DialogService,
     private userService: UserService,
     private postService: PostService,
@@ -135,8 +137,9 @@ export class ProfileComponent {
     private groupService: GroupService,
     private shadow: ShadowService,
     protected validatorService: ValidationModelService,
-    private cdr: ChangeDetectorRef,
-    private followerService: FollowService
+    private followerService: FollowService,
+    private _jwtService: JwtService,
+    protected _skeletonService: SkeletonService
   ) {
     this.isPhoto = true;
     this.isFollowrs = false;
@@ -150,23 +153,29 @@ export class ProfileComponent {
 
   ngAfterViewInit(): void {
     if (this.type === 'user') {
-      this.userService.findUserByName(this.user).subscribe({
-        next: (data: UserProfileDTO) => {
-          this.profileDTO = data;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      this.userService
+        .findUserByName(this.user)
+        .pipe(setLoadingOnRequest(this._skeletonService))
+        .subscribe({
+          next: (data: UserProfileDTO) => {
+            this.profileDTO = data;
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
     } else if (this.type === 'group') {
-      this.groupService.findGroupDetailsByName(this.user).subscribe({
-        next: (data: GroupDetailDTO) => {
-          this.profileDTO = data;
-        },
-        error: (error: Error) => {
-          console.log(error);
-        },
-      });
+      this.groupService
+        .findGroupDetailsByName(this.user)
+        .pipe(setLoadingOnRequest(this._skeletonService))
+        .subscribe({
+          next: (data: GroupDetailDTO) => {
+            this.profileDTO = data;
+          },
+          error: (error: Error) => {
+            console.log(error);
+          },
+        });
     }
 
     if (this.isPhoto) this.onTabChangePhoto({ index: 0 });
@@ -373,7 +382,9 @@ export class ProfileComponent {
       switch (selectedTabIndex) {
         case 0: {
           this.postService
-            .getPostByProfile(this.user, this.indexAll, environment.number)
+            .getPostByProfile(this.user, this.indexAll, Environment.number)
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexAll === 0) {
@@ -401,8 +412,9 @@ export class ProfileComponent {
               this.user,
               PostEnum.POST,
               this.indexMedia,
-              environment.number
+              Environment.number
             )
+            .pipe(setLoadingOnRequest(this._skeletonService))
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexMedia === 0) {
@@ -431,8 +443,10 @@ export class ProfileComponent {
               this.user,
               PostEnum.REEL,
               this.indexReel,
-              environment.number
+              Environment.number
             )
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexReel === 0) {
@@ -460,8 +474,10 @@ export class ProfileComponent {
               this.user,
               PostEnum.TEXT,
               this.indexText,
-              environment.number
+              Environment.number
             )
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexText === 0) {
@@ -485,7 +501,9 @@ export class ProfileComponent {
         }
         case 4: {
           this.shareService
-            .getPostByProfile(this.user, this.indexShare, environment.number)
+            .getPostByProfile(this.user, this.indexShare, Environment.number)
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Share[]) => {
                 if (this.indexShare === 0) {
@@ -509,7 +527,9 @@ export class ProfileComponent {
         }
         case 5: {
           this.postService
-            .getPostByUserTag(this.user, this.indexTag, environment.number)
+            .getPostByUserTag(this.user, this.indexTag, Environment.number)
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexTag === 0) {
@@ -539,8 +559,10 @@ export class ProfileComponent {
               this.user,
               null,
               this.indexAll,
-              environment.number
+              Environment.number
             )
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexAll === 0) {
@@ -568,8 +590,10 @@ export class ProfileComponent {
               this.user,
               PostEnum.POST,
               this.indexMedia,
-              environment.number
+              Environment.number
             )
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexMedia === 0) {
@@ -597,8 +621,10 @@ export class ProfileComponent {
               this.user,
               PostEnum.REEL,
               this.indexReel,
-              environment.number
+              Environment.number
             )
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexReel === 0) {
@@ -626,8 +652,10 @@ export class ProfileComponent {
               this.user,
               PostEnum.TEXT,
               this.indexText,
-              environment.number
+              Environment.number
             )
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexText === 0) {
@@ -651,7 +679,9 @@ export class ProfileComponent {
         }
         case 4: {
           this.shareService
-            .getAllSharesByGroup(this.user, this.indexShare, environment.number)
+            .getAllSharesByGroup(this.user, this.indexShare, Environment.number)
+            .pipe(setLoadingOnRequest(this._skeletonService))
+
             .subscribe({
               next: (data: Share[]) => {
                 if (this.indexShare === 0) {
@@ -676,7 +706,7 @@ export class ProfileComponent {
         case 5: {
           ///////need to add tags on group
           // this.postService
-          //   .getPostByUserTag(this.user, this.indexTag, environment.number)
+          //   .getPostByUserTag(this.user, this.indexTag, Environment.number)
           //   .subscribe({
           //     next: (data: Post[]) => {
           //       // console.log(data);
@@ -702,7 +732,7 @@ export class ProfileComponent {
               this.user,
               FollowerStatusEnum.ACCEPTED,
               this.indexFollowing,
-              environment.number
+              Environment.number
             )
             .subscribe({
               next: (data: UserDTO[]) => {
@@ -731,7 +761,7 @@ export class ProfileComponent {
               this.user,
               FollowerStatusEnum.BLOCK,
               this.indexFollowing,
-              environment.number
+              Environment.number
             )
             .subscribe({
               next: (data: UserDTO[]) => {
@@ -785,5 +815,23 @@ export class ProfileComponent {
 
   protected generateIndexArray(index: number): number[] {
     return index !== 0 ? Array.from({ length: index }, (_, i) => i) : [0];
+  }
+
+  onMake(item: ElementType) {
+    switch (item) {
+      case 'settings': {
+        break;
+      }
+      case 'qr_code': {
+        if (this.type === 'user' || this.type === 'group') {
+          this.dialog.openDialogQrCode(this.type, this.user);
+        }
+        break;
+      }
+      case 'logout': {
+        this._jwtService.logout();
+        break;
+      }
+    }
   }
 }

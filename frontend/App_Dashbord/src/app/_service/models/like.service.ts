@@ -1,19 +1,21 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LikeDTO } from 'src/app/_type/dto/like.dto';
-import { UserDTO } from 'src/app/_type/dto/user.dto';
-import { CommentEnum } from 'src/app/_type/enum/comment.enum';
-import { LikeContentEnum } from 'src/app/_type/enum/like.content.enum';
-import { PostEnum } from 'src/app/_type/enum/post.enum';
-import { Like } from 'src/app/_type/models/like';
-import { environment } from 'src/app/environments/environment';
+import {
+  CommentEnum,
+  LikeContentEnum,
+  LikeDTO,
+  PostEnum,
+  UserDTO,
+  Like,
+  Environment,
+} from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LikeService {
-  private apiUrl = environment.baseUrl + '/like';
+  private apiUrl = Environment.baseUrl + '/api/like';
 
   constructor(private http: HttpClient) {}
 
