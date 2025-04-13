@@ -1,11 +1,15 @@
 import {
   APP_INITIALIZER,
   ApplicationConfig,
+  importProvidersFrom,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   SocialAuthServiceConfig,
@@ -19,7 +23,9 @@ import {
 } from 'travel-and-trek-app-core/dist/app-core';
 import {
   HTTP_INTERCEPTORS,
+  HttpClientModule,
   provideHttpClient,
+  withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 
@@ -41,7 +47,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withFetch()),
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

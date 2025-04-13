@@ -16,19 +16,18 @@ import { forkJoin } from 'rxjs';
 import { GoogleComponent } from 'src/app/_components/google/google.component';
 
 @Component({
-  selector: 'app-password',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    GoogleComponent,
-    HttpClientModule,
-    MaterialModule,
-    AlertComponent,
-  ],
-  providers: [UserService, MailService],
-  templateUrl: './password.component.html',
-  styleUrl: './password.component.scss',
+    selector: 'app-password',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        GoogleComponent,
+        HttpClientModule,
+        MaterialModule,
+        AlertComponent,
+    ],
+    providers: [UserService, MailService],
+    templateUrl: './password.component.html',
+    styleUrl: './password.component.scss'
 })
 export class PasswordComponent {
   form!: FormGroup;

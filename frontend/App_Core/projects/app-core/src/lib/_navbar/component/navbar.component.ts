@@ -19,17 +19,16 @@ import { Position } from '../../_types/_frontend/position';
 import { AppInitService } from '../../_share/public-api';
 
 @Component({
-  selector: 'lib-navbar',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    CommonModule,
-    MaterialModule,
-    RouterLink,
-    RouterModule,
-  ],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css',
+    selector: 'lib-navbar',
+    imports: [
+        RouterOutlet,
+        CommonModule,
+        MaterialModule,
+        RouterLink,
+        RouterModule,
+    ],
+    templateUrl: './navbar.component.html',
+    styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
   @Input() pages!: Page[];

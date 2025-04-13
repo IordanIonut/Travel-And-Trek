@@ -6,11 +6,10 @@ import { MaterialModule } from '../../_materials/material.module';
 import { Mode } from './Mode';
 
 @Component({
-  selector: 'lib-alert',
-  standalone: true,
-  imports: [NgClass, NgStyle, CommonModule, MaterialModule, RouterModule],
-  templateUrl: './alert.component.html',
-  styleUrl: './alert.component.css',
+    selector: 'lib-alert',
+    imports: [NgClass, NgStyle, CommonModule, MaterialModule, RouterModule],
+    templateUrl: './alert.component.html',
+    styleUrl: './alert.component.css'
 })
 export class AlertComponent {
   @Input() message!: string;

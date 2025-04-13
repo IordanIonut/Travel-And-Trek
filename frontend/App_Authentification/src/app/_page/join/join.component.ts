@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit,
+  inject,
   signal,
   ViewChild,
   ViewEncapsulation,
@@ -25,8 +25,17 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import {
+  MatChipEditedEvent,
+  MatChipInputEvent,
+  MatChipsModule,
+} from '@angular/material/chips';
+
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import {
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import {
   passwordMatchValidator,
   passwordValidator,
@@ -38,10 +47,12 @@ import { forkJoin } from 'rxjs';
 import { GoogleComponent } from 'src/app/_components/google/google.component';
 import { AuthService } from 'src/app/_service/auth.service';
 import { RouterModule } from '@angular/router';
-import { BidiModule, Dir } from '@angular/cdk/bidi';
 
+export interface Hobby {
+  name: string;
+}
 @Component({
-  selector: 'app-register',
+  selector: 'app-join',
   standalone: true,
   imports: [
     MaterialModule,
@@ -49,9 +60,7 @@ import { BidiModule, Dir } from '@angular/cdk/bidi';
     NgClass,
     MatNativeDateModule,
     MatStepperModule,
-    BidiModule,
-    Dir,
-    // MatChipsModule,
+    MatChipsModule,
     ReactiveFormsModule,
     MatDatepickerModule,
     AlertComponent,
@@ -59,13 +68,13 @@ import { BidiModule, Dir } from '@angular/cdk/bidi';
     GoogleComponent,
     HttpClientModule,
   ],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss',
+  templateUrl: './join.component.html',
+  styleUrls: ['./join.component.scss'],
   providers: [UserService, AuthService, JwtService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class RegisterComponent {
+export class JoinComponent {
   name!: string;
 
   firstFormGroup!: FormGroup;
@@ -77,15 +86,13 @@ export class RegisterComponent {
   showAlert: boolean = false;
   mode: Mode = Mode.ERROR;
   isLinear: boolean = false;
-
   imagePreview: string | ArrayBuffer | null = null;
   @ViewChild('stepper') stepper!: MatStepper;
-
   showConfirmPassword: boolean = false;
   showPassword: boolean = false;
   savedName: string = 'None';
   selectedCharacter: string = '';
-  characters: any[] = [
+  characters = [
     {
       name: 'Female',
       icon: 'https://upload.wikimedia.org/wikipedia/commons/6/66/Venus_symbol.svg',
@@ -96,6 +103,7 @@ export class RegisterComponent {
     },
   ];
   addOnBlur = true;
+  hobby = signal<Hobby[]>([]);
 
   constructor(
     private _fb: FormBuilder,
@@ -150,42 +158,44 @@ export class RegisterComponent {
     this.thirdFormGroup.get('gender')?.setValue(name);
   }
 
-  // protected add(event: MatChipInputEvent): void {
-  //   const value = (event.value || '').trim();
-  //   if (value) {
-  //     this.hobby.update((hobby: any) => [...hobby, { name: value }]);
-  //   }
-  //   event.chipInput!.clear();
-  // }
+  protected add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.hobby.update((hobby: any) => [...hobby, { name: value }]);
+    }
+    event.chipInput!.clear();
+  }
 
-  // protected remove(fruit: Hobby): void {
-  //   this.hobby.update((hobby: any) => {
-  //     const index = hobby.indexOf(fruit);
-  //     if (index < 0) {
-  //       return hobby;
-  //     }
+  protected remove(fruit: Hobby): void {
+    this.hobby.update((hobby: any) => {
+      const index = hobby.indexOf(fruit);
+      if (index < 0) {
+        return hobby;
+      }
 
-  //     hobby.splice(index, 1);
-  //     // this.announcer.announce(`Removed ${fruit.name}`);
-  //     return [...hobby];
-  //   });
-  // }
+      hobby.splice(index, 1);
+      // this.announcer.announce(`Removed ${fruit.name}`);
+      return [...hobby];
+    });
+  }
 
-  // protected edit(fruit: Hobby, event: MatChipEditedEvent) {
-  //   const value = event.value.trim();
-  //   if (!value) {
-  //     this.remove(fruit);
-  //     return;
-  //   }
-  //   this.hobby.update((hobby: any) => {
-  //     const index = hobby.indexOf(fruit);
-  //     if (index >= 0) {
-  //       hobby[index].name = value;
-  //       return [...hobby];
-  //     }
-  //     return hobby;
-  //   });
-  // }
+  protected edit(fruit: Hobby, event: MatChipEditedEvent) {
+    const value = event.value.trim();
+    if (!value) {
+      this.remove(fruit);
+      return;
+    }
+    this.hobby.update((hobby: any) => {
+      const index = hobby.indexOf(fruit);
+      if (index >= 0) {
+        hobby[index].name = value;
+        return [...hobby];
+      }
+      return hobby;
+    });
+  }
+
+  protected ngOnInit() {}
 
   protected onMoveToSecundForm() {
     this.firstFormGroup.markAllAsTouched();
@@ -382,9 +392,9 @@ export class RegisterComponent {
   }
 
   protected save() {
-    // if (this.hobby.length > 0) {
-    //   this.lastFormGroup.get('hashtag')!.setValue(this.hobby);
-    // }
+    if (this.hobby.length > 0) {
+      this.lastFormGroup.get('hashtag')!.setValue(this.hobby);
+    }
     if (
       this.lastFormGroup.get('hashtag')?.touched &&
       this.lastFormGroup.get('hashtag')?.invalid

@@ -1,9 +1,9 @@
 //@import "@angular/material/prebuilt-themes/azure-blue.css";
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-@import "./_theme/scss/themes";
-@import "./_theme/scss/material";
+@use "tailwindcss/base";
+@use "tailwindcss/components";
+@use "tailwindcss/utilities";
+@use "./_theme/scss/themes";
+@use "./_theme/scss/material";
 
 :root {
   --bg-color: $bgPrimary;
@@ -195,7 +195,6 @@ mat-icon.clicked {
 
 
 body.cyan-theme {
-  // @include apply-theme($cyan-theme);
   transition: background-color 0.3s ease;
 }
 

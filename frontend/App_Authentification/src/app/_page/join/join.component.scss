@@ -1,0 +1,129 @@
+.custum-file-upload {
+  height: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  gap: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e8e8e8;
+  background-color: #212121;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 48px 35px -48px #e8e8e8;
+}
+
+.custum-file-upload .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .icon svg {
+  height: 80px;
+  fill: #e8e8e8;
+}
+
+.custum-file-upload .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .text span {
+  font-weight: 400;
+  color: #e8e8e8;
+}
+
+.custum-file-upload input {
+  display: none;
+}
+
+
+.example-chip-list {
+  width: 100%;
+}
+
+.container {
+  overflow: auto;
+  display: flex;
+  scroll-snap-type: x mandatory;
+  width: 55%;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border-radius: 10px;
+//   padding: 2rem;
+  margin: 1rem;
+  width: 100%;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.container:hover > .card:not(:hover) {
+  opacity: 0.2;
+}
+
+.card.active {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.7);
+}
+
+.title {
+  width: 100%;
+  display: inline-block;
+  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  margin: 1rem auto;
+  cursor: pointer;
+}
+
+#saved-name-container {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+#saved-name {
+  font-weight: bold;
+  color: #3498db;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  border: 2px dashed #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  position: relative;
+}
+
+.custom-file-upload input {
+  display: none;
+}
+
+.custom-file-upload img {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.mat-mdc-form-field-textarea-control{
+  overflow: hidden !important;
+}
