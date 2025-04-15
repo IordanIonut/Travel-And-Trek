@@ -14,18 +14,19 @@ import { SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
-    selector: 'app-root',
-    imports: [
-        RouterOutlet,
-        CommonModule,
-        MaterialModule,
-        HttpClientModule,
-        RouterModule,
-    ],
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    providers: [SetThemeService],
-    encapsulation: ViewEncapsulation.None
+  selector: 'app-root',
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    MaterialModule,
+    HttpClientModule,
+    RouterModule,
+  ],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  providers: [SetThemeService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
   constructor(

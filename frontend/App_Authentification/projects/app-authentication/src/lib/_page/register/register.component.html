@@ -5,9 +5,8 @@
     <div class="flex flex-row justify-center gap-3">
       <app-google></app-google>
     </div>
-
-    <mat-stepper [linear]="isLinear" #stepper [selectedIndex]="0">
-      <mat-step [stepControl]="firstFormGroup">
+    <!-- <mat-stepper [linear]="isLinear" #stepper [selectedIndex]="0">
+       <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup" class="flex flex-col gap-3">
           <div class="flex flex-col gap-3">
             <div
@@ -79,7 +78,7 @@
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="secondFormGroup">
+        <mat-step [stepControl]="secondFormGroup">
         <form [formGroup]="secondFormGroup">
           <div class="flex flex-row justify-around gap-3">
             <label for="file" class="custom-file-upload">
@@ -126,16 +125,12 @@
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="thirdFormGroup">
+       <mat-step [stepControl]="thirdFormGroup">
         <form [formGroup]="thirdFormGroup">
           <div class="flex flex-col justify-around gap-3">
             <div class="container">
               <div
                 class="card"
-                [ngClass]="{
-                  'bg-pink-200': character.name === 'female',
-                  'bg-blue-400': character.name === 'male'
-                }"
                 *ngFor="let character of characters; let i = index"
                 [class.active]="selectedCharacter === character.name"
                 (click)="saveName(character.name)"
@@ -171,7 +166,7 @@
       </mat-step>
       <mat-step [stepControl]="lastFormGroup">
         <form [formGroup]="lastFormGroup">
-          <!-- <div class="flex flex-col justify-around gap-3">
+          <div class="flex flex-col justify-around gap-3">
             <mat-form-field class="example-chip-list">
               <mat-chip-grid #chipGrid aria-label="Enter your hobby...">
                 @for (hobby of hobby(); track hobby) {
@@ -205,7 +200,7 @@
               <mat-label>Your beo</mat-label>
               <textarea matInput formControlName="bio"></textarea>
             </mat-form-field>
-          </div>  -->
+          </div>
           <div class="flex gap-20">
             <button type="button" (click)="onMoveBack()" class="move">
               <mat-icon>arrow_back_ios</mat-icon>
@@ -215,22 +210,11 @@
             </button>
           </div>
         </form>
-      </mat-step>
-    </mat-stepper>
-
-    <div class="flex flex-row justify-center">
-      <p class="text-center text-white text-sm">
-        Have an account?
-        <span
-          class="textSecond cursor-pointer hover:underline"
-          [routerLink]="'/authentication/login'"
-        >
-          Sign in.</span
-        >
-      </p>
-    </div>
+      </mat-step> 
+    </mat-stepper> -->
   </div>
 </div>
+
 <lib-alert
   class="absolute top-4 left-1/2 z-50 transform -translate-x-1/2"
   *ngIf="showAlert"

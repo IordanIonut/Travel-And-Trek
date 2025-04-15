@@ -1,9 +1,7 @@
-import { CommonModule, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit,
   signal,
   ViewChild,
   ViewEncapsulation,
@@ -18,45 +16,55 @@ import {
   Mode,
   User,
 } from 'travel-and-trek-app-core/dist/app-core';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatChipEditedEvent,
+  MatChipInputEvent,
+  MatChipsModule,
+} from '@angular/material/chips';
+import { forkJoin } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
 import { MatNativeDateModule } from '@angular/material/core';
+import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { AuthService } from '../../_service/auth.service';
+import { UserService } from '../../_service/user.service';
+import { GoogleComponent } from '../../_components/google/google.component';
 import {
   passwordMatchValidator,
   passwordValidator,
-} from 'src/app/_validator/password.validator';
-import { adultValidator } from 'src/app/_validator/age.validator';
-import { UserService } from 'src/app/_service/user.service';
-import { HttpClientModule } from '@angular/common/http';
-import { forkJoin } from 'rxjs';
-import { GoogleComponent } from 'src/app/_components/google/google.component';
-import { AuthService } from 'src/app/_service/auth.service';
-import { RouterModule } from '@angular/router';
-import { BidiModule, Dir } from '@angular/cdk/bidi';
+} from '../../_validator/password.validator';
+import { adultValidator } from '../../_validator/age.validator';
+
+interface Hobby {
+  name: string;
+}
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
     MaterialModule,
-    CommonModule,
-    NgClass,
-    MatNativeDateModule,
-    MatStepperModule,
-    BidiModule,
-    Dir,
-    // MatChipsModule,
-    ReactiveFormsModule,
-    MatDatepickerModule,
     AlertComponent,
-    RouterModule,
     GoogleComponent,
+    ReactiveFormsModule,
+    // BidiModule,
+    // MatStepperModule,
+    // MatChipsModule,
+    MatStepper,
+    MatNativeDateModule,
+    NgStyle,
+    NgIf,
+    NgFor,
     HttpClientModule,
   ],
   templateUrl: './register.component.html',
@@ -77,15 +85,13 @@ export class RegisterComponent {
   showAlert: boolean = false;
   mode: Mode = Mode.ERROR;
   isLinear: boolean = false;
-
   imagePreview: string | ArrayBuffer | null = null;
   @ViewChild('stepper') stepper!: MatStepper;
-
   showConfirmPassword: boolean = false;
   showPassword: boolean = false;
   savedName: string = 'None';
   selectedCharacter: string = '';
-  characters: any[] = [
+  characters = [
     {
       name: 'Female',
       icon: 'https://upload.wikimedia.org/wikipedia/commons/6/66/Venus_symbol.svg',
@@ -96,6 +102,7 @@ export class RegisterComponent {
     },
   ];
   addOnBlur = true;
+  hobby = signal<Hobby[]>([]);
 
   constructor(
     private _fb: FormBuilder,
@@ -150,42 +157,44 @@ export class RegisterComponent {
     this.thirdFormGroup.get('gender')?.setValue(name);
   }
 
-  // protected add(event: MatChipInputEvent): void {
-  //   const value = (event.value || '').trim();
-  //   if (value) {
-  //     this.hobby.update((hobby: any) => [...hobby, { name: value }]);
-  //   }
-  //   event.chipInput!.clear();
-  // }
+  protected add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.hobby.update((hobby: any) => [...hobby, { name: value }]);
+    }
+    event.chipInput!.clear();
+  }
 
-  // protected remove(fruit: Hobby): void {
-  //   this.hobby.update((hobby: any) => {
-  //     const index = hobby.indexOf(fruit);
-  //     if (index < 0) {
-  //       return hobby;
-  //     }
+  protected remove(fruit: Hobby): void {
+    this.hobby.update((hobby: any) => {
+      const index = hobby.indexOf(fruit);
+      if (index < 0) {
+        return hobby;
+      }
 
-  //     hobby.splice(index, 1);
-  //     // this.announcer.announce(`Removed ${fruit.name}`);
-  //     return [...hobby];
-  //   });
-  // }
+      hobby.splice(index, 1);
+      // this.announcer.announce(`Removed ${fruit.name}`);
+      return [...hobby];
+    });
+  }
 
-  // protected edit(fruit: Hobby, event: MatChipEditedEvent) {
-  //   const value = event.value.trim();
-  //   if (!value) {
-  //     this.remove(fruit);
-  //     return;
-  //   }
-  //   this.hobby.update((hobby: any) => {
-  //     const index = hobby.indexOf(fruit);
-  //     if (index >= 0) {
-  //       hobby[index].name = value;
-  //       return [...hobby];
-  //     }
-  //     return hobby;
-  //   });
-  // }
+  protected edit(fruit: Hobby, event: MatChipEditedEvent) {
+    const value = event.value.trim();
+    if (!value) {
+      this.remove(fruit);
+      return;
+    }
+    this.hobby.update((hobby: any) => {
+      const index = hobby.indexOf(fruit);
+      if (index >= 0) {
+        hobby[index].name = value;
+        return [...hobby];
+      }
+      return hobby;
+    });
+  }
+
+  protected ngOnInit() {}
 
   protected onMoveToSecundForm() {
     this.firstFormGroup.markAllAsTouched();
@@ -382,9 +391,9 @@ export class RegisterComponent {
   }
 
   protected save() {
-    // if (this.hobby.length > 0) {
-    //   this.lastFormGroup.get('hashtag')!.setValue(this.hobby);
-    // }
+    if (this.hobby.length > 0) {
+      this.lastFormGroup.get('hashtag')!.setValue(this.hobby);
+    }
     if (
       this.lastFormGroup.get('hashtag')?.touched &&
       this.lastFormGroup.get('hashtag')?.invalid

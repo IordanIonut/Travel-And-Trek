@@ -14,10 +14,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { passwordValidator } from 'src/app/_validator/password.validator';
 import { HttpClientModule } from '@angular/common/http';
-import { GoogleComponent } from 'src/app/_components/google/google.component';
-import { AuthService } from 'src/app/_service/auth.service';
+import { AuthService } from '../../_service/auth.service';
+import { GoogleComponent } from '../../_components/google/google.component';
+import { passwordValidator } from '../../_validator/password.validator';
 
 @Component({
   selector: 'app-login',

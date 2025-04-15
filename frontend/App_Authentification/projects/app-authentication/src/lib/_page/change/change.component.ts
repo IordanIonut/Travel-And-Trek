@@ -1,14 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  passwordMatchValidator,
-  passwordValidator,
-} from 'src/app/_validator/password.validator';
 import {
   AlertComponent,
   Environment,
@@ -18,8 +14,12 @@ import {
 } from 'travel-and-trek-app-core/dist/app-core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from 'src/app/_service/user.service';
 import { HttpClientModule } from '@angular/common/http';
+import { UserService } from '../../_service/user.service';
+import {
+  passwordMatchValidator,
+  passwordValidator,
+} from '../../_validator/password.validator';
 
 @Component({
   selector: 'app-change',
@@ -50,7 +50,7 @@ export class ChangeComponent {
     private _route: ActivatedRoute,
     private _router: Router,
     private _jwt: JwtService,
-    private _userService: UserService
+    @Inject(UserService) private _userService: UserService
   ) {
     this._route.queryParams.subscribe((params) => {
       this._jwt.saveToken(params['token']);

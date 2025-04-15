@@ -2,6 +2,16 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/app-authentication",
   "lib": {
-    "entryFile": "src/public-api.ts"
-  }
+    "entryFile": "src/public-api.ts",
+    "styleIncludePaths": [
+      "src/lib",
+      "./src/lib/_page/login/login.component.scss",
+      "./src/lib/_page/register/register.component.scss",
+      "./src/lib/_page/forgot-password/forgot-password.component.scss",
+      "./src/lib/_page/reset-password/reset-password.component.scss"
+    ]
+  },
+  "assets": [
+    "./src/assets"
+  ]
 }

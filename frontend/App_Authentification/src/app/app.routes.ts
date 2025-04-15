@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 export const routes: Routes = [
   {
     path: 'authentication',
@@ -6,28 +7,30 @@ export const routes: Routes = [
       {
         path: 'login',
         loadComponent: () =>
-          import('./_page/login/login.component').then((m) => m.LoginComponent),
+          import(
+            '../../projects/app-authentication/src/lib/_page/login/login.component'
+          ).then((m) => m.LoginComponent),
       },
       {
         path: 'register',
         loadComponent: () =>
-          import('./_page/register/register.component').then(
-            (m) => m.RegisterComponent
-          ),
+          import(
+            '../../projects/app-authentication/src/lib/_page/register/register.component'
+          ).then((m) => m.RegisterComponent),
       },
       {
         path: 'forgot-password',
         loadComponent: () =>
-          import('./_page/password/password.component').then(
-            (m) => m.PasswordComponent
-          ),
+          import(
+            '../../projects/app-authentication/src/lib/_page/password/password.component'
+          ).then((m) => m.PasswordComponent),
       },
       {
         path: 'change-password',
         loadComponent: () =>
-          import('./_page/change/change.component').then(
-            (m) => m.ChangeComponent
-          ),
+          import(
+            '../../projects/app-authentication/src/lib/_page/change/change.component'
+          ).then((m) => m.ChangeComponent),
       },
       { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],

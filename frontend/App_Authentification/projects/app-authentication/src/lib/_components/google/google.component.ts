@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { GoogleSigninService } from './google.service';
-import { GOOGLE_LOGO_URL } from 'src/app/_constant/constant';
 import {
   GoogleSigninButtonModule,
   SocialLoginModule,
 } from '@abacritt/angularx-social-login';
+import { GOOGLE_LOGO_URL } from '../../_constant/constant';
 
 @Component({
   selector: 'app-google',

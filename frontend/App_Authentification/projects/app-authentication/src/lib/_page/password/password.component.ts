@@ -1,33 +1,39 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { AlertComponent, Environment, MailService, Mode, SetThemeService } from 'travel-and-trek-app-core/dist/app-core';
+import {
+  AlertComponent,
+  Environment,
+  MailService,
+  Mode,
+  SetThemeService,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { RouterLink } from '@angular/router';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
-import { GOOGLE_LOGO_URL } from 'src/app/_constant/constant';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { UserService } from 'src/app/_service/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
-import { GoogleComponent } from 'src/app/_components/google/google.component';
+import { GoogleComponent } from '../../_components/google/google.component';
+import { UserService } from '../../_service/user.service';
+import { GOOGLE_LOGO_URL } from '../../_constant/constant';
 
 @Component({
-    selector: 'app-password',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        GoogleComponent,
-        HttpClientModule,
-        MaterialModule,
-        AlertComponent,
-    ],
-    providers: [UserService, MailService],
-    templateUrl: './password.component.html',
-    styleUrl: './password.component.scss'
+  selector: 'app-password',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    GoogleComponent,
+    HttpClientModule,
+    MaterialModule,
+    AlertComponent,
+  ],
+  providers: [UserService, MailService],
+  templateUrl: './password.component.html',
+  styleUrl: './password.component.scss',
 })
 export class PasswordComponent {
   form!: FormGroup;
