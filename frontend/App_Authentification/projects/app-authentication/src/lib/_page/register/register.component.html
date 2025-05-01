@@ -5,8 +5,8 @@
     <div class="flex flex-row justify-center gap-3">
       <app-google></app-google>
     </div>
-    <!-- <mat-stepper [linear]="isLinear" #stepper [selectedIndex]="0">
-       <mat-step [stepControl]="firstFormGroup">
+    <mat-stepper [linear]="isLinear" #stepper [selectedIndex]="1">
+      <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup" class="flex flex-col gap-3">
           <div class="flex flex-col gap-3">
             <div
@@ -78,10 +78,51 @@
           </div>
         </form>
       </mat-step>
-        <mat-step [stepControl]="secondFormGroup">
+      <mat-step [stepControl]="secondFormGroup">
         <form [formGroup]="secondFormGroup">
           <div class="flex flex-row justify-around gap-3">
-            <label for="file" class="custom-file-upload">
+            <main>
+              <label class="custum-file-upload" for="file">
+                <div class="icon" *ngIf="!imagePreview">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill=""
+                    viewBox="0 0 24 24"
+                  >
+                    <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                    <g
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      id="SVGRepo_tracerCarrier"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        fill=""
+                        d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                      ></path>
+                    </g>
+                  </svg>
+                </div>
+                <div *ngIf="!imagePreview" class="icon">
+                  <input
+                    id="file"
+                    formControlName="profile"
+                    type="file"
+                    accept="image/*"
+                    (change)="onFileSelected($event)"
+                  />
+                </div>
+                <img
+                  *ngIf="imagePreview"
+                  [src]="imagePreview"
+                  alt="Image Preview"
+                />
+              </label>
+            </main>
+
+            <!-- <label for="file" class="custom-file-upload">
               <div *ngIf="!imagePreview" class="icon">
                 <svg
                   viewBox="0 0 24 24"
@@ -98,9 +139,6 @@
                   </g>
                 </svg>
               </div>
-              <div class="text">
-                <span>Click to upload image</span>
-              </div>
               <input
                 id="file"
                 formControlName="profile"
@@ -113,7 +151,7 @@
                 [src]="imagePreview"
                 alt="Image Preview"
               />
-            </label>
+            </label> -->
           </div>
           <div class="flex gap-20">
             <button type="button" (click)="onMoveBack()" class="move">
@@ -125,19 +163,159 @@
           </div>
         </form>
       </mat-step>
-       <mat-step [stepControl]="thirdFormGroup">
+      <mat-step [stepControl]="thirdFormGroup">
         <form [formGroup]="thirdFormGroup">
           <div class="flex flex-col justify-around gap-3">
-            <div class="container">
-              <div
-                class="card"
-                *ngFor="let character of characters; let i = index"
-                [class.active]="selectedCharacter === character.name"
-                (click)="saveName(character.name)"
-              >
-                <img [src]="character.icon" [alt]="character.name" />
+            <main>
+              <div class="large-svg-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 50 90"
+                  class="largemalesvg"
+                  height="90"
+                  width="50"
+                >
+                  <circle
+                    stroke-width="6"
+                    stroke="#76E3FE"
+                    r="22"
+                    cy="25"
+                    cx="25"
+                  ></circle>
+                  <path
+                    stroke-linecap="round"
+                    stroke-width="6"
+                    stroke="#76E3FE"
+                    d="M25 47L25 87"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-width="6"
+                    stroke="#76E3FE"
+                    d="M25 86.6958L38.6958 73"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-width="6"
+                    stroke="#76E3FE"
+                    d="M11 73L24.6958 86.6958"
+                  ></path>
+                </svg>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 50 90"
+                  class="largefemalesvg"
+                  height="90"
+                  width="50"
+                >
+                  <circle
+                    stroke-width="6"
+                    stroke="#F57CB3"
+                    r="22"
+                    cy="25"
+                    cx="25"
+                  ></circle>
+                  <path
+                    stroke-linecap="round"
+                    stroke-width="6"
+                    stroke="#F57CB3"
+                    d="M25 47L25 87"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-width="6"
+                    stroke="#F57CB3"
+                    d="M12 73H38"
+                  ></path>
+                </svg>
               </div>
-            </div>
+              <div>
+                <div class="radio-wrapper">
+                  <input
+                    class="gender-radio-buttons"
+                    id="male"
+                    value="male"
+                    name="gender"
+                    type="radio"
+                    (click)="onSelectGender($event)"
+                  />
+                  <label class="genderlabel malebutton" for="male">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 50 90"
+                      class="smallsvg malesmallsvg"
+                    >
+                      <circle
+                        stroke-width="6"
+                        stroke="#76E3FE"
+                        r="22"
+                        cy="25"
+                        cx="25"
+                      ></circle>
+                      <path
+                        stroke-linecap="round"
+                        stroke-width="6"
+                        stroke="#76E3FE"
+                        d="M25 47L25 87"
+                      ></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-width="6"
+                        stroke="#76E3FE"
+                        d="M25 86.6958L38.6958 73"
+                      ></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-width="6"
+                        stroke="#76E3FE"
+                        d="M11 73L24.6958 86.6958"
+                      ></path></svg
+                    >Male
+                  </label>
+
+                  <input
+                    class="gender-radio-buttons"
+                    id="female"
+                    value="female"
+                    name="gender"
+                    type="radio"
+                    (click)="onSelectGender($event)"
+                  />
+                  <label class="genderlabel femalebutton" for="female">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 50 90"
+                      class="smallsvg"
+                    >
+                      <circle
+                        stroke-width="6"
+                        stroke="#F57CB3"
+                        r="22"
+                        cy="25"
+                        cx="25"
+                      ></circle>
+                      <path
+                        stroke-linecap="round"
+                        stroke-width="6"
+                        stroke="#F57CB3"
+                        d="M25 47L25 87"
+                      ></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-width="6"
+                        stroke="#F57CB3"
+                        d="M12 73H38"
+                      ></path></svg
+                    >Female
+                  </label>
+                </div>
+              </div>
+            </main>
 
             <mat-form-field appearance="fill">
               <mat-label>Choose a date</mat-label>
@@ -173,7 +351,6 @@
                 <mat-chip-row
                   (removed)="remove(hobby)"
                   [editable]="true"
-                  formControlName="hashtag"
                   (edited)="edit(hobby, $event)"
                   [aria-description]="'press enter to edit ' + hobby.name"
                 >
@@ -188,7 +365,6 @@
                 }
                 <input
                   [placeholder]="'Your hobbs'"
-                  formControlName="hashtag"
                   [matChipInputFor]="chipGrid"
                   [matChipInputAddOnBlur]="addOnBlur"
                   (matChipInputTokenEnd)="add($event)"
@@ -210,8 +386,8 @@
             </button>
           </div>
         </form>
-      </mat-step> 
-    </mat-stepper> -->
+      </mat-step>
+    </mat-stepper>
   </div>
 </div>
 

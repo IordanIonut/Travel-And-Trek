@@ -18,8 +18,8 @@ import java.util.function.Function;
 public class JWT {
     @Value("${jwt.secret}")
     private String secretKey;
-    private final long EXPIRATION_TIME = 3L * 30 * 24 * 60 * 60 * 1000;
-    private final long EXPIRATION_OTP = 100 * 600 * 1000;
+    private final long EXPIRATION_TIME = 3L * 30 * 24 * 60 * 60 * 1000000;
+    private final long EXPIRATION_OTP = 100 * 6000 * 1000;
 
     public String generateToken(String name, String img, String email, String[] hastag) {
         return Jwts.builder()

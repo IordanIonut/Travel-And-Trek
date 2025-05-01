@@ -7,7 +7,6 @@ import com.example.App.Dashbord.Service.PostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -141,6 +140,18 @@ public class PostController {
             LOG.error("Failed to retrieve getPostByUserFriends(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
+        }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Post> createPost(@RequestBody Post post) {
+        try {
+            Post savedPost = postService.savePost(post);
+            return ResponseEntity.ok(savedPost);
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve createPost(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Post());
         }
     }
 }

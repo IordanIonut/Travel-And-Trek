@@ -109,7 +109,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "./node_modules/travel-and-trek-app-core/projects/app-core/src/lib/style.scss"
             ],
             "scripts": []
           }

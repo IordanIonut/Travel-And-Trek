@@ -1,5 +1,7 @@
 package com.example.App.Dashbord.Controller;
 
+import com.example.App.Authentication.CustomUserDetails;
+import com.example.App.Authentication.CustomUserDetailsService;
 import com.example.App.Dashbord.DTO.SearchDTO;
 import com.example.App.Dashbord.DTO.UserDTO;
 import com.example.App.Dashbord.DTO.UserProfileDTO;
@@ -31,6 +33,8 @@ public class UserController {
     private PostService postService;
     @Autowired
     private HighlightRepository highlightRepository;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
     @Autowired
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 

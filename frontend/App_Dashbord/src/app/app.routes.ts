@@ -6,7 +6,7 @@ import { ProfileComponent } from './_pages/profile/profile.component';
 
 export const routes: Routes = [
   {
-    path: 'dashbord',
+    path: 'dashboard',
     children: [
       { path: 'feet', component: HomeComponent },
       { path: 'search', component: SearchComponent },

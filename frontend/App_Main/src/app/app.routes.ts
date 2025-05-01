@@ -1,38 +1,20 @@
 import { Routes } from '@angular/router';
+import {
+  ChangeComponent,
+  LoginComponent,
+  PasswordComponent,
+  RegisterComponent,
+} from 'travel-app-trek-app-authentication/';
 
 export const routes: Routes = [
   {
     path: 'authentication',
     children: [
-      {
-        path: 'login',
-        loadComponent: () =>
-          import(
-            'travel-and-trek-app-authentification/dist/app-authentication'
-          ).then((m) => m.LoginComponent),
-      },
-      {
-        path: 'register',
-        loadComponent: () =>
-          import(
-            'travel-and-trek-app-authentification/dist/app-authentication'
-          ).then((m) => m.RegisterComponent),
-      },
-      {
-        path: 'forgot-password',
-        loadComponent: () =>
-          import(
-            'travel-and-trek-app-authentification/dist/app-authentication'
-          ).then((m) => m.PasswordComponent),
-      },
-      {
-        path: 'change-password',
-        loadComponent: () =>
-          import(
-            'travel-and-trek-app-authentification/dist/app-authentication'
-          ).then((m) => m.ChangeComponent),
-      },
+      { path: 'register', component: RegisterComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'forgot-password', component: PasswordComponent },
+      { path: 'change-password', component: ChangeComponent },
     ],
   },
-  // { path: '', redirectTo: 'authentication/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/authentication/login', pathMatch: 'full' },
 ];

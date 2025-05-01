@@ -7,7 +7,6 @@ import {
   MaterialModule,
   Mode,
 } from 'travel-and-trek-app-core/dist/app-core';
-import { RouterModule } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -18,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../_service/auth.service';
 import { GoogleComponent } from '../../_components/google/google.component';
 import { passwordValidator } from '../../_validator/password.validator';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -25,8 +25,8 @@ import { passwordValidator } from '../../_validator/password.validator';
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule,
     ReactiveFormsModule,
+    RouterModule,
     AlertComponent,
     GoogleComponent,
     HttpClientModule,
@@ -46,7 +46,8 @@ export class LoginComponent {
   constructor(
     private _fb: FormBuilder,
     private _authService: AuthService,
-    private _jwt: JwtService
+    private _jwt: JwtService,
+    private _router: Router
   ) {
     this.form = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -54,7 +55,9 @@ export class LoginComponent {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this._jwt.logout(Environment.jwtToken);
+  }
 
   onClickSignIn() {
     this.form.markAllAsTouched();
@@ -107,7 +110,8 @@ export class LoginComponent {
         .login(this.form.value.email, this.form.value.password)
         .subscribe({
           next: (data: any) => {
-            this._jwt.saveToken(data.token);
+            this._jwt.saveToken(Environment.jwtToken, data.token);
+            this._router.navigate(['/dashboard/feet']);
             this.showAlertMessage(
               'Login Success',
               'Login successfully.',

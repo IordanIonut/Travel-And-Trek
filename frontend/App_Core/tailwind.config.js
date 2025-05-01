@@ -5,6 +5,7 @@ module.exports = {
     "./node_modules/travel-and-trek-app-core/**/*.{html,ts}",
     "./projects/app-core/src/**/*.{html,ts,scss}",
     "./projects/**/*.{html,ts}",
+    "./src/**/*.{html,ts,scss}",
   ],
   theme: {
     extend: {},

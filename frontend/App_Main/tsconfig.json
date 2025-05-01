@@ -11,11 +11,11 @@
     "paths": {
       "travel-and-trek-app-core": ["./node_modules/travel-and-trek-app-core"],
       "travel-and-trek-app-core/*": ["node_modules/travel-and-trek-app-core/*"],
-      "travel-app-trek-app-authentification": [
-        "./node_modules/travel-and-trek-app-authentification"
+      "travel-app-trek-app-authentication": [
+        "./node_modules/travel-and-trek-app-authentication"
       ],
-      "travel-app-trek-app-authentification/*": [
-        "node_modules/travel-and-trek-app-authentification/*"
+      "travel-app-trek-app-authentication/*": [
+        "node_modules/travel-and-trek-app-authentication/*"
       ]
     },
     "noImplicitOverride": true,

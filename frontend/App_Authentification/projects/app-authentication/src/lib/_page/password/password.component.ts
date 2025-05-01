@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   AlertComponent,
   Environment,
+  JwtService,
   MailService,
   Mode,
   SetThemeService,
@@ -46,14 +47,17 @@ export class PasswordComponent {
   constructor(
     private _fb: FormBuilder,
     private _userService: UserService,
-    private _mailService: MailService
+    private _mailService: MailService,
+    private _jwt: JwtService
   ) {
     this.form = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this._jwt.logout(Environment.jwtToken);
+  }
 
   onClickGoogle() {}
 

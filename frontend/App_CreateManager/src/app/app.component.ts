@@ -11,6 +11,7 @@ import {
   MaterialModule,
   SetThemeService,
 } from 'travel-and-trek-app-core/dist/app-core';
+import { SpinnerComponent } from './_components/_spinner/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ import {
     MaterialModule,
     HttpClientModule,
     RouterModule,
+    SpinnerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

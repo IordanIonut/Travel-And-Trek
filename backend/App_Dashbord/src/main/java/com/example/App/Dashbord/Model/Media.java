@@ -35,7 +35,8 @@ public class Media {
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "id", nullable = true)
     private Group media_group_id;
 
-    @Column(name = "URL", nullable = false)
+    @Lob
+    @Column(name = "URL", nullable = false, columnDefinition = "LONGTEXT")
     private String url;
 
     @Column(name = "LATITUDE", nullable = false)

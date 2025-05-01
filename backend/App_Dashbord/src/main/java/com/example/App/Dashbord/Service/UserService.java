@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,8 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
@@ -84,6 +87,6 @@ public class UserService {
     }
 
     public void updateUserPassword(final String email , final String password){
-            this.userRepository.updateUserPassword(email, password);
+            this.userRepository.updateUserPassword(email, passwordEncoder.encode(password));
     }
 }

@@ -1,48 +1,54 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
+import { Environment } from '../_environment/environment.local';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JwtService {
-  constructor(private _cookieService: CookieService, private _router: Router) {
-    this.checkTokenExpiration();
+  constructor(
+    private _cookieService: CookieService,
+    private _router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.checkTokenExpiration(Environment.jwtToken);
   }
 
-  saveToken(token: string): void {
-    this._cookieService.set('token', token, {
+  saveToken(name: string, token: string): void {
+    this._cookieService.set(name, token, {
       expires: 7,
       secure: location.protocol === 'https:',
       sameSite: 'Lax',
       path: '/',
     });
-    this.checkTokenExpiration();
+    this.checkTokenExpiration(name);
   }
 
-  getToken(): string | null {
-    return this._cookieService.get('token') || null;
+  getToken(name: string): string | null {
+    return this._cookieService.get(name) || null;
   }
 
-  decodeToken(): any {
-    const token = this.getToken();
+  decodeToken(name: string): any {
+    const token = this.getToken(name);
     if (token) {
       return jwtDecode(token);
     }
     return null;
   }
 
-  getTokenExpiration(): number | null {
-    const decodedToken = this.decodeToken();
+  getTokenExpiration(name: string): number | null {
+    const decodedToken = this.decodeToken(name);
     if (decodedToken && decodedToken.exp) {
       return decodedToken.exp * 1000;
     }
     return null;
   }
 
-  isTokenExpired(): boolean {
-    const expiration = this.getTokenExpiration();
+  isTokenExpired(name: string): boolean {
+    const expiration = this.getTokenExpiration(name);
     if (expiration) {
       const currentTime = new Date().getTime();
       return currentTime > expiration;
@@ -50,14 +56,14 @@ export class JwtService {
     return true;
   }
 
-  checkTokenExpiration(): void {
-    if (this.isTokenExpired()) {
-      this.logout();
+  checkTokenExpiration(name: string): void {
+    if (this.isTokenExpired(name)) {
+      this.logout(name);
     } else {
-      const expirationTime = this.getTokenExpiration();
+      const expirationTime = this.getTokenExpiration(name);
       if (expirationTime) {
         const timeout = expirationTime - new Date().getTime();
-        setTimeout(() => this.logout(), timeout);
+        setTimeout(() => this.logout(name), timeout);
       }
     }
   }
@@ -68,7 +74,7 @@ export class JwtService {
     img: string;
     hashtag: string[];
   } | null {
-    const decodedToken = this.decodeToken();
+    const decodedToken = this.decodeToken(Environment.jwtToken);
 
     if (decodedToken) {
       const userInfo = {
@@ -83,7 +89,7 @@ export class JwtService {
     }
   }
 
-  logout(): void {
-    this._cookieService.delete('token');
+  logout(name: string): void {
+    this._cookieService.delete(name, '/');
   }
 }

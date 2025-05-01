@@ -1,68 +1,116 @@
-<div class="page-dialog flex justify-center items-center bg-gray-100 p-4">
-  <mat-card
-    class="translate-box max-w-4xl w-full bg-white shadow-lg rounded-lg p-6"
-  >
+<div
+  class="page-dialog"
+  style="padding: 0px; overflow: hidden; max-height: max-content"
+>
+  <div class="translate-box max-w-4xl w-full shadow-lg rounded-lg p-6">
     <form [formGroup]="form">
-      <div class="language-selection flex justify-between gap-4">
-        <mat-form-field appearance="fill" class="w-1/2">
-          <mat-label>Select Language</mat-label>
-          <mat-select formControlName="detect">
-            <mat-option *ngFor="let lang of languages" [value]="lang.language">
-              <div class="flex items-center">
-                <img
-                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
-                  class="language-flag w-5 h-4 mr-2"
-                />
-                {{ lang.name }}
-              </div>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-1/2">
-          <mat-label>Translate To</mat-label>
-          <mat-select formControlName="to" (selectionChange)="onChange($event)">
-            <mat-option *ngFor="let lang of languages" [value]="lang">
-              <div class="flex items-center">
-                <img
-                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
-                  class="language-flag w-5 h-4 mr-2"
-                />
-                {{ lang.name }}
-              </div>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="input-section mt-6">
-        <mat-form-field appearance="fill" class="w-full">
+      <div class="input-section">
+        <div
+          style="border: solid 3px #00dddd"
+          class="flex items-center border border-gray-700 rounded-lg h-41 px-3 transition focus-within:border-efec bg-[#2b2b2b]"
+        >
           <textarea
             matInput
             formControlName="text"
-            class="w-full p-3 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500"
+            class="ml-3 w-full h-40 bg-[#2b2b2b] textSecond border-none focus:outline-none placeholder-gray-400"
           ></textarea>
+        </div>
+      </div>
+
+      <div class="language-selection flex justify-between gap-4">
+        <mat-form-field appearance="fill" class="w-1/2 py-4">
+          <!-- <mat-label>Select Language</mat-label> -->
+          <mat-select-trigger>
+            <div class="flex items-center">
+              <img
+                [src]="
+                  'https://flagcdn.com/w20/' +
+                  form.get('detect')!.value +
+                  '.png'
+                "
+                class="language-flag w-5 h-4 mr-2"
+              />
+            </div>
+          </mat-select-trigger>
+          <mat-select formControlName="detect">
+            <mat-option
+              *ngFor="let lang of languages"
+              [disabled]="true"
+              [value]="lang.language"
+              [ngClass]="{
+                'selected-option': lang.language === form.get('detect')!.value
+              }"
+            >
+              <div class="flex items-center">
+                <img
+                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
+                  class="language-flag w-5 h-4 mr-2"
+                />
+                {{ lang.name }}
+              </div>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="w-1/2 py-4">
+          <mat-select-trigger>
+            <div class="flex items-center">
+              <img
+                [src]="
+                  'https://flagcdn.com/w20/' + form.get('to')!.value + '.png'
+                "
+                class="language-flag w-5 h-4 mr-2"
+              />
+            </div>
+          </mat-select-trigger>
+          <mat-select formControlName="to" (selectionChange)="onChange($event)">
+            <mat-option
+              *ngFor="let lang of languages"
+              [value]="lang.language"
+              [ngClass]="{
+                'selected-option': lang.language === form.get('detect')!.value
+              }"
+            >
+              <div class="flex items-center">
+                <img
+                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
+                  class="language-flag w-5 h-4 mr-2"
+                />
+                {{ lang.name }}
+              </div>
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 
-      <div class="output-section mt-6">
-        <mat-form-field appearance="fill" class="w-full">
+      <div class="output-section mt">
+        <div
+          style="border: solid 3px #00dddd"
+          class="flex items-center border border-gray-700 rounded-lg h-41 px-3 transition focus-within:border-efec bg-[#2b2b2b]"
+        >
           <textarea
             matInput
             formControlName="translate"
             readonly
-            class="w-full p-3 border rounded-md shadow-sm bg-gray-100 text-gray-500"
+            class="ml-3 w-full h-40 bg-[#2b2b2b] textSecond border-none focus:outline-none placeholder-gray-400"
           ></textarea>
-        </mat-form-field>
+        </div>
       </div>
-      <div class="translate-actions mt-6 flex justify-center gap-4">
-        <button
-          type="button"
-          class="bg-blue-500 text-white py-2 px-6 rounded-full hover:bg-blue-600 transition duration-200"
-        >
-          Send
-        </button>
-      </div>
+      <button
+        type="button"
+        (click)="translateText()"
+        class="mt-4 bgSecond text-white font-medium rounded-lg h-12 w-full cursor-pointer hover:bgSecond transition"
+      >
+        Send Translate
+      </button>
     </form>
-  </mat-card>
+  </div>
 </div>
+<lib-alert
+  class="absolute top-4 left-1/2 z-50 transform -translate-x-1/2"
+  *ngIf="showAlert"
+  [message]="alertMessage"
+  [subject]="errorMessage"
+  [mode]="mode"
+  (handleChangeValue)="showAlert = false"
+></lib-alert>

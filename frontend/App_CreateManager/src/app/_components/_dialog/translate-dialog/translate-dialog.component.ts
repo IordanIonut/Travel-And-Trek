@@ -1,8 +1,13 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  AlertComponent,
+  Environment,
+  MaterialModule,
+  Mode,
+} from 'travel-and-trek-app-core/dist/app-core';
 import { MatMenuModule } from '@angular/material/menu';
 import { TranslateApiService } from 'src/app/_service/_api/translate.service';
 import { response } from 'express';
@@ -19,6 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     MatMenuModule,
     HttpClientModule,
+    NgClass,
+    AlertComponent,
   ],
   providers: [TranslateApiService],
   templateUrl: './translate-dialog.component.html',
@@ -30,15 +37,24 @@ export class TranslateDialogComponent {
   translatedText!: boolean;
   languages = languages;
   form!: FormGroup;
+
+  alertMessage: string = '';
+  errorMessage: string = '';
+  showAlert: boolean = false;
+  mode: Mode = Mode.ERROR;
   constructor(
     private _fb: FormBuilder,
     private _translateApiService: TranslateApiService,
+    private _dialogRef: MatDialogRef<
+      TranslateDialogComponent,
+      { text: string; error: boolean }
+    >,
     @Inject(MAT_DIALOG_DATA) data: { message: string }
   ) {
     this.text = data.message;
 
     this.form = this._fb.group({
-      detect: [{ value: null, disabled: true }],
+      detect: [{ value: null }],
       to: [null],
       text: [
         {
@@ -69,11 +85,7 @@ export class TranslateDialogComponent {
 
   onChange(event: any) {
     this._translateApiService
-      .checkTranslate(
-        this.text!,
-        this.form.get('detect')?.value,
-        event.value.language
-      )
+      .checkTranslate(this.text!, this.form.get('detect')?.value, event.value)
       .subscribe({
         next: (response) => {
           console.log(response);
@@ -87,7 +99,31 @@ export class TranslateDialogComponent {
       });
   }
 
-  translateText() {}
+  translateText() {
+    if (this.form.get('translate')?.value === null) {
+      this._dialogRef.close({ text: '', error: true });
+      return;
+    }
+    this._dialogRef.close({
+      text: this.form.get('translate')?.value,
+      error: false,
+    });
+  }
+
+  showAlertMessage(
+    subject: string,
+    message: string,
+    duration: number,
+    mode: Mode
+  ) {
+    this.alertMessage = message;
+    this.errorMessage = subject;
+    this.showAlert = true;
+    this.mode = mode;
+    setTimeout(() => {
+      this.showAlert = false;
+    }, duration);
+  }
 }
 export const languages = [
   {

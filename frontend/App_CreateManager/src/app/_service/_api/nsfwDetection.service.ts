@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Environment } from 'src/environments/environment.local';
+import { Environment } from 'travel-and-trek-app-core/dist/app-core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NsfwDetectionService {
-  private apiUrl = `${Environment.NSFW_URL}/image`;
+  private apiUrl = `${Environment.NSFW_URL}adult-content-file`;
 
   constructor(private http: HttpClient) {}
 

@@ -53,7 +53,7 @@ export class ChangeComponent {
     @Inject(UserService) private _userService: UserService
   ) {
     this._route.queryParams.subscribe((params) => {
-      this._jwt.saveToken(params['token']);
+      this._jwt.saveToken(Environment.jwtOtp, params['token']);
     });
 
     this.form = this._fb.group({
@@ -65,8 +65,6 @@ export class ChangeComponent {
       opt6: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
-
-  ngOnInit(): void {}
 
   onClickSignIn() {
     this.form.markAllAsTouched();
@@ -125,11 +123,11 @@ export class ChangeComponent {
       );
       return;
     }
-    const token = this._jwt.decodeToken();
+    const token = this._jwt.decodeToken(Environment.jwtOtp);
     if (this.form.valid && token.exp * 1000 > new Date().getTime()) {
       this._userService
         .updateUserPassword(
-          this._jwt.decodeToken()?.email,
+          this._jwt.decodeToken(Environment.jwtOtp)?.email,
           this.form.value.password
         )
         .subscribe({
@@ -172,10 +170,8 @@ export class ChangeComponent {
     this.errorMessage = subject;
     this.showAlert = true;
     this.mode = mode;
-    console.log('1212312');
     setTimeout(() => {
       this.showAlert = false;
-      console.log('asdasda');
     }, duration);
   }
 
@@ -189,11 +185,13 @@ export class ChangeComponent {
 
   verifyOTP() {
     this.form.markAllAsTouched();
-    const token = this._jwt.decodeToken();
-
+    const token = this._jwt.decodeToken(Environment.jwtOtp);
+    console.log(token);
     if (this.form.valid) {
+      console.log(token);
+
       if (
-        this._jwt.decodeToken().sub ===
+        this._jwt.decodeToken(Environment.jwtOtp).sub ===
           this.form.value.opt1 +
             this.form.value.opt2 +
             this.form.value.opt3 +

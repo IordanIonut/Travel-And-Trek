@@ -28,7 +28,7 @@
     "jwt-decode": "^4.0.0",
     "ngx-cookie-service": "^19.1.2",
     "rxjs": "~7.8.0",
-    "travel-and-trek-app-authentification": "file:../App_Authentification",
+    "travel-and-trek-app-authentication": "file:../App_Authentification",
     "travel-and-trek-app-core": "file:../App_Core",
     "travel-and-trek-app-create-manager": "file:../App_CreateManager",
     "tslib": "^2.3.0",

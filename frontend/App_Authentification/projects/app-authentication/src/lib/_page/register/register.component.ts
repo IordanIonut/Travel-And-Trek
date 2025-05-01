@@ -44,6 +44,7 @@ import {
   passwordValidator,
 } from '../../_validator/password.validator';
 import { adultValidator } from '../../_validator/age.validator';
+import { Route, Router } from '@angular/router';
 
 interface Hobby {
   name: string;
@@ -57,9 +58,9 @@ interface Hobby {
     AlertComponent,
     GoogleComponent,
     ReactiveFormsModule,
-    // BidiModule,
-    // MatStepperModule,
-    // MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatChipsModule,
     MatStepper,
     MatNativeDateModule,
     NgStyle,
@@ -110,7 +111,8 @@ export class RegisterComponent {
     private _userService: UserService,
     private _authService: AuthService,
     private _appInitService: AppInitService,
-    private _jwt: JwtService
+    private _jwt: JwtService,
+    private _router: Router
   ) {
     this.name = this._appInitService.APP_NAME;
 
@@ -131,9 +133,13 @@ export class RegisterComponent {
       dateOfBirth: ['', [Validators.required, adultValidator()]],
     });
     this.lastFormGroup = this._fb.group({
-      hashtag: ['', Validators.required],
+      hashtag: this._fb.array([]),
       bio: ['', Validators.required],
     });
+  }
+
+  ngOnInit(): void {
+    this._jwt.logout(Environment.jwtToken);
   }
 
   protected onFileSelected(event: Event): void {
@@ -193,8 +199,6 @@ export class RegisterComponent {
       return hobby;
     });
   }
-
-  protected ngOnInit() {}
 
   protected onMoveToSecundForm() {
     this.firstFormGroup.markAllAsTouched();
@@ -435,7 +439,7 @@ export class RegisterComponent {
         date_create: new Date(),
         profile_picture: this.secondFormGroup.value.profile,
         gender:
-          this.thirdFormGroup.value.gender === 'Female'
+          this.thirdFormGroup.value.gender === 'female'
             ? GenderEnum.F
             : GenderEnum.M,
         date_of_birth: this.thirdFormGroup.value.dateOfBirth,
@@ -445,7 +449,7 @@ export class RegisterComponent {
       };
       this._authService.register(user).subscribe({
         next: (data: any) => {
-          this._jwt.saveToken(data.token);
+          this._router.navigate(['/authentication/login']);
           this.showAlertMessage(
             'Save Account',
             'Account has been saved with successful.',
@@ -486,5 +490,9 @@ export class RegisterComponent {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  onSelectGender(event: any) {
+    this.thirdFormGroup.get('gender')?.setValue(event.target.value);
   }
 }

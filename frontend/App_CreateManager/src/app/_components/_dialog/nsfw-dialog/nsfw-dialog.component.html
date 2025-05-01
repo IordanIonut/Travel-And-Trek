@@ -1,0 +1,20 @@
+<div
+  class="page-dialog p-2"
+  style="padding: 0px; overflow: hidden; max-height: max-content"
+>
+  <div class="p-5">
+    <img
+      #image
+      [src]="imageUrl"
+      class=""
+      crossorigin="anonymous"
+      draggable="false"
+      (load)="onImageLoad()"
+      style="display: block"
+    />
+    <canvas
+      #canvas
+      style="position: absolute; top: 0; left: 0; pointer-events: none"
+    ></canvas>
+  </div>
+</div>

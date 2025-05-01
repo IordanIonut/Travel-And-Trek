@@ -6,10 +6,10 @@ import { User } from './user';
 
 export interface Post {
   id: PostId;
-  post_user_id: User;
-  post_medias_id: Media[];
-  post_hashtag_id: Hastag[];
-  post_group_id: Group;
+  post_user_id: User | null;
+  post_medias_id: Media[] | null;
+  post_hashtag_id: Hastag[] | null;
+  post_group_id: Group | null;
   tagged_users: User[];
   description: string;
   visible: boolean;

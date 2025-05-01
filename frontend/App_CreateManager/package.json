@@ -25,6 +25,8 @@
     "@angular/ssr": "^18.2.1",
     "express": "^4.18.2",
     "fabric": "^4.6.0",
+    "jwt-decode": "^4.0.0",
+    "ngx-cookie-service": "^19.1.2",
     "rxjs": "~7.8.0",
     "travel-and-trek-app-core": "file:../App_Core",
     "tslib": "^2.3.0",
