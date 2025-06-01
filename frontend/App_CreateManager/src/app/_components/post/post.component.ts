@@ -72,7 +72,6 @@ interface People {
     HashtagGenerateService,
     NsfwDetectionTextService,
     UserService,
-    PostService,
     TranslateApiService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,25 +102,24 @@ export class PostComponent {
     private _translateApiService: TranslateApiService,
     private _dialogService: DialogService,
     private _jwtService: JwtService,
-    private _userService: UserService,
-    private _postService: PostService
+    private _userService: UserService
   ) {
     this.formMedia = this._fb.group({
       media: [null, Validators.required],
     });
 
     this.formPost = this._fb.group({
-      text: ['o fut pe ana in pizda', Validators.required],
+      text: [null, Validators.required],
     });
 
-    this.mediaFiles.push('https://picsum.photos/500/500/?random=0');
-    this.mediaFiles.push('https://picsum.photos/500/500/?random=1');
-    this.mediaFiles.push('https://picsum.photos/500/500/?random=2');
-    this.mediaFiles.push('https://picsum.photos/500/500/?random=3');
-    this.mediaFiles.push('https://picsum.photos/500/500/?random=4');
-    this.mediaFiles.push('https://picsum.photos/500/500/?random=5');
-    this.mediaFiles.push('https://picsum.photos/500/500/?random=8');
-    this.onSelectImage(0);
+    // this.mediaFiles.push('https://picsum.photos/500/500/?random=0');
+    // this.mediaFiles.push('https://picsum.photos/500/500/?random=1');
+    // this.mediaFiles.push('https://picsum.photos/500/500/?random=2');
+    // this.mediaFiles.push('https://picsum.photos/500/500/?random=3');
+    // this.mediaFiles.push('https://picsum.photos/500/500/?random=4');
+    // this.mediaFiles.push('https://picsum.photos/500/500/?random=5');
+    // this.mediaFiles.push('https://picsum.photos/500/500/?random=8');
+    // this.onSelectImage(0);
 
     console.log(this._jwtService.getToken(Environment.jwtToken));
   }
@@ -157,6 +155,9 @@ export class PostComponent {
                   this._cdr.detectChanges();
                   this.postType = PostEnum.POST;
                   this.mediaFiles.push(base64String);
+                  if (this.imagePreview === null) {
+                    this.imagePreview = this.mediaFiles[0];
+                  }
                 } else {
                   this.showAlertMessage(
                     'Select Media',
@@ -165,7 +166,6 @@ export class PostComponent {
                     Mode.ERROR
                   );
                   this._cdr.detectChanges();
-
                   this.onNSFWDetection(base64String, response.objects);
                 }
               },
@@ -408,7 +408,7 @@ export class PostComponent {
       });
   }
 
-  onSavePost() {
+  onGeneratePost() {
     this.formMedia.markAllAsTouched();
     this.formPost.markAllAsTouched();
 
@@ -456,6 +456,7 @@ export class PostComponent {
         Environment.duration,
         Mode.SUCCESS
       );
+
       const postId: PostId = {
         id: '',
         type: this.postType,
@@ -471,6 +472,7 @@ export class PostComponent {
           media_user_id: {
             name: this._jwtService.getUserInfo()?.name,
             email: this._jwtService.getUserInfo()?.email,
+            profile_picture: this._jwtService.getUserInfo()?.img,
           } as User,
           media_group_id: null,
           latitude: 0,
@@ -505,14 +507,9 @@ export class PostComponent {
         create_at: new Date(),
         update_at: new Date(),
       };
-      this._postService.createPost(post).subscribe({
-        next: (response) => {
-          console.log(response);
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      console.log(post);
+
+      this._dialogService.openPreviewPostDialog(post);
     }
   }
 

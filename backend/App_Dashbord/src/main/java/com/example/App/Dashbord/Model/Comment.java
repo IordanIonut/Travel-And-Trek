@@ -28,11 +28,9 @@ import java.time.LocalDateTime;
 public class Comment {
     @EmbeddedId
     private CommentId id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
     private User comment_user_id;
-
     //post
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
@@ -40,7 +38,6 @@ public class Comment {
             @JoinColumn(name = "POST_TYPE_COMMENT", referencedColumnName = "type")
     })
     private Post comment_post_id;
-
     //media
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
@@ -48,18 +45,14 @@ public class Comment {
             @JoinColumn(name = "MEDIA_TYPE_COMMENT", referencedColumnName = "type")
     })
     private Media comment_media_id;
-
     //journal
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOURNAL_ID_COMMENT", referencedColumnName = "id")
     private Journal comment_journal_id;
-
     @Column(name = "MESSAGE", nullable = false)
     private String message;
-
     @Column(name = "CREATE_AT", nullable = false)
     private LocalDateTime create_at;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "SOURCE_ID_COMMENT", referencedColumnName = "id"),

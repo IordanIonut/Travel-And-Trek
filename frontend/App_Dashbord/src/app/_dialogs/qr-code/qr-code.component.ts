@@ -18,7 +18,7 @@ export class QrCodeComponent {
     this.url = window.location.origin;
 
     if (data.type === 'user') {
-      this.url += '/dashbord/profile?type=user&name=' + data.name;
+      this.url += '/dashboard/profile?type=user&name=' + data.name;
     }
   }
 }

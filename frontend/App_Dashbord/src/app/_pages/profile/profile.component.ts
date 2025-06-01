@@ -1,5 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   ViewChild,
@@ -139,7 +140,8 @@ export class ProfileComponent {
     protected validatorService: ValidationModelService,
     private followerService: FollowService,
     private _jwtService: JwtService,
-    protected _skeletonService: SkeletonService
+    protected _skeletonService: SkeletonService,
+    private cdr: ChangeDetectorRef
   ) {
     this.isPhoto = true;
     this.isFollowrs = false;
@@ -149,6 +151,10 @@ export class ProfileComponent {
       this.user = params['name'];
       this.type = params['type'];
     });
+  }
+
+  getIconLabel(iconKey: string): string {
+    return `<mat-icon class="icon">${this.iconsObject[iconKey].name}</mat-icon>`;
   }
 
   ngAfterViewInit(): void {
@@ -194,6 +200,7 @@ export class ProfileComponent {
         });
       }
     }
+    this.cdr.detectChanges();
   }
 
   protected onOpenPhote() {
@@ -791,7 +798,12 @@ export class ProfileComponent {
 
   protected onTabChangeFollowers() {
     this.followerService
-      .findUsersByFollowerStatus(this.user, FollowerStatusEnum.ACCEPTED, 0, 10)
+      .findUsersByFollowerStatus(
+        this.user,
+        FollowerStatusEnum.ACCEPTED,
+        0,
+        Environment.number
+      )
       .subscribe({
         next: (data: UserDTO[]) => {
           if (this.indexFollower === 0) {
@@ -829,7 +841,7 @@ export class ProfileComponent {
         break;
       }
       case 'logout': {
-        this._jwtService.logout();
+        this._jwtService.logout(Environment.jwtToken);
         break;
       }
     }

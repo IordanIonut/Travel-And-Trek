@@ -1,14 +1,12 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   AlertComponent,
   Environment,
   JwtService,
   MailService,
   Mode,
-  SetThemeService,
 } from 'travel-and-trek-app-core/dist/app-core';
-import { RouterLink } from '@angular/router';
 import { MaterialModule } from 'travel-and-trek-app-core/dist/app-core';
 import {
   FormBuilder,

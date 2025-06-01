@@ -29,9 +29,9 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
 })
 export class AppComponent {
   pages: Page[] = [
-    { icon: 'home', route: '/dashbord/feet' },
+    { icon: 'home', route: '/dashboard/feet' },
     { icon: 'add', route: '' },
-    { icon: 'movie', route: '/dashbord/reel' },
+    { icon: 'movie', route: '/dashboard/reel' },
     { icon: 'message', route: '' },
   ];
   style: boolean = false;

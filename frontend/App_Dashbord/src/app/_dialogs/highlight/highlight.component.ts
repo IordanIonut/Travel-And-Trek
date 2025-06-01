@@ -4,10 +4,11 @@ import {
   ElementRef,
   Inject,
   OnDestroy,
+  ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import ColorThief from 'colorthief';
-import { Subscription } from 'rxjs';
+import { interval, Subscription, take } from 'rxjs';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {
@@ -20,7 +21,7 @@ import {
 } from 'travel-and-trek-app-core/dist/app-core';
 import { HammerModule } from '@angular/platform-browser';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ValidationModelService } from 'src/app/_service/validator/validation-model.service';
 
 @Component({
@@ -32,6 +33,7 @@ import { ValidationModelService } from 'src/app/_service/validator/validation-mo
     HammerModule,
     DragDropModule,
     NgFor,
+    NgIf,
   ],
   templateUrl: './highlight.component.html',
   styleUrls: ['./highlight.component.scss'],
@@ -48,6 +50,9 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   index!: number;
   profile!: string;
   images!: Media[];
+  totalDuration!: number;
+
+  @ViewChild('dynamicVideo') videoRef!: ElementRef<HTMLVideoElement>;
 
   get currentImage(): Media {
     return this.images[this.currentIndex];
@@ -71,7 +76,7 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  onImageLoad(img: HTMLImageElement): void {
+  onImageLoad(img: any): void {
     this.shadow.applyShadowDialog(img);
   }
 
@@ -127,35 +132,57 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
   onPostPosition(highlight: Highlight | Story) {
     this.currentIndex = 0;
     if (this.validatorModelService.isHighlight(highlight)) {
-      this.images = highlight.highlight_medias;
+      this.images = [];
+      this.images = [...highlight.highlight_medias];
       this.profile = highlight.image;
     } else if (this.validatorModelService.isStory(highlight)) {
       this.images = [];
-      this.images = highlight.story_medias;
+      this.images = [...highlight.story_medias];
       this.profile = highlight.story_user_id?.profile_picture;
     }
     this.onProgress();
   }
 
+  onVideoMetadataLoaded(video: HTMLVideoElement): number {
+    this.totalDuration = video.duration;
+    return video.duration;
+  }
+
   onProgress() {
-    const totalDuration = 15;
     const tickInterval = 1000;
 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
 
-    this.remainingTime = totalDuration;
-    this.progress = 43;
+    this.subscription = interval(tickInterval)
+      .pipe(take(this.totalDuration))
+      .subscribe((elapsedSeconds) => {
+        this.remainingTime = this.totalDuration - elapsedSeconds - 1;
+        this.progress = ((elapsedSeconds + 1) / this.totalDuration) * 100;
+        if (elapsedSeconds + 1 === this.totalDuration) {
+          this.onSwipeLeft();
+        }
+      });
+  }
 
-    // this.subscription = interval(tickInterval)
-    //   .pipe(take(totalDuration))
-    //   .subscribe((elapsedSeconds) => {
-    //     this.remainingTime = totalDuration - elapsedSeconds - 1;
-    //     this.progress = ((elapsedSeconds + 1) / totalDuration) * 100;
-    //     if (elapsedSeconds + 1 === totalDuration) {
-    //       this.onSwipeLeft();
-    //     }
-    //   });
+  getFileType(url: string): 'image' | 'video' | 'unknown' {
+    const extension = url.split('.').pop()?.toLowerCase();
+    if (!extension) return 'unknown';
+
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', '600'];
+    const videoExtensions = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'];
+
+    if (
+      imageExtensions.includes(extension) ||
+      extension.includes('photos/seed/')
+    ) {
+      this.totalDuration = 15;
+      return 'image';
+    }
+    if (videoExtensions.includes(extension)) {
+      return 'video';
+    }
+    return 'unknown';
   }
 }

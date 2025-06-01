@@ -18,7 +18,7 @@ export class PostShareService {
   constructor(
     private dialogService: DialogService,
     private shadow: ShadowService,
-    private valiationService: ValidationModelService,
+    private validationService: ValidationModelService,
     private dialog: MatDialog,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
@@ -27,20 +27,20 @@ export class PostShareService {
     property: 'name' | 'profile_picture' | 'id' | 'type',
     data: Post | Share
   ): any {
-    if (this.valiationService.isPost(data)) {
+    if (this.validationService.isPost(data)) {
       switch (property) {
         case 'name': {
-          if (this.valiationService.isGroup(data.post_group_id))
+          if (this.validationService.isGroup(data.post_group_id!))
             return data.post_group_id.name;
-          if (this.valiationService.isUser(data.post_user_id))
+          if (this.validationService.isUser(data.post_user_id!))
             return data.post_user_id.name;
           return '';
         }
         case 'profile_picture': {
-          if (this.valiationService.isUser(data.post_user_id)) {
+          if (this.validationService.isUser(data.post_user_id!)) {
             return data.post_user_id.profile_picture;
           }
-          if (this.valiationService.isGroup(data.post_group_id)) {
+          if (this.validationService.isGroup(data.post_group_id!)) {
             return data.post_group_id.url;
           }
           return '';
@@ -50,7 +50,7 @@ export class PostShareService {
         }
       }
     }
-    if (this.valiationService.isShare(data)) {
+    if (this.validationService.isShare(data)) {
       switch (property) {
         case 'id': {
           return data.shareId.id;
@@ -60,9 +60,9 @@ export class PostShareService {
   }
 
   getTaggedUsers(data: Post | Share): User[] {
-    if (this.valiationService.isPost(data)) {
+    if (this.validationService.isPost(data)) {
       return data.post_hashtag_id ? data.tagged_users : [];
-    } else if (this.valiationService.isShare(data)) {
+    } else if (this.validationService.isShare(data)) {
       return data.share_post_id ? data.share_post_id.tagged_users : [];
     }
 

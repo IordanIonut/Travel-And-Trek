@@ -30,11 +30,8 @@ import {
 import { forkJoin } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { MatNativeDateModule } from '@angular/material/core';
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AuthService } from '../../_service/auth.service';
 import { UserService } from '../../_service/user.service';
@@ -44,7 +41,7 @@ import {
   passwordValidator,
 } from '../../_validator/password.validator';
 import { adultValidator } from '../../_validator/age.validator';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 interface Hobby {
   name: string;

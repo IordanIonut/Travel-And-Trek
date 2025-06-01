@@ -1,5 +1,5 @@
 {
-  "name": "app-dashbord",
+  "name": "app-dashboard",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

@@ -254,7 +254,7 @@
               (mouseleave)="pauseVideo(videoPlayer)"
             >
               <source
-                src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+                src="{{ data.post_medias_id?.[0]?.url }}"
                 type="video/mp4"
               />
             </video>

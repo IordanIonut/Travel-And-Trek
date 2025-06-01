@@ -18,6 +18,7 @@ import { AuthService } from '../../_service/auth.service';
 import { GoogleComponent } from '../../_components/google/google.component';
 import { passwordValidator } from '../../_validator/password.validator';
 import { Router, RouterModule } from '@angular/router';
+import { GoogleSigninService } from '../../_components/google/google.service';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ import { Router, RouterModule } from '@angular/router';
     GoogleComponent,
     HttpClientModule,
   ],
-  providers: [AuthService, JwtService],
+  providers: [AuthService, JwtService, GoogleSigninService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   encapsulation: ViewEncapsulation.None,

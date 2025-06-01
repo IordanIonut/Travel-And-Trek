@@ -199,7 +199,7 @@ export class MastheadComponent {
     const searchValue =
       type === 'enter' ? this.formSearch?.get('search')?.value : option;
     this.router
-      .navigate(['/dashbord/search'], {
+      .navigate(['/dashboard/search'], {
         queryParams: {
           type: this.selectValue.value,
           search: searchValue.name ? searchValue.name : searchValue,

@@ -1,4 +1,4 @@
-import {NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -82,13 +82,9 @@ export class PostComponent {
   }
 
   constructor(
-    private dialogService: DialogService,
     private shadow: ShadowService,
-    private valiationService: ValidationModelService,
-    private elementRef: ElementRef,
     private postShareService: PostShareService,
     private cdr: ChangeDetectorRef,
-    @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(MAT_DIALOG_DATA) data: { data: Post | Share }
   ) {
     this.data = data.data;

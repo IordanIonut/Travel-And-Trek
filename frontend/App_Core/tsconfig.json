@@ -2,9 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "travel-and-trek-app-core": [
-        "./dist/app-core"
-      ]
+      "app-core": ["./dist/app-core"]
     },
     "outDir": "./dist/out-tsc",
     "strict": true,
@@ -21,10 +19,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

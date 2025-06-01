@@ -13,6 +13,7 @@ import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { UserService } from 'src/app/_service/models/user.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import {
+  Environment,
   JwtService,
   MaterialModule,
   UserProfileDTO,
@@ -80,7 +81,7 @@ export class ProfileComponent {
 
   onProfilePage() {
     this.router
-      .navigate(['dashbord/profile'], {
+      .navigate(['dashboard/profile'], {
         queryParams: {
           type: 'user',
           name:
@@ -106,7 +107,7 @@ export class ProfileComponent {
         break;
       }
       case 'logout': {
-        this._jwtService.logout();
+        this._jwtService.logout(Environment.jwtToken);
         break;
       }
       case 'qr_code': {

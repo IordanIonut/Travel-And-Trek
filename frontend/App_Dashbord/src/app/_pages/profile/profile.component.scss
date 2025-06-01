@@ -2,3 +2,6 @@
   @apply flex flex-col gap-2.5 items-center justify-center shrink-0 relative p-2 w-16;
 }
 
+.mat-mdc-tab .mdc-tab__text-label mat-icon + mat-icon {
+  display: none;
+}

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { RegisterComponent } from 'projects/app-authentication/src/public-api';
 
 export const routes: Routes = [
   {

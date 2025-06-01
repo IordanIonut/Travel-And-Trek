@@ -1,5 +1,5 @@
 {
-  "name": "travel-and-trek-app-core",
+  "name": "app-core",
   "version": "0.0.8",
   "peerDependencies": {
     "@angular/common": "^18.2.0",

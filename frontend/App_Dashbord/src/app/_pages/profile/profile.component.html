@@ -4,7 +4,11 @@
     <div *ngIf="isPhoto" class="flex flex-row gap-3 w-[48rem] relative">
       <div class="flex-col w-full flex relative">
         <mat-tab-group
-          animationDuration="12ms"
+          dynamicHeight
+          mat-stretch-tabs
+          [disablePagination]="true"
+          [disableRipple]="true"
+          animationDuration="0ms"
           class="h-[100%] dash-style-tab-group !flex-col-reverse"
           (selectedTabChange)="onTabChangePhoto($event)"
         >
@@ -29,10 +33,9 @@
 
           <mat-tab class="w-full h-full">
             <ng-template mat-tab-label>
-              <mat-icon class="icon">{{
-                iconsObject["NEWSPAPER"].name
-              }}</mat-icon>
+              <mat-icon>{{ iconsObject["NEWSPAPER"].name }}</mat-icon>
             </ng-template>
+
             <div
               class="hide-scrollbar h-[85vh]"
               (scroll)="onScrollPhoto($event, 1)"

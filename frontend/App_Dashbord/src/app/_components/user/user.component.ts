@@ -120,7 +120,7 @@ export class UserComponent {
 
   protected onSendPage(name: string) {
     this.router
-      .navigate(['/dashbord/profile'], {
+      .navigate(['/dashboard/profile'], {
         queryParams: { type: 'user', name: name },
       })
       .then(() => {

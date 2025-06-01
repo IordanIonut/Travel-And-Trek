@@ -94,7 +94,7 @@ export class GroupComponent {
   }
 
   protected onSendPage(name: string) {
-    this.router.navigate(['/dashbord/profile'], {
+    this.router.navigate(['/dashboard/profile'], {
       queryParams: { type: 'group', name: name },
     });
   }

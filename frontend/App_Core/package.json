@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^19.2.6",
     "@angular/router": "^19.2.6",
     "autoprefixer": "^10.4.20",
+    "colorthief": "^2.6.0",
     "jwt-decode": "^4.0.0",
     "ngx-cookie-service": "^19.1.2",
     "postcss": "^8.4.41",
