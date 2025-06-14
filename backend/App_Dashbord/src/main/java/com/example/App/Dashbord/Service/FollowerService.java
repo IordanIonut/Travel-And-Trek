@@ -15,9 +15,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FollowerService {
@@ -60,15 +62,33 @@ public class FollowerService {
 
     @CacheEvict(value = "followerCache", allEntries = true)
     public void postCreateFollower(Follower follower) {
-        if (follower.getId() == null || follower.getId().getId().isEmpty()) {
-            follower.setId(new FollowerId());
-            follower.getId().setId(new AppDashbordApplication().generateId());
-            follower.getId().setStatus(FollowerStatusEnum.PENDING);
-        } else {
-            follower.getId().setId(new AppDashbordApplication().generateId());
+        if (follower.getFollower_user_id() == null || follower.getFollower_user_id().getId() == null) {
+            throw new IllegalArgumentException("Target user (user_id) must not be null.");
         }
+
+        if (follower.getFollower_user_id_follower() == null || follower.getFollower_user_id_follower().getId() == null) {
+            Optional<User> followerUserOpt = userRepository.findUserByEmail(
+                    follower.getFollower_user_id_follower() != null ? follower.getFollower_user_id_follower().getEmail() : null
+            );
+            if (followerUserOpt.isEmpty()) {
+                throw new IllegalArgumentException("Follower user not found.");
+            }
+            follower.setFollower_user_id_follower(followerUserOpt.get());
+        }
+
+        FollowerId id = new FollowerId();
+        id.setId(new AppDashbordApplication().generateId());
+        id.setStatus(FollowerStatusEnum.PENDING);
+
+        follower.setId(id);
+        follower.setCreated_at(LocalDateTime.now());
+
+        System.out.println("Saving follower with user_id = " + follower.getFollower_user_id()
+                + ", follower_user_id = " + follower.getFollower_user_id_follower());
+
         followerRepository.save(follower);
     }
+
 
 
     //HOME SUGGESTION FRIENDS

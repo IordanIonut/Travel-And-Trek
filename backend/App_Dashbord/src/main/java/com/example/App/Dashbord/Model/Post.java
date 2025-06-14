@@ -62,7 +62,7 @@ public class Post {
             },
             inverseJoinColumns = @JoinColumn(name = "HASHTAG_ID", referencedColumnName = "id")
     )
-    private List<Hashtag> post_hashtag_id;
+    private List<Hastag> post_hashtag_id;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

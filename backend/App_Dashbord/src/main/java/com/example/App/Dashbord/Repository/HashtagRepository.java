@@ -1,6 +1,6 @@
 package com.example.App.Dashbord.Repository;
 
-import com.example.App.Dashbord.Model.Hashtag;
+import com.example.App.Dashbord.Model.Hastag;
 import com.example.App.Dashbord.Model.Post;
 import com.example.App.Dashbord.Model.User;
 import org.springframework.data.domain.Pageable;
@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
-    @Query("SELECT COUNT(DISTINCT t.id) FROM Hashtag t")
+public interface HashtagRepository extends JpaRepository<Hastag, Long> {
+    @Query("SELECT COUNT(DISTINCT t.id) FROM Hastag t")
     Long findTags();
 
-    @Query("SELECT t FROM Hashtag t WHERE t.name = :name")
-    Optional<Hashtag> findByName(@Param("name") String name);
+    @Query("SELECT t FROM Hastag t WHERE t.name = :name")
+    Optional<Hastag> findByName(@Param("name") String name);
 
     @Query("""
                 SELECT DISTINCT p
@@ -36,6 +36,6 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
             """)
     List<Post> getPostByTag(@Param("hashtags") List<String> hashtags, Pageable pageable);
 
-    @Query("SELECT distinct h.name FROM Hashtag h")
+    @Query("SELECT distinct h.name FROM Hastag h")
     List<String> findAllTagsByName();
 }

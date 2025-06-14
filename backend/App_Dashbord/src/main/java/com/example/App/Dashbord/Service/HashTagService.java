@@ -2,7 +2,7 @@ package com.example.App.Dashbord.Service;
 
 import com.example.App.AppDashbordApplication;
 import com.example.App.Dashbord.DTO.UserDTO;
-import com.example.App.Dashbord.Model.Hashtag;
+import com.example.App.Dashbord.Model.Hastag;
 import com.example.App.Dashbord.Model.Post;
 import com.example.App.Dashbord.Repository.HashtagRepository;
 import com.example.App.Dashbord.Repository.UserRepository;
@@ -39,10 +39,10 @@ public class HashTagService {
 
     }
     @Cacheable(value = "hashtagCache", key = "'findOrCreateHashtag::'+#name")
-    public Hashtag findOrCreateHashtag(String name) {
+    public Hastag findOrCreateHashtag(String name) {
         return hashtagRepository.findByName(name)
                 .orElseGet(() -> {
-                    Hashtag newHashtag = new Hashtag();
+                    Hastag newHashtag = new Hastag();
                     newHashtag.setId(AppDashbordApplication.generateId());
                     newHashtag.setName(name);
                     return hashtagRepository.save(newHashtag);

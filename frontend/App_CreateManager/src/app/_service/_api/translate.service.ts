@@ -13,22 +13,12 @@ export class TranslateApiService {
 
   constructor(private http: HttpClient) {}
 
-  checkLangues(text: string): Observable<any> {
-    const body = [
-      {
-        Text: text,
-      },
-    ];
-    const headers = new HttpHeaders({
-      'x-rapidapi-key': Environment.RAPID_API_KEY,
-      'x-rapidapi-host': Environment.TRANSLATIONS_DETECTION_HOST,
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    });
-
-    return this.http.post<any>(`${this.apiUrlDetection}/detectlanguage`, body, {
-      headers,
-    });
+  checkLangues(text: string): Observable<{ iso: string; language: string }> {
+    return this.http.get<{ iso: string; language: string }>(
+      `${Environment.baseUrl}/api/detect-language?text=${encodeURIComponent(
+        text
+      )}`
+    );
   }
 
   checkTranslate(

@@ -38,7 +38,7 @@ public class User {
             },
             inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "id")
     )
-    private List<Hashtag> user_hashtag_id;
+    private List<Hastag> user_hashtag_id;
     @Column(name = "NAME", nullable = false, unique = true)
     private String name;
     @Email
@@ -52,7 +52,8 @@ public class User {
     private String bio;
     @Column(name = "DATE_CREATE", nullable = false)
     private LocalDateTime date_create;
-    @Column(name = "PROFILE_PICTURE", nullable = false)
+    @Lob
+    @Column(name = "PROFILE_PICTURE", nullable = false, columnDefinition = "LONGTEXT")
     private String profile_picture;
     @Column(name = "GENDER", nullable = false)
     @Enumerated(EnumType.STRING)

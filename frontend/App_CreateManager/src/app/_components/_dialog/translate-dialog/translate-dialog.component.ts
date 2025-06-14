@@ -75,7 +75,7 @@ export class TranslateDialogComponent {
   private onDetectText(text: string) {
     this._translateApiService.checkLangues(text).subscribe({
       next: (response) => {
-        this.form.get('detect')?.setValue(response[0].language);
+        this.form.get('detect')?.setValue(response.iso);
       },
       error: (error) => {
         console.log(error);
@@ -88,7 +88,6 @@ export class TranslateDialogComponent {
       .checkTranslate(this.text!, this.form.get('detect')?.value, event.value)
       .subscribe({
         next: (response) => {
-          console.log(response);
           this.form
             .get('translate')
             ?.setValue(response.data.translations.translatedText[0]);

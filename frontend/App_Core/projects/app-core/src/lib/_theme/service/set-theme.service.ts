@@ -5,7 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root',
 })
 export class SetThemeService {
-  private activeTheme: string = 'light-theme'; // Default theme
+  private activeTheme: string = 'light-theme';
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {

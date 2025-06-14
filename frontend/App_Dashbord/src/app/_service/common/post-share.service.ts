@@ -204,7 +204,6 @@ export class PostShareService {
     index: number
   ): void {
     const videoElement = videoPlayer.nativeElement;
-
     if (isPlatformBrowser(this.platformId)) {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -220,7 +219,7 @@ export class PostShareService {
             }
           });
         },
-        { threshold: 0.5 }
+        { threshold: 0.1 }
       );
 
       observer.observe(videoElement);

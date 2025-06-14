@@ -1,3 +1,4 @@
-export enum GenderEnum{
-    M, F
+export enum GenderEnum {
+  M = 'M',
+  F = 'F',
 }

@@ -30,7 +30,7 @@ import {
 import { forkJoin } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { MatNativeDateModule } from '@angular/material/core';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { CommonModule, NgFor, NgIf, NgStyle } from '@angular/common';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AuthService } from '../../_service/auth.service';
@@ -43,10 +43,6 @@ import {
 import { adultValidator } from '../../_validator/age.validator';
 import { Router } from '@angular/router';
 
-interface Hobby {
-  name: string;
-}
-
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -55,14 +51,11 @@ interface Hobby {
     AlertComponent,
     GoogleComponent,
     ReactiveFormsModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatChipsModule,
-    MatStepper,
+    // MatStepperModule,
+    // MatDatepickerModule,
+    // MatChipsModule,
     MatNativeDateModule,
-    NgStyle,
-    NgIf,
-    NgFor,
+    CommonModule,
     HttpClientModule,
   ],
   templateUrl: './register.component.html',
@@ -77,7 +70,6 @@ export class RegisterComponent {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
   thirdFormGroup!: FormGroup;
-  lastFormGroup!: FormGroup;
   alertMessage: string = '';
   errorMessage: string = '';
   showAlert: boolean = false;
@@ -99,8 +91,10 @@ export class RegisterComponent {
       icon: 'https://upload.wikimedia.org/wikipedia/commons/b/b7/Mars_symbol.svg',
     },
   ];
-  addOnBlur = true;
-  hobby = signal<Hobby[]>([]);
+
+  isFirst: boolean = false;
+  isSecond: boolean = false;
+  isThird: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -128,11 +122,10 @@ export class RegisterComponent {
     this.thirdFormGroup = this._fb.group({
       gender: ['', Validators.required],
       dateOfBirth: ['', [Validators.required, adultValidator()]],
-    });
-    this.lastFormGroup = this._fb.group({
-      hashtag: this._fb.array([]),
       bio: ['', Validators.required],
     });
+
+    this.isFirst = true;
   }
 
   ngOnInit(): void {
@@ -140,18 +133,21 @@ export class RegisterComponent {
   }
 
   protected onFileSelected(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result;
-        this._cdr.detectChanges();
-      };
-      reader.readAsDataURL(file);
-    }
-    this.secondFormGroup.patchValue({ profile: file });
-    this.secondFormGroup.get('profile')?.updateValueAndValidity();
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      this.imagePreview = base64;
+      this._cdr.detectChanges();
+      this.secondFormGroup.patchValue({ profile: base64 });
+      this.secondFormGroup.get('profile')?.updateValueAndValidity();
+    };
+
+    reader.readAsDataURL(file);
   }
 
   protected saveName(name: string) {
@@ -160,46 +156,8 @@ export class RegisterComponent {
     this.thirdFormGroup.get('gender')?.setValue(name);
   }
 
-  protected add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      this.hobby.update((hobby: any) => [...hobby, { name: value }]);
-    }
-    event.chipInput!.clear();
-  }
-
-  protected remove(fruit: Hobby): void {
-    this.hobby.update((hobby: any) => {
-      const index = hobby.indexOf(fruit);
-      if (index < 0) {
-        return hobby;
-      }
-
-      hobby.splice(index, 1);
-      // this.announcer.announce(`Removed ${fruit.name}`);
-      return [...hobby];
-    });
-  }
-
-  protected edit(fruit: Hobby, event: MatChipEditedEvent) {
-    const value = event.value.trim();
-    if (!value) {
-      this.remove(fruit);
-      return;
-    }
-    this.hobby.update((hobby: any) => {
-      const index = hobby.indexOf(fruit);
-      if (index >= 0) {
-        hobby[index].name = value;
-        return [...hobby];
-      }
-      return hobby;
-    });
-  }
-
   protected onMoveToSecundForm() {
     this.firstFormGroup.markAllAsTouched();
-
     if (
       this.firstFormGroup.get('name')?.touched &&
       this.firstFormGroup.get('name')?.invalid
@@ -252,6 +210,15 @@ export class RegisterComponent {
         );
         return;
       }
+      if (this.firstFormGroup.get('password')?.hasError('weakPassword')) {
+        this.showAlertMessage(
+          'Password',
+          'Password is weak, try another more strong.',
+          Environment.duration,
+          Mode.ERROR
+        );
+        return;
+      }
     }
 
     if (
@@ -260,8 +227,19 @@ export class RegisterComponent {
     ) {
       if (this.firstFormGroup.get('confirmPassword')?.hasError('required')) {
         this.showAlertMessage(
-          'Password',
-          'Password is required.',
+          'Retry Password',
+          'Retry Password is required.',
+          Environment.duration,
+          Mode.ERROR
+        );
+        return;
+      }
+      if (
+        this.firstFormGroup.get('confirmPassword')?.hasError('weakPassword')
+      ) {
+        this.showAlertMessage(
+          'Retry Password',
+          'Retry Password is weak, try another more strong.',
           Environment.duration,
           Mode.ERROR
         );
@@ -309,9 +287,10 @@ export class RegisterComponent {
           );
           hasError = true;
         }
-
         if (!hasError && this.firstFormGroup.valid) {
-          this.stepper.next();
+          this.isFirst = false;
+          this.isSecond = true;
+          this._cdr.detectChanges();
         }
       },
       error: (error: Error) => {
@@ -343,7 +322,9 @@ export class RegisterComponent {
       }
     }
     if (this.secondFormGroup.valid) {
-      this.stepper.next();
+      this.isSecond = false;
+      this.isThird = true;
+      this._cdr.detectChanges();
     }
   }
 
@@ -379,30 +360,7 @@ export class RegisterComponent {
       if (this.thirdFormGroup.get('dateOfBirth')?.hasError('underage')) {
         this.showAlertMessage(
           'Date of Birth',
-          'You must be an adult in order to create an account.',
-          Environment.duration,
-          Mode.ERROR
-        );
-        return;
-      }
-    }
-    if (this.thirdFormGroup.valid) {
-      this.stepper.next();
-    }
-  }
-
-  protected save() {
-    if (this.hobby.length > 0) {
-      this.lastFormGroup.get('hashtag')!.setValue(this.hobby);
-    }
-    if (
-      this.lastFormGroup.get('hashtag')?.touched &&
-      this.lastFormGroup.get('hashtag')?.invalid
-    ) {
-      if (this.lastFormGroup.get('hashtag')?.hasError('required')) {
-        this.showAlertMessage(
-          'Hobby',
-          'Hobbs is required.',
+          'You must be an adult (18+) in order to create an account.',
           Environment.duration,
           Mode.ERROR
         );
@@ -410,10 +368,10 @@ export class RegisterComponent {
       }
     }
     if (
-      this.lastFormGroup.get('bio')?.touched &&
-      this.lastFormGroup.get('bio')?.invalid
+      this.thirdFormGroup.get('bio')?.touched &&
+      this.thirdFormGroup.get('bio')?.invalid
     ) {
-      if (this.lastFormGroup.get('bio')?.hasError('required')) {
+      if (this.thirdFormGroup.get('bio')?.hasError('required')) {
         this.showAlertMessage(
           'Bio',
           'Bio is required.',
@@ -424,45 +382,55 @@ export class RegisterComponent {
       }
     }
 
-    this.lastFormGroup.markAllAsTouched();
-    if (this.lastFormGroup.valid) {
-      const user: User = {
-        id: null,
-        user_hashtag_id: [],
-        name: this.firstFormGroup.value.name,
-        email: this.firstFormGroup.value.email,
-        password: this.firstFormGroup.value.password,
-        bio: this.lastFormGroup.value.bio,
-        date_create: new Date(),
-        profile_picture: this.secondFormGroup.value.profile,
-        gender:
-          this.thirdFormGroup.value.gender === 'female'
-            ? GenderEnum.F
-            : GenderEnum.M,
-        date_of_birth: this.thirdFormGroup.value.dateOfBirth,
-        date_last_update: new Date(),
-        qr_code: 'user-' + this.firstFormGroup.value.name,
-        location: 'wqeqweqewqeqwe',
-      };
-      this._authService.register(user).subscribe({
-        next: (data: any) => {
-          this._router.navigate(['/authentication/login']);
-          this.showAlertMessage(
-            'Save Account',
-            'Account has been saved with successful.',
-            Environment.duration,
-            Mode.ERROR
-          );
-        },
-        error: (error: Error) => {
-          console.log(error);
-        },
-      });
+    if (this.thirdFormGroup.valid) {
+      this.save();
     }
   }
 
+  protected save() {
+    const user: User = {
+      id: null,
+      user_hashtag_id: [],
+      name: this.firstFormGroup.value.name,
+      email: this.firstFormGroup.value.email,
+      password: this.firstFormGroup.value.password,
+      bio: this.thirdFormGroup.value.bio,
+      date_create: new Date(),
+      profile_picture: this.secondFormGroup.value.profile,
+      gender:
+        this.thirdFormGroup.value.gender === 'female'
+          ? GenderEnum.F
+          : GenderEnum.M,
+      date_of_birth: this.thirdFormGroup.value.dateOfBirth,
+      date_last_update: new Date(),
+      qr_code: 'user-' + this.firstFormGroup.value.name,
+      location: 'wqeqweqewqeqwe',
+    };
+    this._authService.register(user).subscribe({
+      next: (data: any) => {
+        this._router.navigate(['/authentication/login']);
+        this.showAlertMessage(
+          'Save Account',
+          'Account has been saved with successful.',
+          Environment.duration,
+          Mode.ERROR
+        );
+      },
+      error: (error: Error) => {
+        console.log(error);
+      },
+    });
+  }
+
   protected onMoveBack() {
-    this.stepper.previous();
+    if (this.isSecond) {
+      this.isSecond = false;
+      this.isFirst = true;
+    } else {
+      this.isThird = false;
+      this.isSecond = true;
+    }
+    this._cdr.detectChanges();
   }
 
   showAlertMessage(

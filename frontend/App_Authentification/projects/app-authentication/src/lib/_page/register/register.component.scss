@@ -5,7 +5,16 @@
   background-color: rgb(255, 255, 255);
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: column;input[type="date"] {
+  padding: 0.5rem 1rem; /* top-bottom 8px, left-right 16px */
+  font-size: 1rem;
+  color: white;
+  background-color: #2b2b2b;
+  border: none;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
   justify-content: flex-start;
   padding: 30px;
   border-radius: 20px;
@@ -127,4 +136,17 @@
 
 .custum-file-upload input {
   display: none;
+}
+
+
+input[type="date"] {
+  padding: 1rem; 
+  font-size: 1rem;
+  color: white;
+  background-color: #2b2b2b;
+  border: 1px solid #569fcf; 
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
 }

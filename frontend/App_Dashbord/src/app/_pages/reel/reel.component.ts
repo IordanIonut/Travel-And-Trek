@@ -12,6 +12,8 @@ import {
   MaterialModule,
   Post,
   PostEnum,
+  Story,
+  StoryService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { MastheadComponent } from '../../_components/masthead/masthead.component';
 import { NgFor, NgIf } from '@angular/common';
@@ -19,6 +21,7 @@ import { PostComponent } from 'src/app/_components/post/post.component';
 import { UserService } from 'src/app/_service/models/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PostService } from 'src/app/_service/models/post.service';
+import { StoryComponent } from 'src/app/_components/story/story.component';
 import {
   setLoadingOnRequest,
   SkeletonService,
@@ -34,8 +37,9 @@ import {
     HttpClientModule,
     NgFor,
     NgIf,
+    StoryComponent,
   ],
-  providers: [UserService, PostService],
+  providers: [UserService, PostService, SkeletonService],
   templateUrl: './reel.component.html',
   styleUrl: './reel.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -45,6 +49,7 @@ export class ReelComponent {
   index = 0;
   isLoading = false;
   isRun: number = 0;
+  story!: Story[];
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -53,7 +58,8 @@ export class ReelComponent {
     private postService: PostService,
     private ngZone: NgZone,
     private _jwtService: JwtService,
-    protected _skeletonService: SkeletonService
+    protected _skeletonService: SkeletonService,
+    private _storyService: StoryService
   ) {}
 
   ngAfterViewInit(): void {
@@ -61,6 +67,17 @@ export class ReelComponent {
   }
 
   ngOnInit(): void {
+    this._storyService
+      .findFriendsStory(this._jwtService.getUserInfo()?.name!, 0, 300)
+      .subscribe({
+        next: (data: Story[]) => {
+          this.story = data;
+        },
+        error: (error: Error) => {
+          console.log(error);
+        },
+      });
+
     this.fetchData();
   }
 

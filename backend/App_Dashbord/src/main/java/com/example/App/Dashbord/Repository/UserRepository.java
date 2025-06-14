@@ -38,13 +38,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUsersFriendsStory(@Param("name") String name);
 
     @Query("""
-            SELECT new com.example.App.Dashbord.DTO.SearchDTO('person', u.id, u.name) FROM User u WHERE u.name LIKE CONCAT(:name, '%')
+            SELECT new com.example.App.Dashbord.DTO.SearchDTO('person', u.id, u.name, u.profile_picture) FROM User u WHERE u.name LIKE CONCAT(:name, '%')
                 AND (:type = 'all' OR :type = 'person')
             UNION 
-            SELECT new com.example.App.Dashbord.DTO.SearchDTO('group', g.id, g.name) FROM Group g WHERE g.name LIKE CONCAT(:name, '%')
+            SELECT new com.example.App.Dashbord.DTO.SearchDTO('group', g.id, g.name, g.url) FROM Group g WHERE g.name LIKE CONCAT(:name, '%')
                 AND (:type = 'all' OR :type = 'group')
             UNION 
-            SELECT new com.example.App.Dashbord.DTO.SearchDTO('tag', t.id, t.name) FROM Hashtag t WHERE t.name LIKE CONCAT(:name, '%')
+            SELECT new com.example.App.Dashbord.DTO.SearchDTO('tag', t.id, t.name, t.name) FROM Hastag t WHERE t.name LIKE CONCAT(:name, '%')
             """)
     List<SearchDTO> findSuggestersSearch(@Param("name") String name, @Param("type") String type, Pageable pageable);
 

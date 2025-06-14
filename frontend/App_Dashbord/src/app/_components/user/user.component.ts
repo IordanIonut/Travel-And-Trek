@@ -18,6 +18,7 @@ import {
   FollowerStatusEnum,
   GenderEnum,
   Hastag,
+  JwtService,
   MaterialModule,
   User,
   UserDTO,
@@ -60,7 +61,8 @@ export class UserComponent {
     private dialogService: DialogService,
     private router: Router,
     private elementRef: ElementRef,
-    protected _skeletonService: SkeletonService
+    protected _skeletonService: SkeletonService,
+    private _jwtService: JwtService
   ) {
     this._skeletonService.setLoading(true);
   }
@@ -130,6 +132,7 @@ export class UserComponent {
 
   protected onFollow(event: Event, user: User) {
     event.stopPropagation();
+    console.log(this.people);
     if (this.people.state === null) {
       const follow: Follow = {
         id: {
@@ -137,10 +140,10 @@ export class UserComponent {
           status: FollowerStatusEnum.PENDING,
         },
         follower_user_id: {
-          id: '3103512164211051395',
+          id: '',
           user_hashtag_id: [],
           name: '',
-          email: '',
+          email: this._jwtService.getUserInfo()?.email!,
           password: '',
           bio: '',
           date_create: new Date(),

@@ -21,7 +21,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-//AD TO CORE
 @NgModule({
   imports: [
     CommonModule,

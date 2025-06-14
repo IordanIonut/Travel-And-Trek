@@ -3,7 +3,7 @@ package com.example.App.Dashbord.Service;
 import com.example.App.AppDashbordApplication;
 import com.example.App.Dashbord.Embedded.PostId;
 import com.example.App.Dashbord.Enum.PostEnum;
-import com.example.App.Dashbord.Model.Hashtag;
+import com.example.App.Dashbord.Model.Hastag;
 import com.example.App.Dashbord.Model.Media;
 import com.example.App.Dashbord.Model.Post;
 import com.example.App.Dashbord.Model.User;
@@ -94,9 +94,9 @@ public class PostService {
 
     public Post savePost(Post post) {
         if (post.getPost_hashtag_id() != null) {
-            List<Hashtag> validatedHashtags = new ArrayList<>();
-            for (Hashtag hashtag : post.getPost_hashtag_id()) {
-                Hashtag existingOrNewHashtag = hashTagService.findOrCreateHashtag(hashtag.getName());
+            List<Hastag> validatedHashtags = new ArrayList<>();
+            for (Hastag hashtag : post.getPost_hashtag_id()) {
+                Hastag existingOrNewHashtag = hashTagService.findOrCreateHashtag(hashtag.getName());
                 validatedHashtags.add(existingOrNewHashtag);
             }
             post.setPost_hashtag_id(validatedHashtags);

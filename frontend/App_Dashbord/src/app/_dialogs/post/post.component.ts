@@ -19,6 +19,7 @@ import { ValidationModelService } from 'src/app/_service/validator/validation-mo
 import {
   iconsObject,
   MaterialModule,
+  MediaEnum,
   Post,
   PostEnum,
   Share,
@@ -34,6 +35,7 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
   providers: [ShareService],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostComponent {
   @Input() data!: Post | Share;
@@ -113,6 +115,7 @@ export class PostComponent {
 
   ngOnChanges(): void {
     this.postShareService.checkAutoplay(this.videoPlayer, this.run, this.index);
+    this.cdr.detectChanges();
   }
 
   ngAfterViewChecked() {
@@ -177,6 +180,7 @@ export class PostComponent {
         });
       }
     }
+    this.cdr.detectChanges();
   }
 
   protected onRight() {
@@ -198,5 +202,17 @@ export class PostComponent {
       this.cdr.detectChanges();
       this.onShadowLefAndRight();
     }
+  }
+
+  isVideo(type: string | MediaEnum): boolean {
+    return type?.toString() === MediaEnum.VIDEO.toString();
+  }
+
+  isImage(type: string | MediaEnum): boolean {
+    return type?.toString() === MediaEnum.PHOTO.toString();
+  }
+
+  getMediaType(type: string | MediaEnum): string {
+    return type?.toString() || '';
   }
 }

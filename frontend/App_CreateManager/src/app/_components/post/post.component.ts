@@ -43,12 +43,15 @@ import { UserService } from 'src/app/_service/_model/user.service';
 import { error } from 'console';
 import { PostService } from 'src/app/_service/_model/post.service';
 import { TranslateApiService } from 'src/app/_service/_api/translate.service';
+import { SpinnerComponent } from '../_spinner/spinner/spinner.component';
+import { SpinnerService } from '../_spinner/spinner.service';
 
 interface Tags {
   name: string;
 }
 interface People {
   name: string;
+  profile_picture?: string;
 }
 
 @Component({
@@ -120,8 +123,6 @@ export class PostComponent {
     // this.mediaFiles.push('https://picsum.photos/500/500/?random=5');
     // this.mediaFiles.push('https://picsum.photos/500/500/?random=8');
     // this.onSelectImage(0);
-
-    console.log(this._jwtService.getToken(Environment.jwtToken));
   }
 
   protected onFileSelected(event: any): void {
@@ -231,15 +232,8 @@ export class PostComponent {
 
     this.fetchMediaAsFile(this.imagePreview as string)
       .then((file) => {
-        this._photoDescribeService.checkImageForDescribe(file).subscribe({
-          next: (response) => {
-            this.formPost
-              .get('text')
-              ?.setValue(response.caption.replace('<error>', ''));
-          },
-          error: (error) => {
-            console.error(error);
-          },
+        this._photoDescribeService.describeImage(file).then((response: any) => {
+          this.formPost.get('text')?.setValue(response);
         });
       })
       .catch((error) => {
@@ -260,26 +254,21 @@ export class PostComponent {
 
     this.fetchMediaAsFile(this.imagePreview as string)
       .then((file) => {
-        this._photoDescribeService.checkImageForDescribe(file).subscribe({
-          next: (response) => {
-            this._hashtagGenerateService
-              .checkHashtagGenerate(response.caption)
-              .subscribe({
-                next: (response) => {
-                  response.data.slice(0, 5).forEach((tag: any) => {
-                    this.addTag({
-                      value: tag.tag as string,
-                    } as MatChipInputEvent);
-                  });
-                },
-                error: (error) => {
-                  console.error(error);
-                },
-              });
-          },
-          error: (error) => {
-            console.error(error);
-          },
+        this._photoDescribeService.describeImage(file).then((response: any) => {
+          this._hashtagGenerateService
+            .checkHashtagGenerate(response)
+            .subscribe({
+              next: (response) => {
+                response.data.slice(0, 5).forEach((tag: any) => {
+                  this.addTag({
+                    value: tag.tag as string,
+                  } as MatChipInputEvent);
+                });
+              },
+              error: (error) => {
+                console.error(error);
+              },
+            });
         });
       })
       .catch((error) => {
@@ -304,55 +293,57 @@ export class PostComponent {
           this._translateApiService
             .checkTranslate(
               this.formPost.get('text')?.value!,
-              response[0].language,
+              response.language,
               'en'
             )
             .subscribe({
               next: (response) => {
-                this._nsfwDetectionTextService
-                  .checkTextForNsfw(
-                    response.data.translations.translatedText[0]
-                  )
-                  .subscribe({
-                    next: (response) => {
-                      if (response.flagged || response.sexual) {
-                        let reasons: string[] = [];
-                        if (response.flagged) {
-                          reasons.push('flagged true');
-                        }
-                        if (response.sexual_score > 0.5) {
-                          reasons.push(
-                            `sexual true (sexual_score: ${response.sexual_score.toFixed(
-                              2
-                            )})`
-                          );
-                        }
-                        const reasonText =
-                          reasons.length > 0
-                            ? reasons.join(' and ')
-                            : 'unknown reason';
+                if (response.error.code !== 400) {
+                  this._nsfwDetectionTextService
+                    .checkTextForNsfw(
+                      response.data.translations.translatedText[0]
+                    )
+                    .subscribe({
+                      next: (response) => {
+                        if (response.flagged || response.sexual) {
+                          let reasons: string[] = [];
+                          if (response.flagged) {
+                            reasons.push('flagged true');
+                          }
+                          if (response.sexual_score > 0.5) {
+                            reasons.push(
+                              `sexual true (sexual_score: ${response.sexual_score.toFixed(
+                                2
+                              )})`
+                            );
+                          }
+                          const reasonText =
+                            reasons.length > 0
+                              ? reasons.join(' and ')
+                              : 'unknown reason';
 
-                        this.showAlertMessage(
-                          'Check Description NSFW',
-                          `This description didn't pass the NSFW check. Reason: ${reasonText}`,
-                          Environment.duration,
-                          Mode.ERROR
-                        );
-                        this._cdr.detectChanges();
-                      } else {
-                        this.showAlertMessage(
-                          'Description NSFW',
-                          'The description passed the NSFW check.',
-                          Environment.duration,
-                          Mode.SUCCESS
-                        );
-                        this._cdr.detectChanges();
-                      }
-                    },
-                    error: (error) => {
-                      console.error(error);
-                    },
-                  });
+                          this.showAlertMessage(
+                            'Check Description NSFW',
+                            `This description didn't pass the NSFW check. Reason: ${reasonText}`,
+                            Environment.duration,
+                            Mode.ERROR
+                          );
+                          this._cdr.detectChanges();
+                        } else {
+                          this.showAlertMessage(
+                            'Description NSFW',
+                            'The description passed the NSFW check.',
+                            Environment.duration,
+                            Mode.SUCCESS
+                          );
+                          this._cdr.detectChanges();
+                        }
+                      },
+                      error: (error) => {
+                        console.error(error);
+                      },
+                    });
+                }
               },
               error: (error) => {
                 console.log(error);
@@ -489,7 +480,11 @@ export class PostComponent {
       });
 
       const users: User[] = this.peoples().map((t) => {
-        return { id: '', name: t.name } as User;
+        return {
+          id: '',
+          name: t.name,
+          profile_picture: t.profile_picture,
+        } as User;
       });
 
       const post: Post = {
@@ -497,12 +492,13 @@ export class PostComponent {
         post_user_id: {
           name: this._jwtService.getUserInfo()?.name,
           email: this._jwtService.getUserInfo()?.email,
+          profile_picture: this._jwtService.getUserInfo()?.img,
         } as User,
         post_medias_id: [...media],
         post_hashtag_id: [...hastag],
         post_group_id: null,
         tagged_users: [...users],
-        description: this.formPost.get('text')?.value.replace('\n', ''),
+        description: this.formPost.get('text')?.value[0],
         visible: true,
         create_at: new Date(),
         update_at: new Date(),
@@ -615,6 +611,8 @@ export class PostComponent {
     if (value) {
       const newPerson: People = {
         name: value,
+        profile_picture:
+          this.users.find((u) => u.name === value)?.profile_picture || '',
       };
       this.peoples.update((people: any) => [...people, newPerson]);
     }

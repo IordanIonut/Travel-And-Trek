@@ -2,24 +2,31 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Environment } from 'travel-and-trek-app-core/dist/app-core';
+import { Client } from '@gradio/client';
+import { SpinnerService } from 'src/app/_components/_spinner/spinner.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PhotoDescribeService {
-  private apiUrl = `${Environment.PHOTO_DESCRIBE_URL}/description-from-file`;
+  constructor(
+    private http: HttpClient,
+    private spinnerService: SpinnerService
+  ) {}
 
-  constructor(private http: HttpClient) {}
+  private clientPromise = Client.connect('WillemVH/Image_To_Text_Description');
 
-  checkImageForDescribe(image: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('image', image, image.name);
+  async describeImage(file: File): Promise<string> {
+    try {
+      this.spinnerService.show();
+      const client = await this.clientPromise;
+      const result = await client.predict('/feifeichat', {
+        image: file,
+      });
 
-    const headers = new HttpHeaders({
-      'x-rapidapi-key': Environment.RAPID_API_KEY,
-      'x-rapidapi-host': Environment.PHOTO_DESCRIBE_HOST,
-    });
-
-    return this.http.post<any>(this.apiUrl, formData, { headers });
+      return result.data as string;
+    } finally {
+      this.spinnerService.hide();
+    }
   }
 }

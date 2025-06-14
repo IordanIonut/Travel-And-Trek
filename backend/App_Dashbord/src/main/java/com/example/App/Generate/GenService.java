@@ -173,7 +173,7 @@ public class GenService {
                 LOG.info("START--user");
                 long startTime = System.currentTimeMillis();
                 Set<User> users = new HashSet<>(number);
-                List<Hashtag> tagList = hashtagRepository.findAll();
+                List<Hastag> tagList = hashtagRepository.findAll();
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
                 while (users.size() < number) {
@@ -190,7 +190,7 @@ public class GenService {
                     user.setEmail(email);
                     user.setLocation(faker.address().fullAddress());
                     user.setPassword(passwordEncoder.encode("123asd,./A"));
-                    user.setBio(faker.lorem().paragraphs(3).stream().limit(300).toString());
+                    user.setBio(String.join("\n\n", faker.lorem().paragraphs(3)));
                     user.setDate_create(this.getDate(10, 20).atStartOfDay());
                     user.setProfile_picture("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                     user.setGender(random.nextBoolean() ? GenderEnum.M : GenderEnum.F);
@@ -198,7 +198,7 @@ public class GenService {
                     user.setDate_last_update(LocalDateTime.now());
                     String qrData = "user-" + user.getName();
                     user.setQr_code(qrData);
-                    List<Hashtag> selectTag = getRandomSubset(tagList, random, 6);
+                    List<Hastag> selectTag = getRandomSubset(tagList, random, 6);
                     user.setUser_hashtag_id(random.nextBoolean() ? null : selectTag);
 
                     if (users.stream().noneMatch(existingUser -> existingUser.getEmail().equals(user.getEmail()) || existingUser.getName().equals(user.getName()))) {
@@ -222,7 +222,7 @@ public class GenService {
             long startTime = System.currentTimeMillis();
             LOG.info("START--tag");
             Set<String> existingNames = new HashSet<>(hashtagRepository.findAllTagsByName());
-            List<Hashtag> hashtagsToSave = new ArrayList<>(number);
+            List<Hastag> hashtagsToSave = new ArrayList<>(number);
 
             for (int i = 0; i < number; i++) {
                 String name;
@@ -232,7 +232,7 @@ public class GenService {
 
                 existingNames.add(name);
 
-                Hashtag tag = new Hashtag();
+                Hastag tag = new Hastag();
                 tag.setId(generateId());
                 tag.setName(name);
                 hashtagsToSave.add(tag);
@@ -377,7 +377,7 @@ public class GenService {
                 LOG.info("START--post");
                 List<Media> listUsersMedia = mediaRepository.findAllUserId();
                 List<Media> listGroupsMedia = mediaRepository.findAllGroupId();
-                List<Hashtag> tagList = hashtagRepository.findAll();
+                List<Hastag> tagList = hashtagRepository.findAll();
                 List<User> listUsers = userRepository.findAll();
                 PostEnum[] postTypes = PostEnum.values();
                 Set<Post> postBatch = new HashSet<>(number);

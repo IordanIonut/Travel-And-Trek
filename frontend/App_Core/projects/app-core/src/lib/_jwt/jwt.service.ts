@@ -9,18 +9,21 @@ import { Environment } from '../_environment/environment.local';
   providedIn: 'root',
 })
 export class JwtService {
+  isBrowser!: boolean;
+
   constructor(
     private _cookieService: CookieService,
     private _router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
     this.checkTokenExpiration(Environment.jwtToken);
   }
 
   saveToken(name: string, token: string): void {
     this._cookieService.set(name, token, {
       expires: 7,
-      secure: location.protocol === 'https:',
+      secure: this.isBrowser ? location.protocol === 'https:' : false,
       sameSite: 'Lax',
       path: '/',
     });

@@ -13,4 +13,5 @@ public class SearchDTO {
     private String type;
     private String id;
     private String name;
+    private String profile_picture;
 }

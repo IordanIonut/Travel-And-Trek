@@ -24,6 +24,7 @@ import { ValidationModelService } from 'src/app/_service/validator/validation-mo
 import {
   iconsObject,
   MaterialModule,
+  MediaEnum,
   Post,
   PostEnum,
   Share,
@@ -191,5 +192,17 @@ export class PostComponent {
       clearTimeout(this.holdTimeout);
     }
     this.isHolding = false;
+  }
+
+  isVideo(type: string | MediaEnum): boolean {
+    return type?.toString() === MediaEnum.VIDEO.toString();
+  }
+
+  isImage(type: string | MediaEnum): boolean {
+    return type?.toString() === MediaEnum.PHOTO.toString();
+  }
+
+  getMediaType(type: string | MediaEnum): string {
+    return type?.toString() || '';
   }
 }
