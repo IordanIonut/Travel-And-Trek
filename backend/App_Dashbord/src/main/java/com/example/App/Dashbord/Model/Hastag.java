@@ -13,7 +13,7 @@ import lombok.*;
 @Table(name = "HASHTAGS")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Cacheable
-public class Hashtag {
+public class Hastag {
     @Id
     @Column(name = "ID")
     private String id;
