@@ -98,27 +98,36 @@ export class PostComponent {
     return this.postShareService.getProperty(property, this.data);
   }
 
-  ngAfterViewInit(): void {
-    this.postShareService?.colorTief(
-      this.videoPlayer,
-      this.postContainer,
-      this.postImage1,
-      this.postImage2,
-      this.postImage3,
-      this.profile,
-      this.run,
-      this.index
-    );
-    this.cdr.detectChanges();
-    this.onShadowLefAndRight();
+  private hasAppliedColor = false;
+  ngAfterViewChecked(): void {
+    if (this.hasAppliedColor) {
+      return;
+    }
+
+    if (
+      this.postContainer?.nativeElement &&
+      ((this.postImage1 && this.postImage1.nativeElement.complete) ||
+        (this.postImage2 && this.postImage2.nativeElement.complete) ||
+        (this.postImage3 && this.postImage3.nativeElement.complete) ||
+        (this.profile && this.profile.nativeElement.complete) ||
+        (this.videoPlayer && this.videoPlayer.nativeElement))
+    ) {
+      this.postShareService?.colorTief(
+        this.videoPlayer,
+        this.postContainer,
+        this.postImage1,
+        this.postImage2,
+        this.postImage3,
+        this.profile,
+        this.run,
+        this.index
+      );
+      this.hasAppliedColor = true;
+    }
   }
 
   ngOnChanges(): void {
     this.postShareService.checkAutoplay(this.videoPlayer, this.run, this.index);
-    this.cdr.detectChanges();
-  }
-
-  ngAfterViewChecked() {
     this.cdr.detectChanges();
   }
 
@@ -155,31 +164,17 @@ export class PostComponent {
   }
 
   private onShadowLefAndRight() {
-    if (this.postImage2 !== undefined && this.conImage2 !== undefined) {
-      const imgElement = this.postImage2!.nativeElement;
-      const containerElement = this.conImage2.nativeElement;
-      imgElement.crossOrigin = 'anonymous';
-      if (imgElement.complete) {
-        this.shadow.applyShadowToContainer1(imgElement, containerElement);
-      } else {
-        imgElement.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer1(imgElement, containerElement);
-        });
-      }
-    }
+    this.postShareService?.colorTief(
+      this.videoPlayer,
+      this.postContainer,
+      this.postImage1,
+      this.postImage2,
+      this.postImage3,
+      this.profile,
+      this.run,
+      this.index
+    );
 
-    if (this.postImage3 !== undefined && this.conImage3 !== undefined) {
-      const imgElement = this.postImage3!.nativeElement;
-      const containerElement = this.conImage3.nativeElement;
-      imgElement.crossOrigin = 'anonymous';
-      if (imgElement.complete) {
-        this.shadow.applyShadowToContainer1(imgElement, containerElement);
-      } else {
-        imgElement.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer1(imgElement, containerElement);
-        });
-      }
-    }
     this.cdr.detectChanges();
   }
 

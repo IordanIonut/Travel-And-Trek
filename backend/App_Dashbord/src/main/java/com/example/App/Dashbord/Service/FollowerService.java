@@ -113,7 +113,6 @@ public class FollowerService {
     @Cacheable(value ="followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
     public List<UserDTO> findUserSuggestions(String name,  List<String> hashtags,  int index, int number){
         List<User> f = followerRepository.findUserSuggestions(name, hashtags);
-        LOG.info(f.size()+"");
         return new UserDTO().generateUserDTO(f, userRepository.findMutualFriends(name), index, number);
     }
 }

@@ -61,8 +61,7 @@ export class UserComponent {
     private router: Router,
     protected _skeletonService: SkeletonService,
     private _jwtService: JwtService
-  ) {
-  }
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['people']) {
@@ -73,17 +72,29 @@ export class UserComponent {
     this.length = this.people?.friends.length;
   }
 
-  ngAfterViewInit(): void {
-    if (this.im !== undefined && this.con !== undefined) {
-      const imgElement = this.im!.nativeElement;
+  private hasAppliedColor = false;
+  ngAfterViewChecked(): void {
+    if (this.hasAppliedColor) return;
+
+    if (this.im && this.con) {
+      const imgElement = this.im.nativeElement;
       const containerElement = this.con.nativeElement;
       imgElement.crossOrigin = 'anonymous';
+
       if (imgElement.complete) {
         this.shadow.applyShadowToContainer1(imgElement, containerElement);
+        this.hasAppliedColor = true;
       } else {
-        imgElement.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer1(imgElement, containerElement);
-        });
+        imgElement.addEventListener(
+          'load',
+          () => {
+            if (!this.hasAppliedColor) {
+              this.shadow.applyShadowToContainer1(imgElement, containerElement);
+              this.hasAppliedColor = true;
+            }
+          },
+          { once: true }
+        );
       }
     }
   }

@@ -81,103 +81,76 @@ export class PostShareService {
   }
 
   colorTief(
-    videoPlayer: ElementRef<HTMLVideoElement>,
+    videoPlayer: ElementRef<HTMLVideoElement> | undefined,
     postContainer: ElementRef<HTMLDivElement>,
-    postImage1: ElementRef<HTMLImageElement>,
-    postImage2: ElementRef<HTMLImageElement>,
-    postImage3: ElementRef<HTMLImageElement>,
-    profile: ElementRef<HTMLImageElement>,
-    run: number,
-    index: number
+    postImage1?: ElementRef<HTMLImageElement>,
+    postImage2?: ElementRef<HTMLImageElement>,
+    postImage3?: ElementRef<HTMLImageElement>,
+    profile?: ElementRef<HTMLImageElement>,
+    run?: number,
+    index?: number
   ) {
     if (videoPlayer && postContainer) {
-      this.setupVideoAutoplayObserver(videoPlayer, postContainer, run, index);
+      this.setupVideoAutoplayObserver(videoPlayer, postContainer, run!, index!);
     }
-    if (
-      postImage1 !== undefined &&
-      postImage2 !== undefined &&
-      postImage3 !== undefined &&
-      postContainer !== undefined
-    ) {
-      const imgElement1 = postImage1!.nativeElement;
-      const imgElement2 = postImage2.nativeElement;
-      const imgElement3 = postImage3.nativeElement;
-      const containerElement = postContainer.nativeElement;
-      imgElement1.crossOrigin = 'anonymous';
-      imgElement2.crossOrigin = 'anonymous';
-      imgElement3.crossOrigin = 'anonymous';
-      if (
-        imgElement1.complete &&
-        imgElement2.complete &&
-        imgElement3.complete
-      ) {
-        this.shadow.applyShadowToContainer3(
-          imgElement1,
-          imgElement2,
-          imgElement3,
-          containerElement
-        );
-      } else {
-        imgElement1.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer3(
-            imgElement1,
-            imgElement2,
-            imgElement3,
-            containerElement
-          );
-        });
-      }
-    } else if (postImage1 !== undefined && postImage2 && postContainer) {
-      const imgElement1 = postImage1!.nativeElement;
-      const imgElement2 = postImage2.nativeElement;
-      const containerElement = postContainer.nativeElement;
-      imgElement1.crossOrigin = 'anonymous';
-      imgElement2.crossOrigin = 'anonymous';
-      if (imgElement1.complete && imgElement2.complete) {
-        this.shadow.applyShadowToContainer2(
-          imgElement1,
-          imgElement2,
-          containerElement
-        );
-      } else {
-        imgElement1.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer2(
-            imgElement1,
-            imgElement2,
-            containerElement
-          );
-        });
-      }
-    } else if (postImage1 !== undefined && postContainer !== undefined) {
-      const imgElement = postImage1!.nativeElement;
-      const containerElement = postContainer.nativeElement;
-      imgElement.crossOrigin = 'anonymous';
-      if (imgElement.complete) {
-        this.shadow.applyShadowToContainer1(imgElement, containerElement);
-      } else {
-        imgElement.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer1(imgElement, containerElement);
-        });
-      }
-    } else if (
-      postImage1 === undefined &&
-      postImage2 === undefined &&
-      postImage3 === undefined &&
-      videoPlayer === undefined
-    ) {
-      if (!profile || !postContainer) {
+    const containerElement = postContainer.nativeElement;
+    const applyShadowAfterLoad = (
+      images: HTMLImageElement[],
+      applyShadowFn: (...args: any[]) => void
+    ) => {
+      images.forEach((img) => {
+        if (img.crossOrigin !== 'anonymous') {
+          img.crossOrigin = 'anonymous';
+        }
+      });
+
+      if (images.every((img) => img.complete)) {
+        applyShadowFn(...images, containerElement);
         return;
       }
-      const imgElement = profile!.nativeElement;
-      const containerElement = postContainer.nativeElement;
-      imgElement.crossOrigin = 'anonymous';
-      if (imgElement.complete) {
-        this.shadow.applyShadowToContainer1(imgElement, containerElement);
-      } else {
-        imgElement.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer1(imgElement, containerElement);
-        });
-      }
+
+      images.forEach((img) => {
+        if (!img.complete) {
+          const onLoad = () => {
+            if (images.every((i) => i.complete)) {
+              applyShadowFn(...images, containerElement);
+            }
+          };
+          img.addEventListener('load', onLoad, { once: true });
+        }
+      });
+    };
+
+    if (postImage1 && postImage2 && postImage3) {
+      applyShadowAfterLoad(
+        [
+          postImage1.nativeElement,
+          postImage2.nativeElement,
+          postImage3.nativeElement,
+        ],
+        this.shadow.applyShadowToContainer3.bind(this.shadow)
+      );
+    } else if (postImage1 && postImage2) {
+      applyShadowAfterLoad(
+        [postImage1.nativeElement, postImage2.nativeElement],
+        this.shadow.applyShadowToContainer2.bind(this.shadow)
+      );
+    } else if (postImage1) {
+      applyShadowAfterLoad(
+        [postImage1.nativeElement],
+        this.shadow.applyShadowToContainer1.bind(this.shadow)
+      );
+    } else if (
+      !postImage1 &&
+      !postImage2 &&
+      !postImage3 &&
+      !videoPlayer &&
+      profile
+    ) {
+      applyShadowAfterLoad(
+        [profile.nativeElement],
+        this.shadow.applyShadowToContainer1.bind(this.shadow)
+      );
     }
   }
 

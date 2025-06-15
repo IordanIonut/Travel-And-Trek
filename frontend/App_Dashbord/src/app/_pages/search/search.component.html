@@ -1,81 +1,63 @@
 <div class="page">
   <app-masthead></app-masthead>
-
-  <ng-container
-    *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader"
+  <mat-button-toggle-group
+    class="dash-style-toogle w-fit h-auto mb-2"
+    [(ngModel)]="selectedValues!"
+    style="overflow: visible"
+    multiple
+    (change)="onToggleChange($event)"
   >
-    <mat-button-toggle-group
-      class="dash-style-toogle w-fit h-auto mb-2"
-      [(ngModel)]="selectedValues"
-      style="overflow: visible"
-      multiple
-      (change)="onToggleChange($event)"
-    >
-      <mat-button-toggle *ngFor="let item of filters" [value]="item.value">
-        <mat-icon>{{ item.icon }}</mat-icon> {{ item.name }}
-      </mat-button-toggle>
-    </mat-button-toggle-group>
+    <mat-button-toggle *ngFor="let item of filters" [value]="item.value">
+      <mat-icon>{{ item.icon }}</mat-icon> {{ item.name }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
 
-    <div class="flex flex-col hide-scrollbar" (scroll)="onScroll($event)">
-      <div *ngFor="let section of index">
-        <div
-          class="flex flex-wrap w-full h-max justify-between gap-2"
-          *ngIf="onConstrainToogle(filters[1].value) && peoples !== undefined"
-        >
-          <app-user
-            *ngFor="let people of peoples[section]?.data || []"
-            [people]="people"
-          ></app-user>
-        </div>
-        <!-- <span class="bg-red-500 w-full h-2">a</span> -->
-        <div
-          class="flex flex-wrap w-full h-max justify-between gap-2"
-          *ngIf="onConstrainToogle(filters[2].value) && groups !== undefined"
-        >
-          <app-group
-            *ngFor="let group of groups[section]?.data"
-            [group]="group"
-          >
-          </app-group>
-        </div>
-        <!-- <span class="bg-red-500 w-full h-2">b</span> -->
-        <div
-          class="flex flex-wrap w-full h-max justify-between gap-2"
-          *ngIf="onConstrainToogle(filters[3].value) && posts !== undefined"
-        >
-          <app-post *ngFor="let data of posts[section]?.data" [data]="data">
-          </app-post>
-        </div>
-        <!-- <span class="bg-red-500 w-full h-2">c</span> -->
-        <div
-          class="flex flex-wrap w-full h-max justify-between gap-2"
-          *ngIf="onConstrainToogle(filters[4].value) && tagsPost !== undefined"
-        >
-          <app-post
-            *ngFor="let tag of tagsPost[section]?.data"
-            [data]="tag"
-          ></app-post>
-        </div>
-        <div
-          class="flex flex-wrap w-full h-max justify-between gap-2"
-          *ngIf="onConstrainToogle(filters[4].value) && tagsUser !== undefined"
-        >
-          <app-user
-            *ngFor="let tag of tagsUser[section]?.data"
-            [people]="tag"
-          ></app-user>
-        </div>
+  <div class="flex flex-col hide-scrollbar" (scroll)="onScroll($event)">
+    <div *ngFor="let section of index">
+      <div
+        class="flex flex-wrap w-full h-max justify-between gap-2"
+        *ngIf="onConstrainToogle(filters[1].value) && peoples !== undefined"
+      >
+        <app-user
+          *ngFor="let people of peoples[section]?.data || []"
+          [people]="people"
+        ></app-user>
+      </div>
+      <!-- <span class="bg-red-500 w-full h-2">a</span> -->
+      <div
+        class="flex flex-wrap w-full h-max justify-between gap-2"
+        *ngIf="onConstrainToogle(filters[2].value) && groups !== undefined"
+      >
+        <app-group *ngFor="let group of groups[section]?.data" [group]="group">
+        </app-group>
+      </div>
+      <!-- <span class="bg-red-500 w-full h-2">b</span> -->
+      <div
+        class="flex flex-wrap w-full h-max justify-between gap-2"
+        *ngIf="onConstrainToogle(filters[3].value) && posts !== undefined"
+      >
+        <app-post *ngFor="let data of posts[section]?.data" [data]="data">
+        </app-post>
+      </div>
+      <!-- <span class="bg-red-500 w-full h-2">c</span> -->
+      <div
+        class="flex flex-wrap w-full h-max justify-between gap-2"
+        *ngIf="onConstrainToogle(filters[4].value) && tagsPost !== undefined"
+      >
+        <app-post
+          *ngFor="let tag of tagsPost[section]?.data"
+          [data]="tag"
+        ></app-post>
+      </div>
+      <div
+        class="flex flex-wrap w-full h-max justify-between gap-2"
+        *ngIf="onConstrainToogle(filters[4].value) && tagsUser !== undefined"
+      >
+        <app-user
+          *ngFor="let tag of tagsUser[section]?.data"
+          [people]="tag"
+        ></app-user>
       </div>
     </div>
-  </ng-container>
-  <ng-template #skeletonLoader>
-    <div class="flex flex-row gap-2 mb-4">
-      <div
-        *ngFor="let _ of [1, 2, 3, 4, 5]"
-        class="skeleton-button skeleton-color w-10 h-10 rounded-md"
-      ></div>
-    </div>
-    <app-post></app-post>
-    <app-post></app-post>
-  </ng-template>
+  </div>
 </div>

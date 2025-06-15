@@ -97,8 +97,7 @@ export class PostComponent {
     private postShareService: PostShareService,
     protected _skeletonService: SkeletonService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {}
 
@@ -106,17 +105,32 @@ export class PostComponent {
     return this.postShareService.getProperty(property, this.data);
   }
 
-  ngAfterViewInit(): void {
-    this.postShareService?.colorTief(
-      this.videoPlayer,
-      this.postContainer,
-      this.postImage1,
-      this.postImage2,
-      this.postImage3,
-      this.profile,
-      this.run,
-      this.index
-    );
+  private hasAppliedColor = false;
+  ngAfterViewChecked(): void {
+    if (this.hasAppliedColor) {
+      return;
+    }
+
+    if (
+      this.postContainer?.nativeElement &&
+      ((this.postImage1 && this.postImage1.nativeElement.complete) ||
+        (this.postImage2 && this.postImage2.nativeElement.complete) ||
+        (this.postImage3 && this.postImage3.nativeElement.complete) ||
+        (this.profile && this.profile.nativeElement.complete) ||
+        (this.videoPlayer && this.videoPlayer.nativeElement))
+    ) {
+      this.postShareService?.colorTief(
+        this.videoPlayer,
+        this.postContainer,
+        this.postImage1,
+        this.postImage2,
+        this.postImage3,
+        this.profile,
+        this.run,
+        this.index
+      );
+      this.hasAppliedColor = true;
+    }
   }
 
   ngOnChangesVideo(): void {

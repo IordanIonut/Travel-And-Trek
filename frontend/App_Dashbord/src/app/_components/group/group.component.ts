@@ -58,17 +58,29 @@ export class GroupComponent {
     this.length = this.group.friends.length + this.group.followers.length;
   }
 
-  ngAfterViewInit(): void {
-    if (this.im !== undefined && this.con !== undefined) {
-      const imgElement = this.im!.nativeElement;
+  private hasAppliedColor = false;
+  ngAfterViewChecked(): void {
+    if (this.hasAppliedColor) return;
+
+    if (this.im && this.con) {
+      const imgElement = this.im.nativeElement;
       const containerElement = this.con.nativeElement;
       imgElement.crossOrigin = 'anonymous';
+
       if (imgElement.complete) {
         this.shadow.applyShadowToContainer1(imgElement, containerElement);
+        this.hasAppliedColor = true;
       } else {
-        imgElement.addEventListener('load', () => {
-          this.shadow.applyShadowToContainer1(imgElement, containerElement);
-        });
+        imgElement.addEventListener(
+          'load',
+          () => {
+            if (!this.hasAppliedColor) {
+              this.shadow.applyShadowToContainer1(imgElement, containerElement);
+              this.hasAppliedColor = true;
+            }
+          },
+          { once: true }
+        );
       }
     }
   }

@@ -43,7 +43,7 @@ export class ShadowService {
   applyShadowToContainer1(img: HTMLImageElement, container: HTMLElement): void {
     try {
       const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
+      const context = canvas.getContext('2d', { willReadFrequently: true });
       if (!context) {
         throw new Error('Canvas context is not available.');
       }
@@ -75,8 +75,8 @@ export class ShadowService {
     try {
       const canvas1 = document.createElement('canvas');
       const canvas2 = document.createElement('canvas');
-      const context1 = canvas1.getContext('2d');
-      const context2 = canvas2.getContext('2d');
+      const context1 = canvas1.getContext('2d', { willReadFrequently: true });
+      const context2 = canvas2.getContext('2d', { willReadFrequently: true });
 
       if (!context1 || !context2) {
         throw new Error('Canvas context is not available.');
@@ -117,9 +117,9 @@ export class ShadowService {
       const canvas1 = document.createElement('canvas');
       const canvas2 = document.createElement('canvas');
       const canvas3 = document.createElement('canvas');
-      const context1 = canvas1.getContext('2d');
-      const context2 = canvas2.getContext('2d');
-      const context3 = canvas3.getContext('2d');
+      const context1 = canvas1.getContext('2d', { willReadFrequently: true });
+      const context2 = canvas2.getContext('2d', { willReadFrequently: true });
+      const context3 = canvas3.getContext('2d', { willReadFrequently: true });
       if (!context1 || !context2 || !context3) {
         throw new Error('Canvas context is not available.');
       }
