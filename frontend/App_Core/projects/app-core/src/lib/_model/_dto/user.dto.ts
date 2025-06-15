@@ -4,5 +4,5 @@ import { User } from '../_class/user';
 export interface UserDTO {
   user: User;
   friends: User[];
-  state: FollowerStatusEnum;
+  state: FollowerStatusEnum | null;
 }

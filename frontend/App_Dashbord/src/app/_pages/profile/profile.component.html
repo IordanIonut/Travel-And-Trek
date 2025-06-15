@@ -201,7 +201,9 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+    <ng-container
+      *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader"
+    >
       <div class="flex items-center align-middle">
         <div class="flex flex-col items-center justify-between relative gap-2">
           <mat-form-field
@@ -246,7 +248,7 @@
             </div>
           </div>
           <div
-            class="flex-row gap-2 overflow-x-auto justify-between"
+            class="flex-row gap-2 overflow-x-auto justify-between no-scrollbar"
             style="display: ruby"
           >
             <div

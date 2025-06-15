@@ -3,7 +3,9 @@
   class="rounded-[15px] p-2 mb-4 flex flex-row gap-1 items-center justify-start relative w-[37rem] h-[180px]"
   (click)="onSendPage(group.group.name)"
 >
-  <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+  <ng-container
+    *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader"
+  >
     <div class="flex flex-col justify-start items-center self-stretch">
       <img
         #im

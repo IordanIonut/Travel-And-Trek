@@ -4,7 +4,9 @@
   [ngClass]="{ 'width: inherit !important;': shared, 'w-[37rem]': !shared }"
   (dblclick)="onSendPage(people.user.name)"
 >
-  <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+  <ng-container
+    *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader"
+  >
     <div class="flex flex-col justify-start items-center self-stretch">
       <img
         #im
@@ -65,14 +67,24 @@
           class="dash-style-button"
           mat-stroked-button
           color="primary"
-          (click)="onFollow($event, people.user)"
+          (click)="onFollow($event, people.user, null)"
         >
-          <mat-icon>{{
-            people !== null
-              ? (people.state | followerStatusIcon : enums : iconName)
-              : "send"
-          }}</mat-icon>
-          Follow
+          <mat-icon>
+            {{
+              people?.state
+                ? (people?.state! | followerStatusIcon : enums : iconName)
+                : "send"
+            }}
+          </mat-icon>
+        </button>
+        <button
+          *ngIf="onPeopleIsAccepted()"
+          class="dash-style-button"
+          mat-stroked-button
+          color="primary"
+          (click)="onFollow($event, people.user, 'DELETE')"
+        >
+          <mat-icon> close </mat-icon>
         </button>
       </div>
     </div>

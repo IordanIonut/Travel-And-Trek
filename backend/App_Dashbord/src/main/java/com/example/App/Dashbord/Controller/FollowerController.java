@@ -2,7 +2,6 @@ package com.example.App.Dashbord.Controller;
 
 import com.example.App.Dashbord.DTO.UserDTO;
 import com.example.App.Dashbord.Enum.FollowerStatusEnum;
-import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Follower;
 import com.example.App.Dashbord.Service.FollowerService;
 import org.slf4j.Logger;
@@ -88,6 +87,19 @@ public class FollowerController {
             LOG.error("Failed to retrieve findUserSuggestion(): {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
+        }
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deleteFollower(@RequestBody final Follower body) {
+        try {
+            this.followerService.deleteFollower(body);
+            LOG.info("deleteFollower()- follower - Successful.");
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            LOG.error("Failed to retrieve deleteFollower(): {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 }

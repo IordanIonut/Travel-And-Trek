@@ -2,11 +2,10 @@ package com.example.App.Dashbord.Repository;
 
 import com.example.App.Dashbord.Embedded.FollowerId;
 import com.example.App.Dashbord.Enum.FollowerStatusEnum;
-import com.example.App.Dashbord.Enum.PostEnum;
 import com.example.App.Dashbord.Model.Follower;
 import com.example.App.Dashbord.Model.User;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -61,5 +60,10 @@ public interface FollowerRepository extends JpaRepository<Follower, FollowerId> 
     AND (f2.follower_user_id = u OR f2.follower_user_id_follower = u)
 """)
     List<User> findCommonFollowers(@Param("name") String name);
+
+    @Modifying
+    @Query("DELETE FROM Follower f WHERE (f.follower_user_id.id = :user AND f.follower_user_id_follower.id = :follower_user) " +
+            "OR (f.follower_user_id.id = :follower_user AND f.follower_user_id_follower.id = :user)")
+    void deleteFollower(@Param("user") String user, @Param("follower_user") String follower_user);
 
 }

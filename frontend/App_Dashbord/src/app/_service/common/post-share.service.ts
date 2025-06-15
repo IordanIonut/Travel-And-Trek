@@ -165,6 +165,9 @@ export class PostShareService {
       postImage3 === undefined &&
       videoPlayer === undefined
     ) {
+      if (!profile || !postContainer) {
+        return;
+      }
       const imgElement = profile!.nativeElement;
       const containerElement = postContainer.nativeElement;
       imgElement.crossOrigin = 'anonymous';

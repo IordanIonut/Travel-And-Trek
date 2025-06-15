@@ -3,7 +3,7 @@
   class="pt-[5px] pr-5 pb-[5px] flex flex-row items-center justify-between self-stretch shrink-0 relative overflow-hidden"
 >
   <!-- NavBar-->
-  <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+  <ng-container *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader">
     <div
       class="flex flex-row gap-2.5 items-center justify-start self-stretch flex-1 relative"
     >
@@ -34,7 +34,8 @@
                 onWillBeSelect({
                   name: 'Search...',
                   type: 'Search...',
-                  id: 'Search...'
+                  id: 'Search...',
+                  profile_picture: '',
                 })
               "
             >

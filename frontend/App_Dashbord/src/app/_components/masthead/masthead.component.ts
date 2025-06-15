@@ -17,7 +17,7 @@ import { DialogService } from 'src/app/_service/dialog/dialog.service';
 import { ShadowService } from 'src/app/_service/shadow/shadow.service';
 import { UserService } from 'src/app/_service/models/user.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   setLoadingOnRequest,
@@ -27,7 +27,7 @@ import {
 @Component({
   selector: 'app-masthead',
   standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule, NgFor, NgIf],
+  imports: [MaterialModule, ReactiveFormsModule, CommonModule],
   templateUrl: './masthead.component.html',
   styleUrl: './masthead.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -40,6 +40,7 @@ export class MastheadComponent {
     name: 'Search...',
     type: 'Search...',
     id: 'Search...',
+    profile_picture: '',
   };
   profile!: string;
   iconsObject = iconsObject;
@@ -94,6 +95,7 @@ export class MastheadComponent {
           name: params['search'],
           type: params['type'],
           id: 'Search...',
+          profile_picture: '',
         };
       this.selectValue = this.filters.find((f) => f.value === params['type'])!;
       if (this.selectValue === undefined) {
@@ -180,7 +182,6 @@ export class MastheadComponent {
         0,
         10
       )
-      .pipe(setLoadingOnRequest(this._skeletonService))
       .subscribe({
         next: (data: SearchDTO[]) => {
           this.options = data;

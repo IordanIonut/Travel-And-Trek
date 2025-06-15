@@ -79,7 +79,6 @@ export class HomeComponent {
   ngOnInit(): void {
     this._storyService
       .findFriendsStory(this._jwtService.getUserInfo()?.name!, 0, 300)
-      .pipe(setLoadingOnRequest(this._skeletonService))
       .subscribe({
         next: (data: Story[]) => {
           this.story = data;
@@ -145,7 +144,6 @@ export class HomeComponent {
           this.indexPosts,
           Environment.number
         )
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             if (this.indexPosts === 0) {
@@ -173,7 +171,6 @@ export class HomeComponent {
           this.indexUsers,
           Environment.number
         )
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: UserDTO[]) => {
             if (this.indexUsers === 0) {
@@ -202,7 +199,6 @@ export class HomeComponent {
           this.indexPostsReel,
           Environment.number
         )
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             if (this.indexPostsReel === 0) {
@@ -231,7 +227,6 @@ export class HomeComponent {
           this.indexPostsText,
           Environment.number
         )
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             if (this.indexPostsText === 0) {

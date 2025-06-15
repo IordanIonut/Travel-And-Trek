@@ -71,7 +71,6 @@ public class UserService {
         return userRepository.findSuggestersSearch(name, type, pageable);
     }
 
-    @Cacheable(value = "userCache", key = "'findUsersAndMutualFriends::' + #name + '::' + #search + '::' + #page + '::'+#size")
     public List<UserDTO> findUsersAndMutualFriends(String name, String search, int page, int size) {
         return new UserDTO().generateUserDTO(userRepository.findUsersBySearch(search), userRepository.findMutualFriends(name), page, size);
     }

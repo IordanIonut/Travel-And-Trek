@@ -8,7 +8,7 @@
   #postElement
   class="rounded-[15px] p-2.5 flex flex-row gap-2.5 items-center justify-start self-stretch relative overflow-hidden mb-3"
 >
-  <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+  <ng-container *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader">
     <div
       class="flex flex-col justify-start items-center self-stretch w-[3.5rem]"
     >
@@ -96,7 +96,7 @@
           class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
         >
           <div
-            class="flex-row gap-2 overflow-x-auto justify-between"
+            class="flex-row gap-2 overflow-x-auto justify-between no-scrollbar"
             style="display: ruby"
           >
             <div *ngIf="isPost(data)" class="flex flex-row">
@@ -129,7 +129,7 @@
           class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
         >
           <div
-            class="flex-row gap-2 overflow-x-auto justify-between"
+            class="flex-row gap-2 overflow-x-auto justify-between no-scrollbar"
             style="display: ruby"
           >
             <div *ngIf="isPost(data)">

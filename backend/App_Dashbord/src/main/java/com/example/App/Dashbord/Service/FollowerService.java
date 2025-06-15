@@ -8,16 +8,14 @@ import com.example.App.Dashbord.Model.Follower;
 import com.example.App.Dashbord.Model.User;
 import com.example.App.Dashbord.Repository.FollowerRepository;
 import com.example.App.Dashbord.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,15 +58,18 @@ public class FollowerService {
         return new UserDTO().generateUserDTO(followerRepository.findUsersByFollowerStatus(name, status), userRepository.findMutualFriends(name), index, number);
     }
 
-    @CacheEvict(value = "followerCache", allEntries = true)
+    @Transactional
     public void postCreateFollower(Follower follower) {
-        if (follower.getFollower_user_id() == null || follower.getFollower_user_id().getId() == null) {
-            throw new IllegalArgumentException("Target user (user_id) must not be null.");
+        if (follower.getFollower_user_id().getId() == null || follower.getFollower_user_id().getId().isEmpty()) {
+            Optional<User> followerUserOpt = userRepository.findUserByEmail(follower.getFollower_user_id().getEmail());
+            if (followerUserOpt.isEmpty()) {
+                throw new IllegalArgumentException("Follower user not found.");
+            }
+            follower.setFollower_user_id(followerUserOpt.get());
         }
 
-        if (follower.getFollower_user_id_follower() == null || follower.getFollower_user_id_follower().getId() == null) {
-            Optional<User> followerUserOpt = userRepository.findUserByEmail(
-                    follower.getFollower_user_id_follower() != null ? follower.getFollower_user_id_follower().getEmail() : null
+        if (follower.getFollower_user_id_follower().getId() == null || follower.getFollower_user_id_follower().getId().isEmpty()) {
+            Optional<User> followerUserOpt = userRepository.findUserByEmail(follower.getFollower_user_id_follower().getEmail()
             );
             if (followerUserOpt.isEmpty()) {
                 throw new IllegalArgumentException("Follower user not found.");
@@ -83,13 +84,30 @@ public class FollowerService {
         follower.setId(id);
         follower.setCreated_at(LocalDateTime.now());
 
-        System.out.println("Saving follower with user_id = " + follower.getFollower_user_id()
-                + ", follower_user_id = " + follower.getFollower_user_id_follower());
-
         followerRepository.save(follower);
     }
 
+    @Transactional
+    public void deleteFollower(Follower follower) {
+        if (follower.getFollower_user_id().getId() == null || follower.getFollower_user_id().getId().isEmpty()) {
+            Optional<User> followerUserOpt = userRepository.findUserByEmail(follower.getFollower_user_id().getEmail());
+            if (followerUserOpt.isEmpty()) {
+                throw new IllegalArgumentException("Follower user not found.");
+            }
+            follower.setFollower_user_id(followerUserOpt.get());
+        }
 
+        if (follower.getFollower_user_id_follower().getId() == null || follower.getFollower_user_id_follower().getId().isEmpty()) {
+            Optional<User> followerUserOpt = userRepository.findUserByEmail(follower.getFollower_user_id_follower().getEmail()
+            );
+            if (followerUserOpt.isEmpty()) {
+                throw new IllegalArgumentException("Follower user not found.");
+            }
+            follower.setFollower_user_id_follower(followerUserOpt.get());
+        }
+
+        this.followerRepository.deleteFollower(follower.getFollower_user_id().getId(), follower.getFollower_user_id_follower().getId());
+    }
 
     //HOME SUGGESTION FRIENDS
     @Cacheable(value ="followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
@@ -98,38 +116,4 @@ public class FollowerService {
         LOG.info(f.size()+"");
         return new UserDTO().generateUserDTO(f, userRepository.findMutualFriends(name), index, number);
     }
-
-//    @Cacheable(value = "followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
-//    public List<UserDTO> findUserSuggestions(String name, List<String> hashtags, int index, int number) {
-//        List<User> suggestedUsers = this.followerRepository.findCommonFollowers(name);
-//        List<Follower> mutualFollowers = userRepository.findMutualFriends(name);
-//
-//        List<UserDTO> userDTOs = new ArrayList<>();
-//
-//        for (User user : suggestedUsers) {
-//            List<User> mutualFriends = new ArrayList<>();
-//            FollowerStatusEnum statusEnum = null;
-//
-//            for (Follower follower : mutualFollowers) {
-//                if (follower.getFollower_user_id().equals(user) || follower.getFollower_user_id_follower().equals(user)) {
-//                    User mutualFriend = follower.getFollower_user_id().equals(user)
-//                            ? follower.getFollower_user_id_follower()
-//                            : follower.getFollower_user_id();
-//
-//                    if (!mutualFriends.contains(mutualFriend)) {
-//                        mutualFriends.add(mutualFriend);
-//                        statusEnum = follower.getId().getStatus();
-//
-//                        if (mutualFriends.size() == 7) {
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//            userDTOs.add(new UserDTO(user, mutualFriends, statusEnum));
-//        }
-//        userDTOs.sort(Comparator.comparingInt(dto -> -dto.getFriends().size()));
-//
-//        return userDTOs.subList(index, number);
-//    }
 }

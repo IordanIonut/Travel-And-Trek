@@ -1,7 +1,9 @@
 <div class="page">
   <app-masthead></app-masthead>
 
-  <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+  <ng-container
+    *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader"
+  >
     <mat-button-toggle-group
       class="dash-style-toogle w-fit h-auto mb-2"
       [(ngModel)]="selectedValues"

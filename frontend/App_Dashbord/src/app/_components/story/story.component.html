@@ -1,5 +1,5 @@
 <div class="story-com width-page flex !flex-col !h-[91vh] hide-scrollbar">
-  <ng-container *ngIf="!_skeletonService.isLoading; else skeletonLoader">
+  <ng-container *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader">
     <!-- Your Story-->
     <div class="story-header">
       <div class="border-efec story-body">

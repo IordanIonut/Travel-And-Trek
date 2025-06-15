@@ -1,4 +1,4 @@
-import { NgFor, NgIf, SlicePipe } from '@angular/common';
+import { CommonModule, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
 import { MastheadComponent } from 'src/app/_components/masthead/masthead.component';
 import {
@@ -26,6 +26,7 @@ import {
   setLoadingOnRequest,
   SkeletonService,
 } from 'src/app/_service/common/skeleton.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -33,13 +34,12 @@ import {
   imports: [
     MaterialModule,
     MastheadComponent,
-    NgFor,
     GroupComponent,
     FormsModule,
     PostComponent,
-    NgIf,
     UserComponent,
     HttpClientModule,
+    CommonModule,
   ],
   templateUrl: './search.component.html',
   providers: [
@@ -100,11 +100,7 @@ export class SearchComponent {
     private cdr: ChangeDetectorRef,
     private _jwtService: JwtService,
     protected _skeletonService: SkeletonService
-  ) {
-    this._skeletonService.setLoading(true);
-  }
-
-  ngOnInit(): void {}
+  ) {}
 
   ngAfterViewInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -170,7 +166,6 @@ export class SearchComponent {
           this.indexPeoples,
           Environment.number
         )
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: UserDTO[]) => {
             if (this.indexPeoples === 0) {
@@ -202,7 +197,6 @@ export class SearchComponent {
           this.indexGroups,
           Environment.number
         )
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: GroupDTO[]) => {
             if (this.indexPeoples === 0) {
@@ -228,7 +222,6 @@ export class SearchComponent {
     ) {
       this.postService
         .getPostBySearch(this.search, this.indexPosts, Environment.number)
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             if (this.indexPosts === 0) {
@@ -255,7 +248,6 @@ export class SearchComponent {
     ) {
       this.hashtagService
         .getPostByTag([...this.search], this.indexTags, Environment.number)
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: Post[]) => {
             // console.log(data);
@@ -283,7 +275,6 @@ export class SearchComponent {
           this.indexTags,
           Environment.number
         )
-        .pipe(setLoadingOnRequest(this._skeletonService))
         .subscribe({
           next: (data: UserDTO[]) => {
             // console.log(data);

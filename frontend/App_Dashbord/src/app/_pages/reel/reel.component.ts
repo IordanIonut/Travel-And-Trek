@@ -16,7 +16,7 @@ import {
   StoryService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { MastheadComponent } from '../../_components/masthead/masthead.component';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { PostComponent } from 'src/app/_components/post/post.component';
 import { UserService } from 'src/app/_service/models/user.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,8 +35,7 @@ import {
     MastheadComponent,
     PostComponent,
     HttpClientModule,
-    NgFor,
-    NgIf,
+    CommonModule,
     StoryComponent,
   ],
   providers: [UserService, PostService, SkeletonService],
@@ -67,16 +66,16 @@ export class ReelComponent {
   }
 
   ngOnInit(): void {
-    this._storyService
-      .findFriendsStory(this._jwtService.getUserInfo()?.name!, 0, 300)
-      .subscribe({
-        next: (data: Story[]) => {
-          this.story = data;
-        },
-        error: (error: Error) => {
-          console.log(error);
-        },
-      });
+    // this._storyService
+    //   .findFriendsStory(this._jwtService.getUserInfo()?.name!, 0, 300)
+    //   .subscribe({
+    //     next: (data: Story[]) => {
+    //       this.story = data;
+    //     },
+    //     error: (error: Error) => {
+    //       console.log(error);
+    //     },
+    //   });
 
     this.fetchData();
   }
@@ -125,7 +124,7 @@ export class ReelComponent {
         .getPostByUserFriends(
           this._jwtService.getUserInfo()?.name!,
           PostEnum.REEL,
-          [],
+          this._jwtService.getUserInfo()?.hashtag!,
           this.index,
           Environment.number
         )

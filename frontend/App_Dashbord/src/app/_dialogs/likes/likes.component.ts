@@ -60,7 +60,6 @@ export class LikesComponent {
             this.id.type,
             null
           )
-          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
               if (data.length === 0) {
@@ -82,7 +81,6 @@ export class LikesComponent {
             this.id.type,
             LikeContentEnum.LIKE
           )
-          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
               if (data.length === 0) {
@@ -104,7 +102,6 @@ export class LikesComponent {
             this.id.type,
             LikeContentEnum.LOVE
           )
-          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
               if (data.length === 0) {
@@ -126,7 +123,6 @@ export class LikesComponent {
             this.id.type,
             LikeContentEnum.FUNNY
           )
-          .pipe(setLoadingOnRequest(this._skeletonService))
           .subscribe({
             next: (data: UserDTO[]) => {
               if (data.length === 0) {

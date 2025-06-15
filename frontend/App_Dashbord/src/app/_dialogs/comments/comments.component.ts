@@ -56,7 +56,6 @@ export class CommentsComponent {
   private onfetchData() {
     this.commnetService
       .findCommentsByPost(this.id.id, this.id.type)
-      .pipe(setLoadingOnRequest(this._skeletonService))
       .subscribe({
         next: (data: Comment[]) => {
           if (data.length === 0) {

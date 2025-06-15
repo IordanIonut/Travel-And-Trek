@@ -1,10 +1,5 @@
-import { NgFor, NgIf, SlicePipe } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-} from '@angular/core';
+import { CommonModule, NgFor, NgIf, SlicePipe } from '@angular/common';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FollowerStatusIconPipe } from 'src/app/_pipe/follower-status-icon.pipe';
 import { SkeletonService } from 'src/app/_service/common/skeleton.service';
@@ -25,7 +20,7 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
 @Component({
   selector: 'app-group',
   standalone: true,
-  imports: [MaterialModule, NgFor, NgIf, SlicePipe, FollowerStatusIconPipe],
+  imports: [MaterialModule, CommonModule, SlicePipe, FollowerStatusIconPipe],
   providers: [
     ShadowService,
     DialogService,
@@ -57,8 +52,7 @@ export class GroupComponent {
     private _jwtService: JwtService,
     private router: Router,
     protected _skeletonService: SkeletonService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.length = this.group.friends.length + this.group.followers.length;

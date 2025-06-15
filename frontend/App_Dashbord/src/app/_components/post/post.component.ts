@@ -1,4 +1,10 @@
-import { isPlatformBrowser, NgFor, NgIf, NgStyle } from '@angular/common';
+import {
+  CommonModule,
+  isPlatformBrowser,
+  NgFor,
+  NgIf,
+  NgStyle,
+} from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -36,7 +42,7 @@ import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_ty
 @Component({
   selector: 'app-post',
   standalone: true,
-  imports: [MaterialModule, NgFor, NgIf, NgStyle],
+  imports: [MaterialModule, CommonModule, NgStyle],
   providers: [LikeService, CommentService, ShareService, PostShareService],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
@@ -92,14 +98,7 @@ export class PostComponent {
     protected _skeletonService: SkeletonService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // this._skeletonService.setLoading(true);
   }
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['data']) {
-  //     this._skeletonService.setLoading(!this.data);
-  //   }
-  // }
 
   ngOnInit(): void {}
 
@@ -108,7 +107,7 @@ export class PostComponent {
   }
 
   ngAfterViewInit(): void {
-    this.postShareService.colorTief(
+    this.postShareService?.colorTief(
       this.videoPlayer,
       this.postContainer,
       this.postImage1,

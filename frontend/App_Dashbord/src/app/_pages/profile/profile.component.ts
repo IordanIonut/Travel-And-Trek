@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -49,8 +49,7 @@ type ElementType = 'settings' | 'qr_code' | 'logout';
   standalone: true,
   imports: [
     MaterialModule,
-    NgFor,
-    NgIf,
+    CommonModule,
     MastheadComponent,
     PostComponent,
     StoryComponent,
@@ -159,29 +158,23 @@ export class ProfileComponent {
 
   ngAfterViewInit(): void {
     if (this.type === 'user') {
-      this.userService
-        .findUserByName(this.user)
-        .pipe(setLoadingOnRequest(this._skeletonService))
-        .subscribe({
-          next: (data: UserProfileDTO) => {
-            this.profileDTO = data;
-          },
-          error: (error) => {
-            console.log(error);
-          },
-        });
+      this.userService.findUserByName(this.user).subscribe({
+        next: (data) => {
+          this.profileDTO = data!;
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
     } else if (this.type === 'group') {
-      this.groupService
-        .findGroupDetailsByName(this.user)
-        .pipe(setLoadingOnRequest(this._skeletonService))
-        .subscribe({
-          next: (data: GroupDetailDTO) => {
-            this.profileDTO = data;
-          },
-          error: (error: Error) => {
-            console.log(error);
-          },
-        });
+      this.groupService.findGroupDetailsByName(this.user).subscribe({
+        next: (data) => {
+          this.profileDTO = data!;
+        },
+        error: (error: Error) => {
+          console.log(error);
+        },
+      });
     }
 
     if (this.isPhoto) this.onTabChangePhoto({ index: 0 });
@@ -390,8 +383,6 @@ export class ProfileComponent {
         case 0: {
           this.postService
             .getPostByProfile(this.user, this.indexAll, Environment.number)
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexAll === 0) {
@@ -421,7 +412,6 @@ export class ProfileComponent {
               this.indexMedia,
               Environment.number
             )
-            .pipe(setLoadingOnRequest(this._skeletonService))
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexMedia === 0) {
@@ -452,8 +442,6 @@ export class ProfileComponent {
               this.indexReel,
               Environment.number
             )
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexReel === 0) {
@@ -483,8 +471,6 @@ export class ProfileComponent {
               this.indexText,
               Environment.number
             )
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexText === 0) {
@@ -509,8 +495,6 @@ export class ProfileComponent {
         case 4: {
           this.shareService
             .getPostByProfile(this.user, this.indexShare, Environment.number)
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Share[]) => {
                 if (this.indexShare === 0) {
@@ -535,8 +519,6 @@ export class ProfileComponent {
         case 5: {
           this.postService
             .getPostByUserTag(this.user, this.indexTag, Environment.number)
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexTag === 0) {
@@ -568,8 +550,6 @@ export class ProfileComponent {
               this.indexAll,
               Environment.number
             )
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexAll === 0) {
@@ -599,8 +579,6 @@ export class ProfileComponent {
               this.indexMedia,
               Environment.number
             )
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexMedia === 0) {
@@ -630,8 +608,6 @@ export class ProfileComponent {
               this.indexReel,
               Environment.number
             )
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexReel === 0) {
@@ -661,8 +637,6 @@ export class ProfileComponent {
               this.indexText,
               Environment.number
             )
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Post[]) => {
                 if (this.indexText === 0) {
@@ -687,8 +661,6 @@ export class ProfileComponent {
         case 4: {
           this.shareService
             .getAllSharesByGroup(this.user, this.indexShare, Environment.number)
-            .pipe(setLoadingOnRequest(this._skeletonService))
-
             .subscribe({
               next: (data: Share[]) => {
                 if (this.indexShare === 0) {

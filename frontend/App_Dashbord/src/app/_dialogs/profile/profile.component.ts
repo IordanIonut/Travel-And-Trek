@@ -55,8 +55,8 @@ export class ProfileComponent {
         data.name === 'name' ? this._jwtService.getUserInfo()!.name! : data.name
       )
       .subscribe({
-        next: (data: UserProfileDTO) => {
-          this.userDTO = data;
+        next: (data) => {
+          this.userDTO = data!;
         },
         error: (error) => {
           console.log(error);

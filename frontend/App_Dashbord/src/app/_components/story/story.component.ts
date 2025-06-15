@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -21,7 +21,7 @@ import {
 @Component({
   selector: 'app-story',
   standalone: true,
-  imports: [NgFor, MaterialModule, NgIf],
+  imports: [CommonModule, MaterialModule],
   providers: [DialogService],
   templateUrl: './story.component.html',
   styleUrl: './story.component.scss',
@@ -38,14 +38,6 @@ export class StoryComponent {
     private validationModelService: ValidationModelService,
     protected _skeletonService: SkeletonService
   ) {}
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['highlight']) {
-  //     this._skeletonService.setLoading(
-  //       !this.highlight || this.highlight.length === 0
-  //     );
-  //   }
-  // }
 
   ngAfterViewInit(): void {
     this.images.changes.subscribe(() => this.processElements());

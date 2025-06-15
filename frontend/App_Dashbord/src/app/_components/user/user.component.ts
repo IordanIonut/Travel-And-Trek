@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
+import { CommonModule, NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import {
   Component,
@@ -33,9 +33,8 @@ import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_fro
     FollowerStatusIconPipe,
     SlicePipe,
     HttpClientModule,
-    NgIf,
+    CommonModule,
     NgClass,
-    NgFor,
   ],
   providers: [],
   templateUrl: './user.component.html',
@@ -53,23 +52,20 @@ export class UserComponent {
 
   length!: number;
   enums = Object.values(FollowerStatusEnum);
-  iconName: string[] = ['send', 'schedule', 'cancel', 'close'];
+  iconName: string[] = ['chat', 'schedule', 'cancel', 'close'];
 
   constructor(
     private shadow: ShadowService,
     private followService: FollowService,
     private dialogService: DialogService,
     private router: Router,
-    private elementRef: ElementRef,
     protected _skeletonService: SkeletonService,
     private _jwtService: JwtService
   ) {
-    this._skeletonService.setLoading(true);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['people']) {
-      this._skeletonService.setLoading(!this.people);
     }
   }
 
@@ -130,42 +126,55 @@ export class UserComponent {
       });
   }
 
-  protected onFollow(event: Event, user: User) {
+  protected onFollow(event: Event, user: User, type: 'DELETE' | null) {
     event.stopPropagation();
-    console.log(this.people);
+    const follow: Follow = {
+      id: {
+        id: '',
+        status: FollowerStatusEnum.PENDING,
+      },
+      follower_user_id: {
+        id: '',
+        user_hashtag_id: [],
+        name: this._jwtService.getUserInfo()?.name!,
+        email: this._jwtService.getUserInfo()?.email!,
+        password: '',
+        bio: '',
+        date_create: new Date(),
+        profile_picture: '',
+        gender: GenderEnum.F,
+        date_of_birth: new Date(),
+        date_last_update: new Date(),
+        qr_code: '',
+        location: '',
+      },
+      follower_user_id_follower: user,
+      created_at: new Date(),
+    };
     if (this.people.state === null) {
-      const follow: Follow = {
-        id: {
-          id: '',
-          status: FollowerStatusEnum.PENDING,
-        },
-        follower_user_id: {
-          id: '',
-          user_hashtag_id: [],
-          name: '',
-          email: this._jwtService.getUserInfo()?.email!,
-          password: '',
-          bio: '',
-          date_create: new Date(),
-          profile_picture: '',
-          gender: GenderEnum.F,
-          date_of_birth: new Date(),
-          date_last_update: new Date(),
-          qr_code: '',
-          location: '',
-        },
-        follower_user_id_follower: user,
-        created_at: new Date(),
-      };
-
       this.followService.postCreateFollower(follow).subscribe({
         next: (data: any) => {
           this.people.state = FollowerStatusEnum.PENDING;
         },
         error: (error: Error) => {},
       });
+    } else if (
+      this.people.state === FollowerStatusEnum.PENDING ||
+      type === 'DELETE'
+    ) {
+      this.followService.deleteFollower(follow).subscribe({
+        next: (data: any) => {
+          console.log(data);
+          this.people.state = null;
+        },
+        error: (error: Error) => {},
+      });
     } else if (this.people.state === FollowerStatusEnum.ACCEPTED) {
-      this.router.navigate(['/messge/chat']);
+      this.router.navigate(['/message/chat']);
     }
+  }
+
+  onPeopleIsAccepted(): boolean {
+    return this.people.state === FollowerStatusEnum.ACCEPTED;
   }
 }

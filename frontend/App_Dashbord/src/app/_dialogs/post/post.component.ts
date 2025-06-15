@@ -99,7 +99,7 @@ export class PostComponent {
   }
 
   ngAfterViewInit(): void {
-    this.postShareService.colorTief(
+    this.postShareService?.colorTief(
       this.videoPlayer,
       this.postContainer,
       this.postImage1,

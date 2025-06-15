@@ -140,9 +140,9 @@ export class SeeValueComponent {
             this.isComment ? 'POST' : 'COMMENT'
           )
           .subscribe({
-            next: (data: LikeDTO) => {
-              this.count = data.count;
-              this.selectedIcon = data.content;
+            next: (data) => {
+              this.count = data!.count;
+              this.selectedIcon = data!.content;
             },
             error: (error: Error) => {
               console.log(error);
