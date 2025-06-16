@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { PostService } from 'src/app/_service/_model/post.service';
+import { PostService } from 'projects/app-create/src/lib/_service/_model/post.service';
 import {
   AlertComponent,
   Environment,
@@ -32,19 +32,18 @@ import {
 import { Position } from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({
-  selector: 'app-preview-post',
-  standalone: true,
-  imports: [
-    MaterialModule,
-    NgFor,
-    NgIf,
-    NgStyle,
-    AlertComponent,
-    HttpClientModule,
-  ],
-  providers: [ShareService, PostService, ValidationModelService],
-  templateUrl: './preview-post.component.html',
-  styleUrl: './preview-post.component.scss',
+    selector: 'app-preview-post',
+    imports: [
+        MaterialModule,
+        NgFor,
+        NgIf,
+        NgStyle,
+        AlertComponent,
+        HttpClientModule,
+    ],
+    providers: [ShareService, PostService, ValidationModelService],
+    templateUrl: './preview-post.component.html',
+    styleUrl: './preview-post.component.scss'
 })
 export class PreviewPostComponent {
   @Input() data!: Post;

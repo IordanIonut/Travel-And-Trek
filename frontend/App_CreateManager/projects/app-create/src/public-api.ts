@@ -1,6 +1,1 @@
-/*
- * Public API Surface of app-create
- */
-
-export * from './lib/app-create.service';
-export * from './lib/app-create.component';
+export * from './lib/_components/post/post.component';

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Environment } from 'travel-and-trek-app-core/dist/app-core';
 import { Client } from '@gradio/client';
-import { SpinnerService } from 'src/app/_components/_spinner/spinner.service';
+import { SpinnerService } from '../../_components/_spinner/spinner.service';
 
 @Injectable({
   providedIn: 'root',

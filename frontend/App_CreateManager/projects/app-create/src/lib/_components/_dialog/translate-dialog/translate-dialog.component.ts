@@ -1,28 +1,23 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   AlertComponent,
-  Environment,
   MaterialModule,
   Mode,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { MatMenuModule } from '@angular/material/menu';
-import { TranslateApiService } from 'src/app/_service/_api/translate.service';
-import { response } from 'express';
-import { error } from 'console';
+import { TranslateApiService } from 'projects/app-create/src/lib/_service/_api/translate.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-translate-dialog',
-  standalone: true,
   imports: [
     MaterialModule,
-    NgFor,
-    NgIf,
+    CommonModule,
     ReactiveFormsModule,
-    MatMenuModule,
+    // MatMenuModule,
     HttpClientModule,
     NgClass,
     AlertComponent,

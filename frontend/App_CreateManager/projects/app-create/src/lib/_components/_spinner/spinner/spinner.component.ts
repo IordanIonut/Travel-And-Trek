@@ -3,11 +3,10 @@ import { SpinnerService } from '../spinner.service';
 import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-spinner',
-  standalone: true,
-  imports: [CommonModule, AsyncPipe],
-  templateUrl: './spinner.component.html',
-  styleUrl: './spinner.component.scss',
+    selector: 'app-spinner',
+    imports: [CommonModule, AsyncPipe],
+    templateUrl: './spinner.component.html',
+    styleUrl: './spinner.component.scss'
 })
 export class SpinnerComponent {
   isLoading: any;

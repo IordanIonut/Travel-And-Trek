@@ -9,8 +9,7 @@ import {
 
 @Component({
   selector: 'app-nsfw-dialog',
-  standalone: true,
-  imports: [AlertComponent, NgIf],
+  imports: [],
   templateUrl: './nsfw-dialog.component.html',
   styleUrl: './nsfw-dialog.component.scss',
 })

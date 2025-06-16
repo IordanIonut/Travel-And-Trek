@@ -7,15 +7,16 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { TranslateDialogComponent } from 'projects/app-create/src/lib/_components/_dialog/translate-dialog/translate-dialog.component';
+import { SpinnerComponent } from 'projects/app-create/src/lib/_components/_spinner/spinner/spinner.component';
+import { PostComponent } from 'projects/app-create/src/public-api';
 import {
   MaterialModule,
   SetThemeService,
 } from 'travel-and-trek-app-core/dist/app-core';
-import { SpinnerComponent } from './_components/_spinner/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     RouterOutlet,
     CommonModule,
@@ -23,6 +24,8 @@ import { SpinnerComponent } from './_components/_spinner/spinner/spinner.compone
     HttpClientModule,
     RouterModule,
     SpinnerComponent,
+    PostComponent,
+    TranslateDialogComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

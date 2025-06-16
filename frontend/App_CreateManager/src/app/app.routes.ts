@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PostComponent } from './_components/post/post.component';
+import { PostComponent } from 'projects/app-create/src/lib/_components/post/post.component';
 
 export const routes: Routes = [
   {

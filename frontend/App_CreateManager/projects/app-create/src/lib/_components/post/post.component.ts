@@ -30,21 +30,17 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { NsfwDetectionService } from 'src/app/_service/_api/nsfwDetection.service';
-import { PhotoDescribeService } from 'src/app/_service/_api/photoDescribe.service';
-import { HashtagGenerateService } from 'src/app/_service/_api/hashtagGenerate.service';
-import e, { response } from 'express';
-import { DialogService } from 'src/app/_service/_dialogs/dialog.service';
-import { NsfwDetectionTextService } from 'src/app/_service/_api/nsfwDetectionText.service';
+import { NsfwDetectionService } from 'projects/app-create/src/lib/_service/_api/nsfwDetection.service';
+import { PhotoDescribeService } from 'projects/app-create/src/lib/_service/_api/photoDescribe.service';
+import { HashtagGenerateService } from 'projects/app-create/src/lib/_service/_api/hashtagGenerate.service';
+import { DialogService } from 'projects/app-create/src/lib/_service/_dialogs/dialog.service';
+import { NsfwDetectionTextService } from 'projects/app-create/src/lib/_service/_api/nsfwDetectionText.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
-import { UserService } from 'src/app/_service/_model/user.service';
-import { error } from 'console';
-import { PostService } from 'src/app/_service/_model/post.service';
-import { TranslateApiService } from 'src/app/_service/_api/translate.service';
-import { SpinnerComponent } from '../_spinner/spinner/spinner.component';
-import { SpinnerService } from '../_spinner/spinner.service';
+import { UserService } from 'projects/app-create/src/lib/_service/_model/user.service';
+import { TranslateApiService } from '../../_service/_api/translate.service';
+import { timingSafeEqual } from 'crypto';
 
 interface Tags {
   name: string;
@@ -56,7 +52,6 @@ interface People {
 
 @Component({
   selector: 'app-post',
-  standalone: true,
   imports: [
     MaterialModule,
     HttpClientModule,
@@ -64,7 +59,7 @@ interface People {
     CommonModule,
     HttpClientModule,
     AlertComponent,
-    MatChipsModule,
+    // MatChipsModule,
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
@@ -233,6 +228,7 @@ export class PostComponent {
     this.fetchMediaAsFile(this.imagePreview as string)
       .then((file) => {
         this._photoDescribeService.describeImage(file).then((response: any) => {
+          console.log(response);
           this.formPost.get('text')?.setValue(response);
         });
       })
@@ -260,9 +256,8 @@ export class PostComponent {
             .subscribe({
               next: (response) => {
                 response.data.slice(0, 5).forEach((tag: any) => {
-                  this.addTag({
-                    value: tag.tag as string,
-                  } as MatChipInputEvent);
+                  this.newTag = tag.tag;
+                  this.addTagFromInput();
                 });
               },
               error: (error) => {
@@ -510,22 +505,42 @@ export class PostComponent {
   }
 
   onSelectPerson(event: any) {
-    this.addPerson({ value: event.target.innerText } as MatChipInputEvent);
+    this.newPerson = event.target.innerText;
+    this.addPersonFromInput();
   }
+
+  showSuggestions = signal(false);
 
   onInputChange(event: Event) {
     const inputElement = event.target as HTMLInputElement;
+    const query = inputElement.value.trim();
+    this.newPerson = query;
+
+    if (!query) {
+      this.users = [];
+      this.showSuggestions.set(false);
+      return;
+    }
+
     this._userService
-      .findSuggestersSearch(inputElement.value, 'person', 0, Environment.number)
+      .findSuggestersSearch(query, 'person', 0, Environment.number)
       .subscribe({
         next: (response) => {
           this.users = response;
+          this.showSuggestions.set(this.users.length > 0);
           this._cdr.detectChanges();
         },
         error: (error) => {
-          console.log(error);
+          console.log('Autocomplete error:', error);
+          this.showSuggestions.set(false);
         },
       });
+  }
+
+  selectSuggestion(name: string) {
+    this.newPerson = name;
+    this.addPersonFromInput();
+    this.showSuggestions.set(false);
   }
 
   private onNSFWDetection(image: string, obj: any) {
@@ -562,41 +577,61 @@ export class PostComponent {
     }, duration);
   }
 
-  readonly addOnBlur = true;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  readonly tags = signal<Tags[]>([]);
-  readonly peoples = signal<People[]>([]);
   readonly announcer = inject(LiveAnnouncer);
 
-  addTag(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      this.tags.update((tags: any) => [...tags, { name: value }]);
-    }
-    if (event.chipInput) {
-      event.chipInput.clear();
+  readonly tags = signal<Tags[]>([]);
+  readonly peoples = signal<People[]>([]);
+
+  newTag = '';
+  newPerson = '';
+
+  // Helper: trackBy functions for ngFor
+  trackByTag(index: number, item: Tags) {
+    return item.name;
+  }
+
+  trackByPerson(index: number, item: People) {
+    return item.name;
+  }
+
+  // Add tag/people on Enter or Comma key press
+  handleInputKeydown(event: KeyboardEvent, type: 'tag' | 'person') {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      if (type === 'tag') {
+        this.addTagFromInput();
+      } else {
+        this.addPersonFromInput();
+      }
     }
   }
 
-  removeTag(tag: Tags): void {
-    this.tags.update((tags: any) => {
+  addTagFromInput() {
+    const value = this.newTag.trim();
+    if (value) {
+      this.tags.update((tags) => [...tags, { name: value }]);
+      this.announcer.announce(`Added ${value}`);
+    }
+    this.newTag = '';
+  }
+
+  removeTag(tag: Tags) {
+    this.tags.update((tags) => {
       const index = tags.indexOf(tag);
-      if (index < 0) {
-        return tags;
-      }
+      if (index < 0) return tags;
       tags.splice(index, 1);
       this.announcer.announce(`Removed ${tag.name}`);
       return [...tags];
     });
   }
 
-  editTag(tag: Tags, event: any) {
-    const value = event.value.trim();
+  editTag(tag: Tags, newValue: string | null) {
+    const value = (newValue ?? '').trim();
     if (!value) {
       this.removeTag(tag);
       return;
     }
-    this.tags.update((tags: any) => {
+    this.tags.update((tags) => {
       const index = tags.indexOf(tag);
       if (index >= 0) {
         tags[index].name = value;
@@ -606,40 +641,36 @@ export class PostComponent {
     });
   }
 
-  addPerson(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+  addPersonFromInput() {
+    const value = this.newPerson.trim();
     if (value) {
       const newPerson: People = {
         name: value,
-        profile_picture:
-          this.users.find((u) => u.name === value)?.profile_picture || '',
+        profile_picture: '',
       };
-      this.peoples.update((people: any) => [...people, newPerson]);
+      this.peoples.update((people) => [...people, newPerson]);
+      this.announcer.announce(`Added ${value}`);
     }
-    if (event.chipInput) {
-      event.chipInput.clear();
-    }
+    this.newPerson = '';
   }
 
-  removePerson(person: People): void {
-    this.peoples.update((people: any) => {
+  removePerson(person: People) {
+    this.peoples.update((people) => {
       const index = people.indexOf(person);
-      if (index < 0) {
-        return people;
-      }
+      if (index < 0) return people;
       people.splice(index, 1);
       this.announcer.announce(`Removed ${person.name}`);
       return [...people];
     });
   }
 
-  editPerson(person: People, event: any) {
-    const value = event.value.trim();
+  editPerson(person: People, newValue: string | null) {
+    const value = (newValue ?? '').trim();
     if (!value) {
       this.removePerson(person);
       return;
     }
-    this.peoples.update((people: any) => {
+    this.peoples.update((people) => {
       const index = people.indexOf(person);
       if (index >= 0) {
         people[index].name = value;
@@ -647,5 +678,29 @@ export class PostComponent {
       }
       return people;
     });
+  }
+
+  blurTarget(target: EventTarget | null): void {
+    if (
+      target &&
+      'blur' in target &&
+      typeof (target as HTMLElement).blur === 'function'
+    ) {
+      (target as HTMLElement).blur();
+    }
+  }
+
+  editPersonFromEvent(person: People, target: EventTarget | null) {
+    if (target && 'textContent' in target) {
+      const text = (target as HTMLElement).textContent?.trim() ?? '';
+      this.editPerson(person, text);
+    }
+  }
+
+  editTagFromEvent(tag: Tags, target: EventTarget | null) {
+    if (target && 'textContent' in target) {
+      const text = (target as HTMLElement).textContent?.trim() ?? '';
+      this.editTag(tag, text);
+    }
   }
 }

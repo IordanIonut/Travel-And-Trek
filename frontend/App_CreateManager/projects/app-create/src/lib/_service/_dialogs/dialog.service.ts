@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateDialogComponent } from 'src/app/_components/_dialog/translate-dialog/translate-dialog.component';
 import { Observable } from 'rxjs';
-import { NsfwDialogComponent } from 'src/app/_components/_dialog/nsfw-dialog/nsfw-dialog.component';
 import { Post } from 'travel-and-trek-app-core/dist/app-core';
-import { PreviewPostComponent } from 'src/app/_components/_dialog/preview-post/preview-post.component';
+import { TranslateDialogComponent } from '../../_components/_dialog/translate-dialog/translate-dialog.component';
+import { NsfwDialogComponent } from '../../_components/_dialog/nsfw-dialog/nsfw-dialog.component';
+import { PreviewPostComponent } from '../../_components/_dialog/preview-post/preview-post.component';
 
 @Injectable({
   providedIn: 'root',
