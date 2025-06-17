@@ -16,5 +16,15 @@ export const routes: Routes = [
       { path: 'change-password', component: ChangeComponent },
     ],
   },
+  // {
+  //   path: 'dashboard',
+  //   children: [
+  //     { path: 'feet', component: HomeComponent },
+  //     { path: 'search', component: SearchComponent },
+  //     { path: 'reel', component: ReelComponent },
+  //     { path: 'profile', component: ProfileComponent },
+  //     { path: '', redirectTo: 'feet', pathMatch: 'full' },
+  //   ],
+  // },
   { path: '', redirectTo: '/authentication/login', pathMatch: 'full' },
 ];

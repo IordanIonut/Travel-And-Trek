@@ -1,0 +1,415 @@
+<div class="page overflow-visible" style="overflow: visible !important">
+  <app-masthead></app-masthead>
+  <div class="flex flex-row h-full justify-between mr-1.5 relative">
+    <div *ngIf="isPhoto" class="flex flex-row gap-3 w-[48rem] relative">
+      <div class="flex-col w-full flex relative">
+        <mat-tab-group
+          dynamicHeight
+          mat-stretch-tabs
+          [disablePagination]="true"
+          [disableRipple]="true"
+          animationDuration="0ms"
+          class="h-[100%] dash-style-tab-group !flex-col-reverse"
+          (selectedTabChange)="onTabChangePhoto($event)"
+        >
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">{{ iconsObjectNow["ALL"].name }}</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollPhoto($event, 0)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexAll)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postsAll[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon>{{ iconsObjectNow["NEWSPAPER"].name }}</mat-icon>
+            </ng-template>
+
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollPhoto($event, 1)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexMedia)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postMedia[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">{{
+                iconsObjectNow["PLAY_CIRCLE"].name
+              }}</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollPhoto($event, 2)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexReel)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postsReel[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">{{
+                iconsObjectNow["DESCRIPTION"].name
+              }}</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollPhoto($event, 3)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexText)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postsText[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">{{
+                iconsObjectNow["REPLY_ALL"].name
+              }}</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollPhoto($event, 4)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexShare)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of shareAll[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">{{ iconsObjectNow["SELL"].name }}</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollPhoto($event, 5)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexTag)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-post
+                    *ngFor="let post of postTag[item]?.data"
+                    [data]="post"
+                  ></app-post>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+
+    <div *ngIf="isFollowing" class="flex flex-row gap-3 w-[48rem] relative">
+      <div class="flex-col w-full flex relative">
+        <mat-tab-group
+          animationDuration="12ms"
+          class="h-[100%] dash-style-tab-group"
+          (selectedTabChange)="onTabChangeFollowing($event)"
+        >
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">{{ iconsObjectNow["ALL"].name }}</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollFollowing($event, 0)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexFollowing)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-user
+                    *ngFor="let people of followings[item]?.data"
+                    [people]="people"
+                  ></app-user>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab class="w-full h-full">
+            <ng-template mat-tab-label>
+              <mat-icon class="icon">{{ iconsObjectNow["BLOCK"].name }}</mat-icon>
+            </ng-template>
+            <div
+              class="hide-scrollbar h-[85vh]"
+              (scroll)="onScrollFollowing($event, 0)"
+            >
+              <div *ngFor="let item of generateIndexArray(indexBlock)">
+                <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+                  <app-user
+                    *ngFor="let people of blocks[item]?.data"
+                    [people]="people"
+                  ></app-user>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+
+    <div *ngIf="isFollowrs" class="flex flex-row gap-3 w-[48rem] relative">
+      <div class="flex-col w-full flex">
+        <div
+          class="hide-scrollbar h-[91vh]"
+          (scroll)="onScrollFollowers($event)"
+        >
+          <div *ngFor="let item of generateIndexArray(indexFollower)">
+            <div class="flex flex-wrap gap-1 justify-between w-full h-fit">
+              <app-user
+                *ngFor="let people of followers[item]?.data"
+                [people]="people"
+              ></app-user>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container
+      *ngIf="!(_skeletonService.loading$ | async); else skeletonLoader"
+    >
+      <div class="flex items-center align-middle">
+        <div class="flex flex-col items-center justify-between relative gap-2">
+          <mat-form-field
+            *ngIf="isFollowrs || isFollowing"
+            class="dash-style-input w-4/5 absolute -top-20"
+            appearance="fill"
+          >
+            <mat-icon matPrefix>{{ iconsObjectNow["SEARCH"].name }}</mat-icon>
+            <mat-label>Seach ...</mat-label>
+            <input matInput placeholder="Search" />
+          </mat-form-field>
+
+          <div
+            class="flex flex-col items-center justify-start self-stretch shrink-0 relative gap-2"
+          >
+            <div
+              class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
+            >
+              <button
+                #conProfileDialog
+                class="story-body"
+                (click)="onOpenPhote()"
+              >
+                <img
+                  #imgProfileDialog
+                  id="imgProfileDialog"
+                  draggable="false"
+                  class="story max-w-max"
+                  style="object-fit: cover; width: 6rem; height: 6rem"
+                  src="{{ getProperty('url') }}"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            class="flex flex-col items-center justify-start shrink-0 relative gap-2"
+          >
+            <div
+              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative self-stretch flex items-center justify-start"
+            >
+              {{ getProperty("name") }}
+            </div>
+          </div>
+          <div
+            class="flex-row gap-2 overflow-x-auto justify-between no-scrollbar"
+            style="display: ruby"
+          >
+            <div
+              *ngFor="let item of getProperty('hashtag')!"
+              class="clSecond justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
+            >
+              #{{ item?.name }}
+            </div>
+          </div>
+
+          <div
+            class="flex flex-row justify-center shrink-0 relative h-[70px] mb-2 gap-2"
+          >
+            <div
+              class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
+            >
+              <div class="view">
+                <div
+                  class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+                >
+                  {{ getProperty("posts") }}
+                </div>
+                <div
+                  class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
+                >
+                  <button class="border-efec story-body" (click)="onIsPhoto()">
+                    <mat-icon class="icon-butoon">{{
+                      iconsObjectNow["PHOTO_CAMERA"].name
+                    }}</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"
+              ></div>
+            </div>
+            <div
+              class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
+            >
+              <div class="view">
+                <div
+                  class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+                >
+                  {{ getProperty("followers") }}
+                </div>
+                <div
+                  class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
+                >
+                  <button
+                    class="border-efec story-body"
+                    (click)="onIsFollowrs()"
+                  >
+                    <mat-icon class="icon-butoon">{{
+                      iconsObjectNow["PERSON"].name
+                    }}</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="bgEfec w-1 h-full rounded-[4px] relative shrink-0 flex"
+              ></div>
+            </div>
+            <div
+              class="flex flex-row gap-5 justify-start shrink-0 relative h-[70px]"
+            >
+              <div class="view">
+                <div
+                  class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal relative flex items-center justify-start"
+                >
+                  {{ getProperty("followings") }}
+                </div>
+                <div
+                  class="flex flex-row gap-2.5 items-center justify-center shrink-0 relative"
+                >
+                  <button
+                    class="border-efec story-body"
+                    (click)="onIsFollowing()"
+                  >
+                    <mat-icon class="icon-butoon">{{
+                      iconsObjectNow["PERSON_SEARCH"].name
+                    }}</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2.5 items-start justify-start relative">
+            <div
+              class="text-[#ffffff] text-left font-['Inter-Regular',_sans-serif] text-sm font-normal w-auto relative flex items-center justify-start"
+            >
+              {{ getProperty("bio") }}
+            </div>
+          </div>
+
+          <div
+            class="p-[5px] flex flex-row gap-2.5 items-center justify-around self-stretch shrink-0 relative"
+          >
+            <div class="nav-bar relative h-fit m-2 sm:m-4">
+              <div class="relative flex items-center">
+                <div
+                  *ngFor="let item of elemnts; let i = index"
+                  class="flex flex-row items-center"
+                >
+                  <div class="element" (click)="onMake(item)">
+                    <mat-icon class="clEfec">{{ item }}</mat-icon>
+                  </div>
+                  <div *ngIf="i < elemnts.length - 1" class="line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #skeletonLoader>
+      <div class="flex flex-col items-center justify-center relative gap-2">
+        <!-- Skeleton for Search Bar -->
+        <div
+          *ngIf="isFollowrs || isFollowing"
+          class="skeleton-bar skeleton-color w-4/5 h-10 rounded-md absolute -top-20"
+        ></div>
+
+        <!-- Skeleton for Profile Picture -->
+        <div class="skeleton-circle skeleton-color w-24 h-24"></div>
+
+        <!-- Skeleton for Name -->
+        <div class="skeleton-text skeleton-color w-32 h-6 rounded-md"></div>
+
+        <!-- Skeleton for Hashtags -->
+        <div class="flex flex-row gap-2 overflow-x-auto">
+          <div
+            *ngFor="let _ of [1, 2, 3]"
+            class="skeleton-hashtag skeleton-color w-16 h-6 rounded-md"
+          ></div>
+        </div>
+
+        <!-- Skeleton for Stats -->
+        <div class="flex flex-row justify-center gap-4">
+          <div class="skeleton-stat skeleton-color w-16 h-6 rounded-md"></div>
+          <div class="skeleton-stat skeleton-color w-16 h-6 rounded-md"></div>
+          <div class="skeleton-stat skeleton-color w-16 h-6 rounded-md"></div>
+        </div>
+
+        <!-- Skeleton for Bio -->
+        <div class="skeleton-text skeleton-color w-3/4 h-6 rounded-md"></div>
+
+        <!-- Skeleton for Navigation Bar -->
+        <div class="flex flex-row gap-2">
+          <div
+            *ngFor="let _ of [1, 2, 3]"
+            class="skeleton-icon skeleton-color w-10 h-10 rounded-full"
+          ></div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div>
+      <app-story
+        [highlight]="getProperty('highlight')!"
+        class="flex w-[82px]"
+      ></app-story>
+    </div>
+  </div>
+</div>

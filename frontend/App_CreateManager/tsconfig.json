@@ -5,11 +5,10 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": false,
     "baseUrl": "./",
     "paths": {
-      "app-create": [
-        "./dist/app-create"
-      ],
       "travel-and-trek-app-core": ["./node_modules/travel-and-trek-app-core"],
       "travel-and-trek-app-core/*": ["node_modules/travel-and-trek-app-core/*"]
     },

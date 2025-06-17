@@ -1,0 +1,494 @@
+<div
+  #postElement
+  class="rounded-[15px] p-2.5 flex flex-row gap-2.5 items-center justify-start self-stretch relative overflow-hidden mb-3"
+>
+  <div class="flex flex-col justify-start items-center self-stretch w-[3.5rem]">
+    <button
+      *ngIf="isShare(data) || isPost(data)"
+      (click)="
+        isPost(data) ? onOpenProfile($event, data!.post_user_id!.name) : null
+      "
+      (click)="
+        isShare(data) ? onOpenProfile($event, data!.share_user_id!.name) : null
+      "
+    >
+      <img
+        draggable="false"
+        id="profile"
+        #profile
+        crossorigin="anonymous"
+        class="rounded-full mb-3 h-14 object-cover justify-start flex flex-col self-stretch max-w-max w-full"
+        src="{{
+          getProperty('profile_picture') ||
+            (isShare(data) && data!.share_user_id!.profile_picture)
+        }}"
+      />
+    </button>
+    <div
+      *ngIf="isShare(data)"
+      class="bgEfec w-2 h-8 rounded-[4px] relative flex mb-3"
+      style="margin-top: -3px"
+    ></div>
+    <button
+      *ngIf="isShare(data)"
+      (click)="onOpenProfile($event, data!.share_user_id_sharled!.name)"
+    >
+      <img
+        draggable="false"
+        class="rounded-full mb-3 h-14 object-cover max-w-max justify-start flex flex-col self-stretch w-full"
+        src="{{ data!.share_user_id_sharled!.profile_picture }}"
+      />
+    </button>
+    <div
+      class="bgEfec w-1 h-full rounded-[4px] relative flex mb-3"
+      style="margin-top: -3px"
+    ></div>
+    <div *ngIf="isPost(data) || isShare(data)">
+      <div *ngFor="let item of getTaggedUsers(data); let k = index">
+        <button (click)="onOpenProfile($event, item.name)">
+          <img
+            draggable="false"
+            [ngStyle]="
+              (isPost(data) && k !== data!.tagged_users!.length - 1) ||
+              (isShare(data) &&
+                k !== data!.share_post_id!.tagged_users!.length - 1)
+                ? { marginBottom: '-10px' }
+                : {}
+            "
+            class="rounded-full h-14 object-cover justify-start flex flex-col self-stretch w-full"
+            src="{{ item?.profile_picture }}"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-col w-[45rem] gap-2.5 items-start self-stretch relative justify-between"
+  >
+    <div
+      class="bgCom rounded-[15px] p-2.5 flex flex-col gap-1 items-start justify-start self-stretch shrink-0 relative"
+    >
+      <div
+        class="textCl text-left text-2xl font-normal relative self-stretch flex items-center justify-start"
+      >
+        {{
+          getProperty("name") || (isShare(data) && data!.share_user_id!.name)
+        }}
+      </div>
+      <div
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
+      >
+        {{ data!.description }}
+      </div>
+      <div
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
+      >
+        <div
+          class="flex-row gap-2 overflow-x-auto justify-between no-scrollbar"
+          style="display: ruby"
+        >
+          <div *ngIf="isPost(data)" class="flex flex-row">
+            <div
+              *ngFor="let item of data.post_hashtag_id"
+              class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
+            >
+              #{{ item?.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="isShare(data) && data!.shareId!.type === ShareEnum.POST"
+      class="bgCom rounded-[15px] p-2.5 flex flex-col gap-1 items-start justify-start self-stretch shrink-0 relative"
+    >
+      <div
+        class="textCl text-left text-2xl font-normal relative self-stretch flex items-center justify-start"
+      >
+        {{ data!.share_user_id_sharled!.name }}
+      </div>
+      <div
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
+      >
+        {{ data!.description }}
+      </div>
+      <div
+        class="textCl text-left text-sm font-normal relative self-stretch flex items-center justify-start"
+      >
+        <div
+          class="flex-row gap-2 overflow-x-auto justify-between no-scrollbar"
+          style="display: ruby"
+        >
+          <div *ngIf="isPost(data)">
+            <div
+              *ngFor="let item of data.post_hashtag_id"
+              class="font-['Inter-Regular',_sans-serif] justify-between text-sm font-normal m-2 px-3 py-1 hashtag"
+            >
+              #{{ item?.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- POST -->
+    <div
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
+      *ngIf="
+        (isPost(data) &&
+          data?.id?.type === PostEnum.POST &&
+          data!.post_medias_id!.length > 0) ||
+        (isShare(data) &&
+          data?.shareId?.type === ShareEnum.POST &&
+          data!.share_post_id!.post_medias_id!.length > 0)
+      "
+    >
+      <div
+        #postContainer
+        class="flex flex-col gap-2.5 self-stretch flex-1 relative post-container flex-wrap content-around items-center justify-between"
+      >
+        <!-- <img
+          draggable="false"
+          class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full h-[32rem]"
+          style="object-fit: cover"
+          id="postImage1"
+          #postImage1
+          crossorigin="anonymous"
+          src="{{
+            (isPost(data) && data!.post_medias_id![position]!.url) ||
+              (isShare(data) &&
+                data!.share_post_id!.post_medias_id![position]!.url)
+          }}"
+          alt="image"
+        /> -->
+
+        <ng-container
+          *ngIf="
+            getMediaType(
+              isPost(data)
+                ? data!.post_medias_id![position]!.id!.type
+                : isShare(data)
+                ? data!.share_post_id!.post_medias_id![position]!.id!.type
+                : ''
+            ) as mediaUrl
+          "
+        >
+          <img
+            *ngIf="isImage(mediaUrl)"
+            draggable="false"
+            class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full h-[32rem]"
+            style="object-fit: cover"
+            [src]="
+              (isPost(data) && data!.post_medias_id![position]!.url) ||
+              (isShare(data) &&
+                data!.share_post_id!.post_medias_id![position]!.url)
+            "
+            alt="image"
+            id="postImage1"
+            #postImage1
+            crossorigin="anonymous"
+          />
+
+          <div class="video-container" *ngIf="isVideo(mediaUrl)" #postContainer>
+            <video
+              class="rounded-[5px] self-stretch h-full flex-1 relative"
+              [controls]="true"
+              [autoplay]="false"
+              [muted]="true"
+              [loop]="true"
+              id="videoPlayer{{ index }}"
+              #videoPlayer
+              crossorigin="anonymous"
+              (mouseenter)="playVideo(videoPlayer)"
+              (mouseleave)="pauseVideo(videoPlayer)"
+            >
+              <source
+                [src]="
+                  (isPost(data) && data!.post_medias_id![position]!.url) ||
+                  (isShare(data) &&
+                    data!.share_post_id!.post_medias_id![position]!.url)
+                "
+                type="video/mp4"
+              />
+            </video>
+          </div>
+        </ng-container>
+      </div>
+      <div
+        *ngIf="
+          (isPost(data) && data!.post_medias_id!.length >= 1) ||
+          (isShare(data) && data!.share_post_id!.post_medias_id!.length >= 1)
+        "
+        class="flex flex-col gap-2.5 items-start justify-center self-stretch flex-1 fixed"
+      >
+        <div
+          #conImage2
+          class="rounded-[15px] p-2.5 img right-[-20rem]"
+          *ngIf="
+            (isPost(data) && data!.post_medias_id!.length > position + 1) ||
+            (isShare(data) &&
+              data!.share_post_id!.post_medias_id!.length > position + 1)
+          "
+        >
+          <!-- <img
+            draggable="false"
+            style="object-fit: cover; position: static"
+            id="postImage2"
+            #postImage2
+            (click)="onRight()"
+            crossorigin="anonymous"
+            src="{{
+              (isPost(data) && data!.post_medias_id![position + 1]!.url!) ||
+                (isShare(data) &&
+                  data!.share_post_id!.post_medias_id![position + 1]!.url!)
+            }}"
+          /> -->
+
+          <ng-container
+            *ngIf="
+              getMediaType(
+                isPost(data)
+                  ? data!.post_medias_id![position + 1]!.id!.type
+                  : isShare(data)
+                  ? data!.share_post_id!.post_medias_id![position + 1]!.id!.type
+                  : ''
+              ) as mediaUrl
+            "
+          >
+            <img
+              *ngIf="isImage(mediaUrl)"
+              draggable="false"
+              class="rounded-[5px] max-w-max self-stretch flex-1 relative w-full"
+              style="object-fit: cover; position: static"
+              (click)="onRight()"
+              [src]="
+                (isPost(data) && data!.post_medias_id![position + 1]!.url) ||
+                (isShare(data) &&
+                  data!.share_post_id!.post_medias_id![position + 1]!.url)
+              "
+              id="postImage2"
+              #postImage2
+              crossorigin="anonymous"
+            />
+
+            <div
+              class="video-container"
+              *ngIf="isVideo(mediaUrl)"
+              #postContainer
+            >
+              <video
+                class="rounded-[5px] self-stretch flex-1 relative w-[30rem] h-[30rem]"
+                style="object-fit: cover; position: static"
+                [muted]="true"
+                [autoplay]="false"
+                #videoPlayer
+                (click)="onRight()"
+                crossorigin="anonymous"
+              >
+                <source
+                  [src]="
+                    (isPost(data) &&
+                      data!.post_medias_id![position + 1]!.url) ||
+                    (isShare(data) &&
+                      data!.share_post_id!.post_medias_id![position + 1]!.url)
+                  "
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+          </ng-container>
+        </div>
+        <div
+          *ngIf="position - 1 >= 0"
+          #conImage3
+          class="rounded-[15px] p-2.5 img left-[-20rem]"
+        >
+          <!-- <img
+            draggable="false"
+            style="object-fit: cover; position: static"
+            id="postImage3"
+                        #postImage3
+            (click)="onLeft()"
+            crossorigin="anonymous"
+            src="{{
+              (isPost(data) && data!.post_medias_id![position - 1]!.url!) ||
+                (isShare(data) &&
+                  data!.share_post_id!.post_medias_id![position - 1]!.url!)
+            }}"
+          /> -->
+
+          <ng-container
+            *ngIf="
+              getMediaType(
+                isPost(data)
+                  ? data!.post_medias_id![position - 1]!.id!.type
+                  : isShare(data)
+                  ? data!.share_post_id!.post_medias_id![position - 1]!.id!.type
+                  : ''
+              ) as mediaUrl
+            "
+          >
+            <img
+              *ngIf="isImage(mediaUrl)"
+              draggable="false"
+              style="object-fit: cover; position: static"
+              [src]="
+                (isPost(data) && data!.post_medias_id![position - 1]!.url) ||
+                (isShare(data) &&
+                  data!.share_post_id!.post_medias_id![position - 1]!.url)
+              "
+              id="postImage3"
+              #postImage3
+              (click)="onLeft()"
+              crossorigin="anonymous"
+            />
+
+            <div
+              class="video-container"
+              *ngIf="isVideo(mediaUrl)"
+              #postContainer
+            >
+              <video
+                class="rounded-[5px] self-stretch flex-1 relative w-[30rem] h-[30rem]"
+                style="object-fit: cover; position: static"
+                [muted]="true"
+                #videoPlayer
+                [autoplay]="false"
+                (click)="onLeft()"
+                crossorigin="anonymous"
+              >
+                <source
+                  [src]="
+                    (isPost(data) &&
+                      data!.post_medias_id![position - 1]!.url) ||
+                    (isShare(data) &&
+                      data!.share_post_id!.post_medias_id![position - 1]!.url)
+                  "
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <!-- REEL -->
+    <div
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
+      *ngIf="isPost(data) && data!.id!.type === PostEnum.REEL"
+    >
+      <div
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
+      >
+        <div class="video-container" #postContainer>
+          <video
+            class="rounded-[5px] self-stretch h-full flex-1 relative"
+            [controls]="true"
+            [autoplay]="false"
+            [muted]="true"
+            [loop]="true"
+            id="videoPlayer{{ index }}"
+            #videoPlayer
+            crossorigin="anonymous"
+            (mouseenter)="playVideo(videoPlayer)"
+            (mouseleave)="pauseVideo(videoPlayer)"
+          >
+            <source
+              src="{{ data.post_medias_id?.[0]?.url }}"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+      </div>
+    </div>
+    <!-- MEDIA -->
+    <div
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
+      *ngIf="isShare(data) && data?.shareId?.type === ShareEnum.MEDIA"
+    >
+      <div
+        #postContainer
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
+      >
+        <img
+          draggable="false"
+          class="rounded-[5px] max-w-max w-full self-stretch flex-1 relative"
+          style="object-fit: cover"
+          id="postImage1"
+          #postImage1
+          crossorigin="anonymous"
+          src="{{ isShare(data) && data!.share_media_id.url }}"
+        />
+      </div>
+    </div>
+    <!-- Story -->
+    <div
+      class="flex flex-row gap-[5px] items-center justify-center self-stretch flex-1 relative"
+      *ngIf="isShare(data) && data?.shareId?.type === ShareEnum.STORY"
+    >
+      <div
+        #postContainer
+        class="flex flex-col gap-2.5 items-start justify-start self-stretch flex-1 relative post-container"
+      >
+        <!-- <img
+          draggable="false"
+          class="rounded-[5px] max-w-max w-full self-stretch flex-1 relative"
+          style="object-fit: cover"
+          id="postImage1"
+          #postImage1
+          crossorigin="anonymous"
+          src="{{ data!.share_story_id!.story_medias![0].url }}"
+        /> -->
+
+        <ng-container
+          *ngIf="
+            getMediaType(
+              data!.share_story_id!.story_medias![0]!.id.type
+            ) as mediaUrl
+          "
+        >
+          <img
+            *ngIf="isImage(mediaUrl)"
+            draggable="false"
+            class="rounded-[5px] max-w-max w-full self-stretch flex-1 relative"
+            style="object-fit: cover; position: static"
+            [src]="data!.share_story_id!.story_medias![0].url"
+            id="postImage1"
+            #postImage1
+            crossorigin="anonymous"
+          />
+
+          <div class="video-container" *ngIf="isVideo(mediaUrl)" #postContainer>
+            <video
+              class="rounded-[5px] self-stretch flex-1 relative"
+              style="object-fit: cover; position: static"
+              [muted]="true"
+              [autoplay]="false"
+              #videoPlayer
+              crossorigin="anonymous"
+            >
+              <source
+                [src]="data!.share_story_id!.story_medias![0].url"
+                type="video/mp4"
+              />
+            </video>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div
+      class="flex flex-row w-full items-center justify-between self-stretch shrink-0 relative"
+    >
+      <div #share (click)="onClickShare($event)">
+        <mat-icon>{{ iconsObjectNow["SHARE"].name }}</mat-icon>
+      </div>
+      <div #comment (click)="onClickComment($event)">
+        <mat-icon>{{ iconsObjectNow["COMMENT"].name }}</mat-icon>
+      </div>
+      <div #like (click)="onClickLike($event)">
+        <mat-icon>{{ iconsObjectNow["LIKE"].name }}</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>

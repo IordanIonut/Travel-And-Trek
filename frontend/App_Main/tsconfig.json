@@ -16,6 +16,12 @@
       ],
       "travel-app-trek-app-authentication/*": [
         "node_modules/travel-and-trek-app-authentication/*"
+      ],
+      "travel-and-trek-app-dashboard": [
+        "./node_modules/travel-and-trek-app-dashboard"
+      ],
+      "travel-and-trek-app-dashboard/*": [
+        "node_modules/travel-and-trek-app-dashboard/*"
       ]
     },
     "noImplicitOverride": true,

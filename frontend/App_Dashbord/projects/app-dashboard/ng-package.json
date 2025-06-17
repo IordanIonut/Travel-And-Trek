@@ -1,0 +1,17 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/app-dashboard",
+  "lib": {
+    "entryFile": "src/public-api.ts",
+    "styleIncludePaths": [
+      "src/lib",
+      "./src/lib/_pages/home/home.component.scss",
+      "./src/lib/_pages/profile/profile.component.scss",
+      "./src/lib/_pages/reel/reel.component.scss",
+      "./src/lib/_pages/search/search.component.scss"
+    ]
+  },
+  "assets": [
+    "./src/assets"
+  ]
+}
