@@ -7,6 +7,9 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
+      "app-dashbord": [
+        "./dist/app-dashbord"
+      ],
       "travel-and-trek-app-core": ["./node_modules/travel-and-trek-app-core"],
       "travel-and-trek-app-core/*": ["node_modules/travel-and-trek-app-core/*"]
     },

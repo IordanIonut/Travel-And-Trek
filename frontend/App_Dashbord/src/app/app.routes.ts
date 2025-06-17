@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './_pages/home/home.component';
-import { SearchComponent } from './_pages/search/search.component';
-import { ReelComponent } from './_pages/reel/reel.component';
-import { ProfileComponent } from './_pages/profile/profile.component';
+import { HomeComponent } from '../../projects/app-dashbord/src/lib/_pages/home/home.component';
+import { SearchComponent } from '../../projects/app-dashbord/src/lib/_pages/search/search.component';
+import { ReelComponent } from '../../projects/app-dashbord/src/lib/_pages/reel/reel.component';
+import { ProfileComponent } from '../../projects/app-dashbord/src/lib/_pages/profile/profile.component';
 
 export const routes: Routes = [
   {

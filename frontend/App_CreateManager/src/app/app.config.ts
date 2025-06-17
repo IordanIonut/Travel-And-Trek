@@ -19,6 +19,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideClientHydration(),
+    provideAnimationsAsync(),
     JwtService,
     {
       provide: HTTP_INTERCEPTORS,
@@ -27,14 +31,12 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (appInit: AppInitService) => () => appInit.initApp(),
+      useFactory: (appInit: AppInitService) => appInit.initApp(),
       deps: [AppInitService],
       multi: true,
     },
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideClientHydration(),
-    provideAnimationsAsync(),
+    ///spinner
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: MatDialogRef, useValue: { close: () => {} } },
     { provide: MAT_DIALOG_DATA, useValue: {} },
   ],

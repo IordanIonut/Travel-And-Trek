@@ -155,12 +155,11 @@
           draggable="false"
         />
         }@else {
-
-        <div class="max-w-lg w-[40rem] h-[67dvh] object-contain"></div>
+          <div class="max-w-lg w-[40rem] h-[67dvh] object-contain"></div>
         }
         <form [formGroup]="formPost" class="flex flex-col gap-4 w-full">
           <div
-            class="flex items-center border border-gray-700 rounded-lg h-40 px-3 transition focus-within:border-efec bg-[#2b2b2b]"
+            class="flex items-center border border-gray-700 rounded-lg h-max px-3 transition focus-within:border-efec bg-[#2b2b2b]"
           >
             <textarea
               formControlName="text"
