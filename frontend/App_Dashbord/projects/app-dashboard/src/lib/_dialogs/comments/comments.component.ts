@@ -2,21 +2,17 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CommentComponent } from 'projects/app-dashboard/src/lib/_components/comment/comment.component';
-import { CommentService } from 'projects/app-dashboard/src/lib/_service/models/comment.service';
+import { CommentComponent } from '../../_components/comment/comment.component';
 import {
   Comment,
+  CommentService,
   MaterialModule,
   PostId,
+  SkeletonService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { NgFor } from '@angular/common';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import {
-  setLoadingOnRequest,
-  SkeletonService,
-} from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
-import { LikesComponent } from '../likes/likes.component';
+import { DialogService } from '../../_service/dialog/dialog.service';
 
 @Component({
   selector: 'app-comments',
@@ -55,7 +51,7 @@ export class CommentsComponent {
 
   private onfetchData() {
     this.commnetService.findCommentsByPost(this.id.id, this.id.type).subscribe({
-      next: (data: Comment[]) => {
+      next: (data: any[]) => {
         if (data.length === 0) {
           this._dialogRef.close();
         }

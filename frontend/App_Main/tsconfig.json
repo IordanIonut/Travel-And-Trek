@@ -22,6 +22,12 @@
       ],
       "travel-and-trek-app-dashboard/*": [
         "node_modules/travel-and-trek-app-dashboard/*"
+      ],
+      "travel-and-trek-app-create": [
+        "./node_modules/travel-and-trek-app-create"
+      ],
+      "travel-and-trek-app-create/*": [
+        "node_modules/travel-and-trek-app-create/*"
       ]
     },
     "noImplicitOverride": true,

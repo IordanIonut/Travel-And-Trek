@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { SpinnerService } from '../spinner.service';
-import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-spinner',
-    imports: [CommonModule, AsyncPipe],
-    templateUrl: './spinner.component.html',
-    styleUrl: './spinner.component.scss'
+  selector: 'app-spinner',
+  imports: [CommonModule, AsyncPipe],
+  templateUrl: './spinner.component.html',
+  styleUrl: './spinner.component.scss',
 })
 export class SpinnerComponent {
   isLoading: any;

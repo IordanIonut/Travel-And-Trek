@@ -8,10 +8,8 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { PostShareService } from 'projects/app-dashboard/src/lib/_service/common/post-share.service';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { ShareService } from 'projects/app-dashboard/src/lib/_service/models/share.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PostShareService } from '../../_service/common/post-share.service';
 import {
   Icon,
   iconsObject,
@@ -22,6 +20,7 @@ import {
   ShadowService,
   Share,
   ShareEnum,
+  ShareService,
   User,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';

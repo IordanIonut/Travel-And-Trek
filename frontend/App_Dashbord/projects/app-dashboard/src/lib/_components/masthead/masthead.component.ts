@@ -13,16 +13,13 @@ import {
   MaterialModule,
   SearchDTO,
   ShadowService,
-} from 'travel-and-trek-app-core/dist/app-core';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { UserService } from 'projects/app-dashboard/src/lib/_service/models/user.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  setLoadingOnRequest,
   SkeletonService,
-} from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
+  UserService,
+} from 'travel-and-trek-app-core/dist/app-core';
+import { DialogService } from '../../../lib/_service/dialog/dialog.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-masthead',

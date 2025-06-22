@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { Environment } from '../../_environment/environment.local';
+import { setLoadingOnRequest, SkeletonService } from '../_skeleton/skeleton.service';
 import { CommentEnum, Like, LikeContentEnum, LikeDTO, PostEnum, UserDTO } from '../../_model/public-api';
 
 @Injectable({
@@ -10,18 +11,30 @@ import { CommentEnum, Like, LikeContentEnum, LikeDTO, PostEnum, UserDTO } from '
 export class LikeService {
   private apiUrl = Environment.baseUrl + '/api/like';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private skeletonService: SkeletonService
+  ) {}
 
   findCountLikesByPost(
     id: string,
     value: PostEnum | CommentEnum,
     type: string
-  ): Observable<LikeDTO> {
+  ): Observable<LikeDTO | null> {
     const params = new HttpParams()
       .append('id', id)
       .append('value', value)
       .append('type', type);
-    return this.http.get<LikeDTO>(`${this.apiUrl}/post/number`, { params });
+    return this.http
+      .get<LikeDTO>(`${this.apiUrl}/post/number`, { params })
+      .pipe(
+        switchMap((data) => {
+          if (!data) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 
   findUsersLikesByPost(
@@ -37,10 +50,21 @@ export class LikeService {
     if (content !== null && content !== undefined) {
       params = params.append('content', content);
     }
-    return this.http.get<UserDTO[]>(`${this.apiUrl}/post/userDTO`, { params });
+    return this.http
+      .get<UserDTO[]>(`${this.apiUrl}/post/userDTO`, { params })
+      .pipe(
+        switchMap((data) => {
+          if (Array.isArray(data) && data.length === 0) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 
   postLike(like: Like): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/save`, like);
+    return this.http
+      .post<void>(`${this.apiUrl}/save`, like)
+      .pipe(setLoadingOnRequest(this.skeletonService));
   }
 }

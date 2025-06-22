@@ -7,11 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CommentService } from 'projects/app-dashboard/src/lib/_service/models/comment.service';
 import {
   Comment,
   CommentEnum,
   CommentId,
+  CommentService,
   iconsObject,
   JwtService,
   MaterialModule,

@@ -18,18 +18,18 @@ import {
   Media,
   ShadowService,
   Story,
+  ValidationModelService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { HammerModule } from '@angular/platform-browser';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+// import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgFor, NgIf } from '@angular/common';
-import { ValidationModelService } from 'projects/app-dashboard/src/lib/_service/validator/validation-model.service';
 
 @Component({
   selector: 'app-highlight',
   standalone: true,
   imports: [
     MaterialModule,
-    MatProgressBarModule,
+    // MatProgressBarModule,
     HammerModule,
     DragDropModule,
     NgFor,
@@ -73,7 +73,9 @@ export class HighlightComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    this.onProgress();
+  }
 
   onImageLoad(img: any): void {
     this.shadow.applyShadowDialog(img);

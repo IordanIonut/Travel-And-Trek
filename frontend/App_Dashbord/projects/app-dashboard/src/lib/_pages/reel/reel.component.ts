@@ -12,20 +12,17 @@ import {
   MaterialModule,
   Post,
   PostEnum,
-  Story,
-  StoryService,
-} from 'travel-and-trek-app-core/dist/app-core';
-import { MastheadComponent } from '../../_components/masthead/masthead.component';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { PostComponent } from 'projects/app-dashboard/src/lib/_components/post/post.component';
-import { UserService } from 'projects/app-dashboard/src/lib/_service/models/user.service';
-import { HttpClientModule } from '@angular/common/http';
-import { PostService } from 'projects/app-dashboard/src/lib/_service/models/post.service';
-import { StoryComponent } from 'projects/app-dashboard/src/lib/_components/story/story.component';
-import {
+  PostService,
   setLoadingOnRequest,
   SkeletonService,
-} from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
+  Story,
+  StoryService,
+  UserService,
+} from 'travel-and-trek-app-core/dist/app-core';
+import { MastheadComponent } from '../../_components/masthead/masthead.component';
+import { CommonModule } from '@angular/common';
+import { PostComponent } from '../../_components/post/post.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-reel',
@@ -36,7 +33,6 @@ import {
     PostComponent,
     HttpClientModule,
     CommonModule,
-    StoryComponent,
   ],
   providers: [UserService, PostService, SkeletonService],
   templateUrl: './reel.component.html',

@@ -1,28 +1,28 @@
 import { CommonModule, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
-import { MastheadComponent } from 'projects/app-dashboard/src/lib/_components/masthead/masthead.component';
+import { MastheadComponent } from '../../_components/masthead/masthead.component';
 import {
   Environment,
   FilterSeach,
   GroupDTO,
+  GroupService,
+  HashtagService,
   JwtService,
+  LikeService,
   MaterialModule,
   Post,
+  PostService,
   ShadowService,
+  SkeletonService,
   UserDTO,
+  UserService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { GroupComponent } from '../../_components/group/group.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { UserService } from 'projects/app-dashboard/src/lib/_service/models/user.service';
 import { FormsModule, NgModel } from '@angular/forms';
-import { GroupService } from 'projects/app-dashboard/src/lib/_service/models/group.service';
-import { PostService } from 'projects/app-dashboard/src/lib/_service/models/post.service';
-import { PostComponent } from 'projects/app-dashboard/src/lib/_components/post/post.component';
-import { HashtagService } from 'projects/app-dashboard/src/lib/_service/models/hashtag.service';
-import { LikeService } from 'projects/app-dashboard/src/lib/_service/models/like.service';
-import { UserComponent } from 'projects/app-dashboard/src/lib/_components/user/user.component';
-import { SkeletonService } from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
+import { PostComponent } from '../../_components/post/post.component';
+import { UserComponent } from '../../_components/user/user.component';
 
 @Component({
   selector: 'app-search',

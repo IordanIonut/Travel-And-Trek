@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:App_Main": "node dist/app-main/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -24,19 +23,23 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.1",
-    "travel-and-trek-app-dashboard": "file:../App_Dashbord",
+    "@gradio/client": "^1.15.3",
+    "angularx-qrcode": "^20.0.0",
+    "colorthief": "^2.6.0",
     "express": "^4.18.2",
     "jwt-decode": "^4.0.0",
     "ngx-cookie-service": "^19.1.2",
+    "ora": "^5.4.1",
     "rxjs": "~7.8.0",
     "travel-and-trek-app-authentication": "file:../App_Authentification",
     "travel-and-trek-app-core": "file:../App_Core",
-    "travel-and-trek-app-create-manager": "file:../App_CreateManager",
+    "travel-and-trek-app-create": "file:../App_CreateManager",
+    "travel-and-trek-app-dashboard": "file:../App_Dashbord",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.18",
+    "@angular-devkit/build-angular": "^18.2.1",
     "@angular/cli": "^18.2.1",
     "@angular/compiler-cli": "^18.2.0",
     "@types/express": "^4.17.17",

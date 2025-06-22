@@ -1,1 +1,11 @@
+<app-spinner></app-spinner>
+<div *ngIf="showNavbar" class="flex justify-between">
+  <lib-navbar
+    [pages]="pages"
+    [style]="style"
+    [selectedIndex]="selectedIndex"
+    [position]="position"
+  ></lib-navbar>
+</div>
 <router-outlet></router-outlet>
+<app-translate-dialog></app-translate-dialog>

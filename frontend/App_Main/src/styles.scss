@@ -1,3 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 // @import "@angular/material/prebuilt-themes/azure-blue.css";
 @import "../../App_Core/projects/app-core/src/lib/style.scss";
+
+
+.mat-mdc-outlined-button{
+    border-style: none !important;
+}
+
+.page-dialog{
+    border-radius: 30px !important;
+    padding-bottom: 0.75rem !important;
+}
+
+@media (min-width: 640px) {
+    .sm\:w-3\/4 {
+        width: max-content !important;
+        height: min-content !important;
+    }
+}
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel{
+    background-color: black !important;
+}

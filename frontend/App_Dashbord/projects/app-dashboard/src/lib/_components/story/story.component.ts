@@ -8,14 +8,14 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { SkeletonService } from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { ValidationModelService } from 'projects/app-dashboard/src/lib/_service/validator/validation-model.service';
+import { DialogService } from '../../_service/dialog/dialog.service';
 import {
   Highlight,
   MaterialModule,
   ShadowService,
+  SkeletonService,
   Story,
+  ValidationModelService,
 } from 'travel-and-trek-app-core/dist/app-core';
 
 @Component({

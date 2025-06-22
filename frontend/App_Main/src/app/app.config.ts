@@ -6,10 +6,7 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import {
-  BrowserModule,
-  provideClientHydration,
-} from '@angular/platform-browser';
+import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   SocialAuthServiceConfig,
@@ -23,13 +20,23 @@ import {
 } from 'travel-and-trek-app-core/dist/app-core';
 import {
   HTTP_INTERCEPTORS,
-  HttpClientModule,
   provideHttpClient,
   withFetch,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { LoadingInterceptor } from 'travel-and-trek-app-create/dist/app-create';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: MatDialogRef, useValue: { close: () => {} } },
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideClientHydration(),
+    provideAnimationsAsync(),
     JwtService,
     {
       provide: HTTP_INTERCEPTORS,
@@ -38,15 +45,10 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (appInit: AppInitService) => () => appInit.initApp(),
+      useFactory: (appInit: AppInitService) => appInit.initApp(),
       deps: [AppInitService],
       multi: true,
     },
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideClientHydration(),
-    provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

@@ -2,18 +2,15 @@ import { NgFor } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UserComponent } from 'projects/app-dashboard/src/lib/_components/user/user.component';
-import {
-  setLoadingOnRequest,
-  SkeletonService,
-} from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
-import { LikeService } from 'projects/app-dashboard/src/lib/_service/models/like.service';
+import { UserComponent } from '../../_components/user/user.component';
 import {
   iconsObject,
   JwtService,
   LikeContentEnum,
+  LikeService,
   MaterialModule,
   PostId,
+  SkeletonService,
   UserDTO,
 } from 'travel-and-trek-app-core/dist/app-core';
 

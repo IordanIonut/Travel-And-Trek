@@ -8,10 +8,10 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { CommentService } from 'projects/app-dashboard/src/lib/_service/models/comment.service';
+import { DialogService } from '../../../lib/_service/dialog/dialog.service';
 import {
   Comment,
+  CommentService,
   MaterialModule,
   ShadowService,
 } from 'travel-and-trek-app-core/dist/app-core';

@@ -1,8 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { Environment } from '../../_environment/environment.local';
+import { setLoadingOnRequest, SkeletonService } from '../_skeleton/skeleton.service';
 import { Post, UserDTO } from '../../_model/public-api';
+
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +12,10 @@ import { Post, UserDTO } from '../../_model/public-api';
 export class HashtagService {
   private apiUrl = Environment.baseUrl + '/api/hashtags';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private skeletonService: SkeletonService
+  ) {}
 
   getPostByTag(
     hashtags: string[],
@@ -23,7 +28,14 @@ export class HashtagService {
     hashtags.forEach((tag) => {
       params = params.append('hashtags', tag);
     });
-    return this.http.get<Post[]>(`${this.apiUrl}/get/post`, { params });
+    return this.http.get<Post[]>(`${this.apiUrl}/get/post`, { params }).pipe(
+      switchMap((data) => {
+        if (Array.isArray(data) && data.length === 0) {
+          return of(data);
+        }
+        return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+      })
+    );
   }
 
   getUserByTag(
@@ -39,6 +51,13 @@ export class HashtagService {
     hashtags.forEach((tag) => {
       params = params.append('hashtags', tag);
     });
-    return this.http.get<UserDTO[]>(`${this.apiUrl}/get/user`, { params });
+    return this.http.get<UserDTO[]>(`${this.apiUrl}/get/user`, { params }).pipe(
+      switchMap((data) => {
+        if (Array.isArray(data) && data.length === 0) {
+          return of(data);
+        }
+        return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+      })
+    );
   }
 }

@@ -5,6 +5,12 @@ export * from './_mail/mail.service';
 //SHADOW
 export * from './_shadow/shadow.service';
 
+//SKELETON
+export * from './_skeleton/skeleton.service';
+
+//VALIDATORS
+export * from './_validator/validation-model.service';
+
 //MODELS
 export * from './_models/comment.service';
 export * from './_models/follower.service';

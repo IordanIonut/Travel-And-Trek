@@ -10,7 +10,9 @@ import {
   Environment,
   FilterSeach,
   FollowerStatusEnum,
+  FollowService,
   GroupDetailDTO,
+  GroupService,
   Hastag,
   Highlight,
   Icon,
@@ -19,28 +21,23 @@ import {
   MaterialModule,
   Post,
   PostEnum,
+  PostService,
   ShadowService,
   Share,
+  ShareService,
+  SkeletonService,
   UserDTO,
   UserProfileDTO,
+  UserService,
+  ValidationModelService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { MastheadComponent } from '../../_components/masthead/masthead.component';
 import { PostComponent } from '../../_components/post/post.component';
 import { StoryComponent } from '../../_components/story/story.component';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { UserService } from 'projects/app-dashboard/src/lib/_service/models/user.service';
+import { DialogService } from '../../_service/dialog/dialog.service';
 import { HttpClientModule } from '@angular/common/http';
-import { PostService } from 'projects/app-dashboard/src/lib/_service/models/post.service';
-import { ShareService } from 'projects/app-dashboard/src/lib/_service/models/share.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GroupService } from 'projects/app-dashboard/src/lib/_service/models/group.service';
-import { ValidationModelService } from 'projects/app-dashboard/src/lib/_service/validator/validation-model.service';
-import { FollowService } from 'projects/app-dashboard/src/lib/_service/models/follower.service';
-import { UserComponent } from 'projects/app-dashboard/src/lib/_components/user/user.component';
-import {
-  setLoadingOnRequest,
-  SkeletonService,
-} from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
+import { ActivatedRoute } from '@angular/router';
+import { UserComponent } from '../../_components/user/user.component';
 
 type ElementType = 'settings' | 'qr_code' | 'logout';
 

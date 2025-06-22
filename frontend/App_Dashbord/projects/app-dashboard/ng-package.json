@@ -8,7 +8,27 @@
       "./src/lib/_pages/home/home.component.scss",
       "./src/lib/_pages/profile/profile.component.scss",
       "./src/lib/_pages/reel/reel.component.scss",
-      "./src/lib/_pages/search/search.component.scss"
+      "./src/lib/_pages/search/search.component.scss",
+      "./src/lib/_dialogs/chat/chat.component.scss",
+      "./src/lib/_dialogs/comments/comments.component.scss",
+      "./src/lib/_dialogs/filter/filter.component.scss",
+      "./src/lib/_dialogs/highlight/highlight.component.scss",
+      "./src/lib/_dialogs/likes/likes.component.scss",
+      "./src/lib/_dialogs/notification/notification.component.scss",
+      "./src/lib/_dialogs/photo/photo.component.scss",
+      "./src/lib/_dialogs/post/post.component.scss",
+      "./src/lib/_dialogs/profile/profile.component.scss",
+      "./src/lib/_dialogs/qr-code/qr-code.component.scss",
+      "./src/lib/_dialogs/see-value/see-value.component.scss",
+      "./src/lib/_dialogs/send/send.component.scss",
+      "./src/lib/_dialogs/shares/shares.component.scss",
+      "./src/lib/_components/comment/comment.component.scss",
+      "./src/lib/_components/group/group.component.scss",
+      "./src/lib/_components/masthead/masthead.component.scss",
+      "./src/lib/_components/place/place.component.scss",
+      "./src/lib/_components/post/post.component.scss",
+      "./src/lib/_components/story/story.component.scss",
+      "./src/lib/_components/user/user.component.scss"
     ]
   },
   "assets": [

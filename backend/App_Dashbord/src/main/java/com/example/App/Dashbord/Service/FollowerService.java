@@ -39,12 +39,12 @@ public class FollowerService {
     }
 
     @Cacheable(value = "followerCache", key = "'countFollowersByUser::' + #name")
-    public Long countFollowersByUser(final String name){
+    public Long countFollowersByUser(final String name) {
         return followerRepository.countFollowersByUser(name);
     }
 
     @Cacheable(value = "followerCache", key = "'countFollowingByUser::' + #name")
-    public Long countFollowingByUser(final String name){
+    public Long countFollowingByUser(final String name) {
         return followerRepository.countFollowingByUser(name);
     }
 
@@ -110,8 +110,8 @@ public class FollowerService {
     }
 
     //HOME SUGGESTION FRIENDS
-    @Cacheable(value ="followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
-    public List<UserDTO> findUserSuggestions(String name,  List<String> hashtags,  int index, int number){
+    @Cacheable(value = "followerCache", key = "'findUserSuggestions::'+#name+'::'+#hashtags.toString()+'::'+#index+'::'+#number")
+    public List<UserDTO> findUserSuggestions(String name, List<String> hashtags, int index, int number) {
         List<User> f = followerRepository.findUserSuggestions(name, hashtags);
         return new UserDTO().generateUserDTO(f, userRepository.findMutualFriends(name), index, number);
     }

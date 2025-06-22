@@ -1,15 +1,20 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { Environment } from '../../_environment/environment.local';
+import { setLoadingOnRequest, SkeletonService } from '../_skeleton/skeleton.service';
 import { GroupDetailDTO, GroupDTO } from '../../_model/public-api';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
   private apiUrl = Environment.baseUrl + '/api/group';
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private skeletonService: SkeletonService
+  ) {}
 
   findGroupsByName(
     name: string,
@@ -22,14 +27,30 @@ export class GroupService {
       .append('search', search)
       .append('page', page)
       .append('size', size);
-    return this.http.get<GroupDTO[]>(`${this.apiUrl}/suggesters/group`, {
-      params,
-    });
+    return this.http
+      .get<GroupDTO[]>(`${this.apiUrl}/suggesters/group`, {
+        params,
+      })
+      .pipe(
+        switchMap((data) => {
+          if (Array.isArray(data) && data.length === 0) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 
-  findGroupDetailsByName(name: string): Observable<GroupDetailDTO> {
-    return this.http.get<GroupDetailDTO>(
-      `${this.apiUrl}/get/details?name=${name}`
-    );
+  findGroupDetailsByName(name: string): Observable<GroupDetailDTO | null> {
+    return this.http
+      .get<GroupDetailDTO>(`${this.apiUrl}/get/details?name=${name}`)
+      .pipe(
+        switchMap((data) => {
+          if (data) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 }

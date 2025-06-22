@@ -1,27 +1,24 @@
-import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import {
   Environment,
+  FollowService,
   JwtService,
   MaterialModule,
   Post,
   PostEnum,
+  PostService,
+  SkeletonService,
   Story,
+  StoryService,
   UserDTO,
+  UserService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { StoryComponent } from '../../_components/story/story.component';
 import { MastheadComponent } from '../../_components/masthead/masthead.component';
-import { UserService } from 'projects/app-dashboard/src/lib/_service/models/user.service';
 import { HttpClientModule } from '@angular/common/http';
-import { StoryService } from 'projects/app-dashboard/src/lib/_service/models/story.service';
-import { PostService } from 'projects/app-dashboard/src/lib/_service/models/post.service';
-import { FollowService } from 'projects/app-dashboard/src/lib/_service/models/follower.service';
 import { NgFor, NgIf } from '@angular/common';
-import { PostComponent } from 'projects/app-dashboard/src/lib/_components/post/post.component';
+import { PostComponent } from '../../_components/post/post.component';
 import { UserComponent } from '../../_components/user/user.component';
-import {
-  setLoadingOnRequest,
-  SkeletonService,
-} from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
 
 @Component({
   selector: 'app-home',

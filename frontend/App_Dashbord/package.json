@@ -1,14 +1,12 @@
 {
-  "name": "app-dashboard",
+  "name": "travel-and-trek-app-dashboard",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "preinstall": "npx npm-force-resolutions",
-    "serve:ssr:App_Dashbord": "node dist/app-dashbord/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {

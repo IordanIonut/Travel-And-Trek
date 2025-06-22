@@ -9,7 +9,7 @@ import {
 @Component({
   selector: 'app-filter',
   standalone: true,
-  imports: [MaterialModule, NgFor, NgClass, NgStyle],
+  imports: [MaterialModule, NgFor, NgClass],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.scss',
 })

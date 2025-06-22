@@ -1,13 +1,12 @@
 {
-  "name": "app-create-manager",
+  "name": "travel-and-trek-app-create",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:App_CreateManager": "node dist/app-create-manager/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {

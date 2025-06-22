@@ -3,13 +3,17 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/lib",
+    "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "target": "ES2022",
+    "module": "ES2022",
+    "types": [],
+    "lib": ["ES2022", "DOM", "ESNext"]
   },
-  "exclude": [
-    "**/*.spec.ts"
-  ]
+  "angularCompilerOptions": {
+    "enableIvy": true,
+    "compilationMode": "partial"
+  },
+  "exclude": ["**/*.spec.ts"]
 }

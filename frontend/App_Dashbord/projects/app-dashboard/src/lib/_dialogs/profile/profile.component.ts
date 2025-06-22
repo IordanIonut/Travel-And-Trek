@@ -9,14 +9,14 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { UserService } from 'projects/app-dashboard/src/lib/_service/models/user.service';
+import { DialogService } from '../../_service/dialog/dialog.service';
 import {
   Environment,
   JwtService,
   MaterialModule,
   ShadowService,
   UserProfileDTO,
+  UserService,
 } from 'travel-and-trek-app-core/dist/app-core';
 
 type ElementType = 'settings' | 'qr_code' | 'logout';
@@ -30,7 +30,7 @@ type ElementType = 'settings' | 'qr_code' | 'logout';
   styleUrl: './profile.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class ProfileComponent {
+export class ProfileDialogComponent {
   userDTO?: UserProfileDTO;
   type!: string;
   elemnts: ElementType[] = ['settings', 'qr_code', 'logout'];
@@ -101,13 +101,13 @@ export class ProfileComponent {
   }
 
   onMake(make: ElementType) {
-    console.log(make);
     switch (make) {
       case 'settings': {
         break;
       }
       case 'logout': {
-        this._jwtService.logout(Environment.jwtToken);
+        this.router.navigate(['authentication/register']);
+        this.onClose()
         break;
       }
       case 'qr_code': {

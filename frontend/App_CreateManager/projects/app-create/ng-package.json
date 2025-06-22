@@ -2,6 +2,17 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/app-create",
   "lib": {
-    "entryFile": "src/public-api.ts"
-  }
+    "entryFile": "src/public-api.ts",
+    "styleIncludePaths": [
+      "src/lib",
+      "./src/lib/_components/_dialog/nsfw-dialog/nsfw-dialog.component.scss",
+      "./src/lib/_components/_dialog/preview-post/preview-post.component.scss",
+      "./src/lib/_components/_dialog/translate-dialog/translate-dialog.component.scss",
+      "./src/lib/_components/_spinner/spinner/spinner.component.scss",
+      "./src/lib/_components/post/post.component.scss"
+    ]
+  },
+  "assets": [
+    "./src/assets"
+  ]
 }

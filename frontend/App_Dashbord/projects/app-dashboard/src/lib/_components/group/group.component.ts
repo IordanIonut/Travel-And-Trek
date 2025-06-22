@@ -1,18 +1,18 @@
 import { CommonModule, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FollowerStatusIconPipe } from 'projects/app-dashboard/src/lib/_pipe/follower-status-icon.pipe';
-import { SkeletonService } from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { FollowService } from 'projects/app-dashboard/src/lib/_service/models/follower.service';
-import { GroupMembershipService } from 'projects/app-dashboard/src/lib/_service/models/group-membership.service';
+import { FollowerStatusIconPipe } from '../../_pipe/follower-status-icon.pipe';
+import { DialogService } from '../../_service/dialog/dialog.service';
 import {
+  FollowService,
   GroupDTO,
   GroupMembership,
   GroupMembershipEnum,
+  GroupMembershipService,
   JwtService,
   MaterialModule,
   ShadowService,
+  SkeletonService,
   User,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/dist/app-core/lib/_types/_frontend/position';

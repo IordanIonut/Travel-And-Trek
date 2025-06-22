@@ -18,15 +18,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PostShareService } from 'projects/app-dashboard/src/lib/_service/common/post-share.service';
-import { SkeletonService } from 'projects/app-dashboard/src/lib/_service/common/skeleton.service';
-import { DialogService } from 'projects/app-dashboard/src/lib/_service/dialog/dialog.service';
-import { CommentService } from 'projects/app-dashboard/src/lib/_service/models/comment.service';
-import { LikeService } from 'projects/app-dashboard/src/lib/_service/models/like.service';
-import { ShareService } from 'projects/app-dashboard/src/lib/_service/models/share.service';
-import { ValidationModelService } from 'projects/app-dashboard/src/lib/_service/validator/validation-model.service';
+import { DialogService } from '../../_service/dialog/dialog.service';
 import {
+  CommentService,
   iconsObject,
+  LikeService,
   MaterialModule,
   MediaEnum,
   Post,
@@ -34,9 +30,13 @@ import {
   ShadowService,
   Share,
   ShareEnum,
+  ShareService,
+  SkeletonService,
   User,
+  ValidationModelService,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
+import { PostShareService } from '../../_service/common/post-share.service';
 
 @Component({
   selector: 'app-post',

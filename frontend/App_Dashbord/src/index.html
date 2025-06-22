@@ -14,11 +14,14 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <meta
+      http-equiv="Cross-Origin-Opener-Policy"
+      content="same-origin-allow-popups"
+    />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
   </head>
   <body class="mat-typography">
-    <app-root
-      class="flex flex-row h-screen w-screen overflow-hidden pr-3"
-    ></app-root>
+    <app-root class="flex flex-row h-screen w-full overflow-hidden"></app-root>
   </body>
 </html>

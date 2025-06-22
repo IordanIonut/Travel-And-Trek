@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ChatComponent } from 'projects/app-dashboard/src/lib/_dialogs/chat/chat.component';
-import { CommentsComponent } from 'projects/app-dashboard/src/lib/_dialogs/comments/comments.component';
-import { FilterComponent } from 'projects/app-dashboard/src/lib/_dialogs/filter/filter.component';
-import { HighlightComponent } from 'projects/app-dashboard/src/lib/_dialogs/highlight/highlight.component';
-import { LikesComponent } from 'projects/app-dashboard/src/lib/_dialogs/likes/likes.component';
-import { NotificationComponent } from 'projects/app-dashboard/src/lib/_dialogs/notification/notification.component';
-import { PhotoComponent } from 'projects/app-dashboard/src/lib/_dialogs/photo/photo.component';
-import { PostComponent } from 'projects/app-dashboard/src/lib/_dialogs/post/post.component';
-import { ProfileComponent } from 'projects/app-dashboard/src/lib/_dialogs/profile/profile.component';
-import { QrCodeComponent } from 'projects/app-dashboard/src/lib/_dialogs/qr-code/qr-code.component';
-import { SeeValueComponent } from 'projects/app-dashboard/src/lib/_dialogs/see-value/see-value.component';
-import { SendComponent } from 'projects/app-dashboard/src/lib/_dialogs/send/send.component';
-import { SharesComponent } from 'projects/app-dashboard/src/lib/_dialogs/shares/shares.component';
+import { ChatComponent } from '../../_dialogs/chat/chat.component';
+import { CommentsComponent } from '../../_dialogs/comments/comments.component';
+import { FilterComponent } from '../../_dialogs/filter/filter.component';
+import { HighlightComponent } from '../../_dialogs/highlight/highlight.component';
+import { LikesComponent } from '../../_dialogs/likes/likes.component';
+import { NotificationComponent } from '../../_dialogs/notification/notification.component';
+import { PhotoComponent } from '../../_dialogs/photo/photo.component';
+import { ProfileDialogComponent } from '../../_dialogs/profile/profile.component';
+import { QrCodeComponent } from '../../_dialogs/qr-code/qr-code.component';
+import { SeeValueComponent } from '../../_dialogs/see-value/see-value.component';
+import { SendComponent } from '../../_dialogs/send/send.component';
+import { SharesComponent } from '../../_dialogs/shares/shares.component';
 import {
   CommentId,
   FilterSeach,
@@ -23,6 +22,7 @@ import {
   Story,
 } from 'travel-and-trek-app-core/dist/app-core';
 import { Position } from 'travel-and-trek-app-core/projects/app-core/src/lib/_types/_frontend/position';
+import { PostComponent } from '../../_dialogs/post/post.component';
 
 @Injectable({
   providedIn: 'root',
@@ -66,7 +66,7 @@ export class DialogService {
   }
 
   openDialogProfile(position: Position, name: string, type: string): void {
-    const dialogRef = this.dialog.open(ProfileComponent, {
+    const dialogRef = this.dialog.open(ProfileDialogComponent, {
       width: `${this.width}px`,
       data: { name: name, type: type },
       maxHeight: this.maxHeight,

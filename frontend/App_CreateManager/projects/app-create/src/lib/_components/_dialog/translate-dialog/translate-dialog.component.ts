@@ -7,8 +7,7 @@ import {
   MaterialModule,
   Mode,
 } from 'travel-and-trek-app-core/dist/app-core';
-import { MatMenuModule } from '@angular/material/menu';
-import { TranslateApiService } from 'projects/app-create/src/lib/_service/_api/translate.service';
+import { TranslateApiService } from '../../../_service/_api/translate.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({

@@ -29,7 +29,7 @@ export function setLoadingOnRequest(skeletonService: SkeletonService) {
         skeletonService.setLoading(true);
       }),
       finalize(() => {
-        timer(500).subscribe(() => skeletonService.setLoading(false));
+        timer(500)?.subscribe(() => skeletonService.setLoading(false));
       })
     );
 }

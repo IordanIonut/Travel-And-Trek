@@ -1,5 +1,5 @@
 {
-  "name": "app-create",
+  "name": "travel-and-trek-app-create",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^18.2.0",
@@ -8,5 +8,9 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "main": "./bundles/travel-and-trek-app-create.umd.js",
+  "module": "./esm2020/travel-and-trek-app-create.mjs",
+  "es2015": "./fesm2015/travel-and-trek-app-create.mjs",
+  "esm2020": "./esm2020/travel-and-trek-app-create.mjs"
 }

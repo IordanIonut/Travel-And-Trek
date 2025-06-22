@@ -1,28 +1,27 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CommentService } from 'projects/app-dashboard/src/lib/_service/models/comment.service';
-import { LikeService } from 'projects/app-dashboard/src/lib/_service/models/like.service';
-import { ShareService } from 'projects/app-dashboard/src/lib/_service/models/share.service';
 import {
   Comment,
   CommentEnum,
   CommentId,
+  CommentService,
   iconsObject,
   JwtService,
   Like,
   LikeContentEnum,
   LikeDTO,
   LikeEnum,
+  LikeService,
   MaterialModule,
   Post,
   PostEnum,
   PostId,
+  ShareService,
   User,
+  ValidationModelService,
 } from 'travel-and-trek-app-core/dist/app-core';
-import { MatDividerModule } from '@angular/material/divider';
 import { NgClass, NgIf, NgStyle } from '@angular/common';
-import { ValidationModelService } from 'projects/app-dashboard/src/lib/_service/validator/validation-model.service';
 
 @Component({
   selector: 'app-see-value',
@@ -30,7 +29,6 @@ import { ValidationModelService } from 'projects/app-dashboard/src/lib/_service/
   imports: [
     MaterialModule,
     HttpClientModule,
-    MatDividerModule,
     NgIf,
     NgStyle,
     NgClass,

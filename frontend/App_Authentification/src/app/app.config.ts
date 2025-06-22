@@ -39,7 +39,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (appInit: AppInitService) => () => appInit.initApp(),
+      useFactory: (appInit: AppInitService) => appInit.initApp(),
       deps: [AppInitService],
       multi: true,
     },

@@ -30,17 +30,14 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { NsfwDetectionService } from 'projects/app-create/src/lib/_service/_api/nsfwDetection.service';
-import { PhotoDescribeService } from 'projects/app-create/src/lib/_service/_api/photoDescribe.service';
-import { HashtagGenerateService } from 'projects/app-create/src/lib/_service/_api/hashtagGenerate.service';
-import { DialogService } from 'projects/app-create/src/lib/_service/_dialogs/dialog.service';
-import { NsfwDetectionTextService } from 'projects/app-create/src/lib/_service/_api/nsfwDetectionText.service';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { NsfwDetectionService } from '../../_service/_api/nsfwDetection.service';
+import { PhotoDescribeService } from '../../_service/_api/photoDescribe.service';
+import { HashtagGenerateService } from '../../_service/_api/hashtagGenerate.service';
+import { DialogService } from '../../_service/_dialogs/dialog.service';
+import { NsfwDetectionTextService } from '../../_service/_api/nsfwDetectionText.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
-import { UserService } from 'projects/app-create/src/lib/_service/_model/user.service';
+import { UserService } from '../../_service/_model/user.service';
 import { TranslateApiService } from '../../_service/_api/translate.service';
-import { timingSafeEqual } from 'crypto';
 
 interface Tags {
   name: string;
@@ -460,7 +457,7 @@ export class PostComponent {
             email: this._jwtService.getUserInfo()?.email,
             profile_picture: this._jwtService.getUserInfo()?.img,
           } as User,
-          media_group_id: null,
+          media_group_id: {} as null,
           latitude: 0,
           longitude: 0,
           create_at: new Date(),

@@ -1,7 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { Environment } from '../../_environment/environment.local';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from '../_skeleton/skeleton.service';
 import { SearchDTO, UserDTO, UserProfileDTO } from '../../_model/public-api';
 
 @Injectable({
@@ -10,10 +14,22 @@ import { SearchDTO, UserDTO, UserProfileDTO } from '../../_model/public-api';
 export class UserService {
   private apiUrl = Environment.baseUrl + '/api/user';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private skeletonService: SkeletonService
+  ) {}
 
-  findUserByName(name: String): Observable<UserProfileDTO> {
-    return this.http.get<UserProfileDTO>(`${this.apiUrl}/info?name=${name}`);
+  findUserByName(name: String): Observable<UserProfileDTO | null> {
+    return this.http
+      .get<UserProfileDTO>(`${this.apiUrl}/info?name=${name}`)
+      .pipe(
+        switchMap((data) => {
+          if (!data) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 
   findSuggestersSearch(
@@ -41,8 +57,17 @@ export class UserService {
       .append('search', search)
       .append('page', page)
       .append('size', size);
-    return this.http.get<UserDTO[]>(`${this.apiUrl}/suggesters/user`, {
-      params,
-    });
+    return this.http
+      .get<UserDTO[]>(`${this.apiUrl}/suggesters/user`, {
+        params,
+      })
+      .pipe(
+        switchMap((data) => {
+          if (Array.isArray(data) && data.length === 0) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 }

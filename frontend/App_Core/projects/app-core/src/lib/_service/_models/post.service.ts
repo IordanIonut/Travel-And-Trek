@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { Environment } from '../../_environment/environment.local';
+import { setLoadingOnRequest, SkeletonService } from '../_skeleton/skeleton.service';
 import { Post, PostEnum, PostId } from '../../_model/public-api';
 
 @Injectable({
@@ -9,7 +10,10 @@ import { Post, PostEnum, PostId } from '../../_model/public-api';
 })
 export class PostService {
   private apiUrl = Environment.baseUrl + '/api/post';
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private skeletonService: SkeletonService
+  ) {}
 
   getPostByProfileType(
     name: string,
@@ -17,9 +21,18 @@ export class PostService {
     index: number,
     number: number
   ): Observable<Post[]> {
-    return this.http.get<Post[]>(
-      `${this.apiUrl}/find/type?name=${name}&type=${type}&index=${index}&number=${number}`
-    );
+    return this.http
+      .get<Post[]>(
+        `${this.apiUrl}/find/type?name=${name}&type=${type}&index=${index}&number=${number}`
+      )
+      .pipe(
+        switchMap((data) => {
+          if (Array.isArray(data) && data.length === 0) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 
   getPostByProfile(
@@ -27,9 +40,18 @@ export class PostService {
     index: number,
     number: number
   ): Observable<Post[]> {
-    return this.http.get<Post[]>(
-      `${this.apiUrl}/find?name=${name}&index=${index}&number=${number}`
-    );
+    return this.http
+      .get<Post[]>(
+        `${this.apiUrl}/find?name=${name}&index=${index}&number=${number}`
+      )
+      .pipe(
+        switchMap((data) => {
+          if (Array.isArray(data) && data.length === 0) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 
   getPostByUserTag(
@@ -37,9 +59,18 @@ export class PostService {
     index: number,
     number: number
   ): Observable<Post[]> {
-    return this.http.get<Post[]>(
-      `${this.apiUrl}/find/tags?name=${name}&index=${index}&number=${number}`
-    );
+    return this.http
+      .get<Post[]>(
+        `${this.apiUrl}/find/tags?name=${name}&index=${index}&number=${number}`
+      )
+      .pipe(
+        switchMap((data) => {
+          if (Array.isArray(data) && data.length === 0) {
+            return of(data);
+          }
+          return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+        })
+      );
   }
 
   getPostBySearch(
@@ -51,7 +82,14 @@ export class PostService {
       .append('search', search)
       .append('index', index)
       .append('number', size);
-    return this.http.get<Post[]>(`${this.apiUrl}/suggestion`, { params });
+    return this.http.get<Post[]>(`${this.apiUrl}/suggestion`, { params }).pipe(
+      switchMap((data) => {
+        if (Array.isArray(data) && data.length === 0) {
+          return of(data);
+        }
+        return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+      })
+    );
   }
 
   getPostByGroupNameAndType(
@@ -65,11 +103,25 @@ export class PostService {
       .append('index', index)
       .append('number', number)
       .append('type', type || '');
-    return this.http.get<Post[]>(`${this.apiUrl}/get/group`, { params });
+    return this.http.get<Post[]>(`${this.apiUrl}/get/group`, { params }).pipe(
+      switchMap((data) => {
+        if (Array.isArray(data) && data.length === 0) {
+          return of(data);
+        }
+        return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+      })
+    );
   }
 
-  getPostById(id: PostId): Observable<Post> {
-    return this.http.get<Post>(`${this.apiUrl}/get?id=${id}`);
+  getPostById(id: PostId): Observable<Post | null> {
+    return this.http.get<Post>(`${this.apiUrl}/get?id=${id}`).pipe(
+      switchMap((data) => {
+        if (!data) {
+          return of(data);
+        }
+        return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+      })
+    );
   }
 
   getPostByUserFriends(
@@ -86,6 +138,13 @@ export class PostService {
       .append('index', index)
       .append('number', number);
 
-    return this.http.get<Post[]>(`${this.apiUrl}/find/data`, { params });
+    return this.http.get<Post[]>(`${this.apiUrl}/find/data`, { params }).pipe(
+      switchMap((data) => {
+        if (Array.isArray(data) && data.length === 0) {
+          return of(data);
+        }
+        return of(data).pipe(setLoadingOnRequest(this.skeletonService));
+      })
+    );
   }
 }
