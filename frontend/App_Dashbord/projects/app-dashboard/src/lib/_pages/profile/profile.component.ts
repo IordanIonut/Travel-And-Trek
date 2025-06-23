@@ -99,7 +99,7 @@ export class ProfileComponent {
   isLoadingText: boolean = false;
   isLoadingMedia: boolean = false;
 
-  elemnts: ElementType[] = ['settings', 'qr_code', 'logout'];
+  elemnts: ElementType[] = ['qr_code'];
   filters: FilterSeach[] = [
     {
       value: '1',
@@ -147,6 +147,10 @@ export class ProfileComponent {
       this.user = params['name'];
       this.type = params['type'];
     });
+
+    if (this.user === this._jwtService.getUserInfo().name) {
+      this.elemnts = ['settings', 'qr_code', 'logout'];
+    }
   }
 
   getIconLabel(iconKey: string): string {

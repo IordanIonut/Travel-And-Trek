@@ -20,6 +20,8 @@ import {
   Hastag,
   SearchDTO,
   MediaEnum,
+  UserService,
+  Group,
 } from 'travel-and-trek-app-core/dist/app-core';
 import {
   FormBuilder,
@@ -36,7 +38,6 @@ import { HashtagGenerateService } from '../../_service/_api/hashtagGenerate.serv
 import { DialogService } from '../../_service/_dialogs/dialog.service';
 import { NsfwDetectionTextService } from '../../_service/_api/nsfwDetectionText.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { UserService } from '../../_service/_model/user.service';
 import { TranslateApiService } from '../../_service/_api/translate.service';
 
 interface Tags {
@@ -87,6 +88,7 @@ export class PostComponent {
   mediaFiles: string[] = [];
   users!: SearchDTO[];
   numberOfImages = Environment.numberOfImage;
+  isTextValid: boolean;
   constructor(
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,
@@ -106,15 +108,6 @@ export class PostComponent {
     this.formPost = this._fb.group({
       text: [null, Validators.required],
     });
-
-    // this.mediaFiles.push('https://picsum.photos/500/500/?random=0');
-    // this.mediaFiles.push('https://picsum.photos/500/500/?random=1');
-    // this.mediaFiles.push('https://picsum.photos/500/500/?random=2');
-    // this.mediaFiles.push('https://picsum.photos/500/500/?random=3');
-    // this.mediaFiles.push('https://picsum.photos/500/500/?random=4');
-    // this.mediaFiles.push('https://picsum.photos/500/500/?random=5');
-    // this.mediaFiles.push('https://picsum.photos/500/500/?random=8');
-    // this.onSelectImage(0);
   }
 
   protected onFileSelected(event: any): void {
@@ -151,6 +144,7 @@ export class PostComponent {
                   if (this.imagePreview === null) {
                     this.imagePreview = this.mediaFiles[0];
                   }
+                  this.onNSFWDetection(base64String, response.objects);
                 } else {
                   this.showAlertMessage(
                     'Select Media',
@@ -285,57 +279,56 @@ export class PostComponent {
           this._translateApiService
             .checkTranslate(
               this.formPost.get('text')?.value!,
-              response.language,
+              response.iso,
               'en'
             )
             .subscribe({
               next: (response) => {
-                if (response.error.code !== 400) {
-                  this._nsfwDetectionTextService
-                    .checkTextForNsfw(
-                      response.data.translations.translatedText[0]
-                    )
-                    .subscribe({
-                      next: (response) => {
-                        if (response.flagged || response.sexual) {
-                          let reasons: string[] = [];
-                          if (response.flagged) {
-                            reasons.push('flagged true');
-                          }
-                          if (response.sexual_score > 0.5) {
-                            reasons.push(
-                              `sexual true (sexual_score: ${response.sexual_score.toFixed(
-                                2
-                              )})`
-                            );
-                          }
-                          const reasonText =
-                            reasons.length > 0
-                              ? reasons.join(' and ')
-                              : 'unknown reason';
-
-                          this.showAlertMessage(
-                            'Check Description NSFW',
-                            `This description didn't pass the NSFW check. Reason: ${reasonText}`,
-                            Environment.duration,
-                            Mode.ERROR
-                          );
-                          this._cdr.detectChanges();
-                        } else {
-                          this.showAlertMessage(
-                            'Description NSFW',
-                            'The description passed the NSFW check.',
-                            Environment.duration,
-                            Mode.SUCCESS
-                          );
-                          this._cdr.detectChanges();
+                this._nsfwDetectionTextService
+                  .checkTextForNsfw(
+                    response.data.translations.translatedText[0]
+                  )
+                  .subscribe({
+                    next: (response) => {
+                      if (response.flagged || response.sexual) {
+                        let reasons: string[] = [];
+                        if (response.flagged) {
+                          reasons.push('flagged true');
                         }
-                      },
-                      error: (error) => {
-                        console.error(error);
-                      },
-                    });
-                }
+                        if (response.sexual_score > 0.5) {
+                          reasons.push(
+                            `sexual true (sexual_score: ${response.sexual_score.toFixed(
+                              2
+                            )})`
+                          );
+                        }
+                        const reasonText =
+                          reasons.length > 0
+                            ? reasons.join(' and ')
+                            : 'unknown reason';
+                        this.showAlertMessage(
+                          'Check Description NSFW',
+                          `This description didn't pass the NSFW check. Reason: ${reasonText}`,
+                          Environment.duration,
+                          Mode.ERROR
+                        );
+                        this.isTextValid = false;
+                        this._cdr.detectChanges();
+                      } else {
+                        this.showAlertMessage(
+                          'Description NSFW',
+                          'The description passed the NSFW check.',
+                          Environment.duration,
+                          Mode.SUCCESS
+                        );
+                        this.isTextValid = true;
+                        this._cdr.detectChanges();
+                      }
+                    },
+                    error: (error) => {
+                      console.error(error);
+                    },
+                  });
               },
               error: (error) => {
                 console.log(error);
@@ -409,6 +402,10 @@ export class PostComponent {
       return;
     }
 
+    if (!this.isTextValid) {
+      return;
+    }
+
     if (
       this.formPost.get('text')?.touched &&
       this.formPost.get('text')?.invalid
@@ -457,7 +454,7 @@ export class PostComponent {
             email: this._jwtService.getUserInfo()?.email,
             profile_picture: this._jwtService.getUserInfo()?.img,
           } as User,
-          media_group_id: {} as null,
+          media_group_id: null as Group,
           latitude: 0,
           longitude: 0,
           create_at: new Date(),
@@ -522,12 +519,12 @@ export class PostComponent {
     this._userService
       .findSuggestersSearch(query, 'person', 0, Environment.number)
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.users = response;
           this.showSuggestions.set(this.users.length > 0);
           this._cdr.detectChanges();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.log('Autocomplete error:', error);
           this.showSuggestions.set(false);
         },

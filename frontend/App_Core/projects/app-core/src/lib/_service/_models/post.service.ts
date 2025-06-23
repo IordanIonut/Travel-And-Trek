@@ -2,7 +2,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { Environment } from '../../_environment/environment.local';
-import { setLoadingOnRequest, SkeletonService } from '../_skeleton/skeleton.service';
+import {
+  setLoadingOnRequest,
+  SkeletonService,
+} from '../_skeleton/skeleton.service';
 import { Post, PostEnum, PostId } from '../../_model/public-api';
 
 @Injectable({
@@ -146,5 +149,9 @@ export class PostService {
         return of(data).pipe(setLoadingOnRequest(this.skeletonService));
       })
     );
+  }
+
+  createPost(post: Post) {
+    return this.http.post(`${this.apiUrl}/create`, post);
   }
 }

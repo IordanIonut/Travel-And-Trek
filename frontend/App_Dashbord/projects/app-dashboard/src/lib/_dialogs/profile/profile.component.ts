@@ -106,8 +106,8 @@ export class ProfileDialogComponent {
         break;
       }
       case 'logout': {
-        this.router.navigate(['authentication/register']);
-        this.onClose()
+        this.router.navigate(['authentication/login']);
+        this.onClose();
         break;
       }
       case 'qr_code': {

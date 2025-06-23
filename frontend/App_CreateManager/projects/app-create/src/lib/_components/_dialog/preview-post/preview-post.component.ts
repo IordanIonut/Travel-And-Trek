@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { PostService } from '../../../_service/_model/post.service';
 import {
   AlertComponent,
   Environment,
@@ -22,6 +21,7 @@ import {
   Mode,
   Post,
   PostEnum,
+  PostService,
   ShadowService,
   Share,
   ShareEnum,

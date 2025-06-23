@@ -17,6 +17,9 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    if (req.url.includes('p.rapidapi.com')) {
+      return next.handle(req);
+    }
     const token = this._jwt.getToken(Environment.jwtToken);
     if (token) {
       const cloned = req.clone({
