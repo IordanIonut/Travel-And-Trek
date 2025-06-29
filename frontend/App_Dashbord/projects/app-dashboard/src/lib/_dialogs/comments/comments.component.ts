@@ -52,9 +52,9 @@ export class CommentsComponent {
   private onfetchData() {
     this.commnetService.findCommentsByPost(this.id.id, this.id.type).subscribe({
       next: (data: any[]) => {
-        if (data.length === 0) {
-          this._dialogRef.close();
-        }
+        // if (data.length === 0) {
+        //   this._dialogRef.close();
+        // }
         this.comments = data;
       },
       error: (error: Error) => {

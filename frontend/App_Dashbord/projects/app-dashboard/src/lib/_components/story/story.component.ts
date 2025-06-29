@@ -11,6 +11,7 @@ import {
 import { DialogService } from '../../_service/dialog/dialog.service';
 import {
   Highlight,
+  JwtService,
   MaterialModule,
   ShadowService,
   SkeletonService,
@@ -28,6 +29,7 @@ import {
 })
 export class StoryComponent {
   @Input() highlight: Story[] | Highlight[] = [];
+  @Input() user!: string;
 
   @ViewChildren('imgStory') images!: QueryList<ElementRef>;
   @ViewChildren('conStory') buttons!: QueryList<ElementRef>;
@@ -36,7 +38,8 @@ export class StoryComponent {
     private dialog: DialogService,
     private shadow: ShadowService,
     private validationModelService: ValidationModelService,
-    protected _skeletonService: SkeletonService
+    protected _skeletonService: SkeletonService,
+    private _jwtService: JwtService
   ) {}
 
   ngAfterViewInit(): void {
@@ -95,5 +98,9 @@ export class StoryComponent {
       }
     }
     return undefined;
+  }
+
+  onIsTheSamePerson(): boolean {
+    return this._jwtService.getUserInfo().name === this.user;
   }
 }

@@ -190,7 +190,11 @@ public class GenService {
                     user.setEmail(email);
                     user.setLocation(faker.address().fullAddress());
                     user.setPassword(passwordEncoder.encode("123asd,./A"));
-                    user.setBio(String.join("\n\n", faker.lorem().paragraphs(3)));
+
+                    String bio = String.join("\n\n", faker.lorem().paragraphs(3));
+                    bio = bio.length() > 255 ? bio.substring(0, 255) : bio;
+                    user.setBio(bio);
+
                     user.setDate_create(this.getDate(10, 20).atStartOfDay());
                     user.setProfile_picture("https://picsum.photos/seed/" + UUID.randomUUID() + "/600/600");
                     user.setGender(random.nextBoolean() ? GenderEnum.M : GenderEnum.F);

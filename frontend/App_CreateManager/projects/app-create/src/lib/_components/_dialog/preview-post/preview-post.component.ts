@@ -115,9 +115,12 @@ export class PreviewPostComponent {
           Environment.duration,
           Mode.SUCCESS
         );
-        const url =
-          'dashboard/profile?type=user&name=' + this.data.post_user_id?.name;
-        this.route.navigate([url]);
+        this.route.navigate(['/dashboard/profile'], {
+          queryParams: {
+            type: 'user',
+            name: this.data.post_user_id?.name,
+          },
+        });
       },
       error: (error) => {
         console.log(error);

@@ -188,4 +188,8 @@ export class UserComponent {
   onPeopleIsAccepted(): boolean {
     return this.people.state === FollowerStatusEnum.ACCEPTED;
   }
+
+  onCheckUser(): boolean {
+    return this.people.user.name === this._jwtService.getUserInfo().name;
+  }
 }

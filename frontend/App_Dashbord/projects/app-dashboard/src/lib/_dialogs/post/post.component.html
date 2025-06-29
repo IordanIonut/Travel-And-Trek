@@ -224,7 +224,7 @@
       >
         <div
           #conImage2
-          class="rounded-[15px] p-2.5 img right-[-20rem]"
+          class="p-2.5 rounded-[5px] right-[-10rem] w-[30rem] h-[30rem] self-stretch flex-1 fixed top-[14rem]"
           *ngIf="
             (isPost(data) && data!.post_medias_id!.length > position + 1) ||
             (isShare(data) &&
@@ -302,7 +302,7 @@
         <div
           *ngIf="position - 1 >= 0"
           #conImage3
-          class="rounded-[15px] p-2.5 img left-[-20rem]"
+          class="p-2.5 left-[-10rem] rounded-[5px] w-[30rem] h-[30rem] self-stretch flex-1 fixed top-[14rem]"
         >
           <!-- <img
             draggable="false"

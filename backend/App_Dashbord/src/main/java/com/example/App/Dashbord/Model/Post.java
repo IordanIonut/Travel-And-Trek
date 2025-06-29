@@ -64,7 +64,7 @@ public class Post {
     )
     private List<Hastag> post_hashtag_id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "POST_TAGS",
             joinColumns = {
@@ -75,7 +75,7 @@ public class Post {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<User> tagged_users;
 
-    @Column(name = "DESCRIPTION", nullable = false)
+    @Column(name = "DESCRIPTION", nullable = false ,columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "VISIBILY", nullable = false)

@@ -88,7 +88,7 @@ export class PostComponent {
   mediaFiles: string[] = [];
   users!: SearchDTO[];
   numberOfImages = Environment.numberOfImage;
-  isTextValid: boolean;
+  isTextValid: boolean = null;
   constructor(
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,
@@ -263,7 +263,7 @@ export class PostComponent {
   }
 
   onCheckNSFWText() {
-    if (this.formPost.get('text')?.value == null) {
+    if (this.formPost.get('text')?.value[0] == null) {
       this.showAlertMessage(
         'Check Description NSFW',
         'To use this verification, you need to insert or generate a description.',
@@ -402,10 +402,6 @@ export class PostComponent {
       return;
     }
 
-    if (!this.isTextValid) {
-      return;
-    }
-
     if (
       this.formPost.get('text')?.touched &&
       this.formPost.get('text')?.invalid
@@ -423,6 +419,19 @@ export class PostComponent {
       this.showAlertMessage(
         'Select Tags',
         'You need to insert a tag or generate with AI.',
+        Environment.duration,
+        Mode.ERROR
+      );
+      return;
+    }
+
+    if (this.isTextValid === null) {
+      this.onCheckNSFWText();
+      return;
+    } else if (!this.isTextValid) {
+      this.showAlertMessage(
+        'Select Description',
+        'You need to insert a description or generate with AI.',
         Environment.duration,
         Mode.ERROR
       );

@@ -45,7 +45,11 @@
     </div>
 
     <div class="flex flex-row hide-scrollbar">
-      <app-story [highlight]="story" class="flex w-[82px]"></app-story>
+      <app-story
+        [highlight]="story"
+        [user]="_jwtService.getUserInfo()?.name"
+        class="flex w-[82px]"
+      ></app-story>
     </div>
   </div>
 </div>

@@ -69,7 +69,7 @@ export class HomeComponent {
     private _storyService: StoryService,
     private _postService: PostService,
     private _followerService: FollowService,
-    private _jwtService: JwtService,
+    protected _jwtService: JwtService,
     protected _skeletonService: SkeletonService
   ) {}
 
