@@ -75,7 +75,7 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this._storyService
-      .findFriendsStory(this._jwtService.getUserInfo()?.name!, 0, 300)
+      .findFriendsStory(this._jwtService.getUserInfo()?.name!, 0, 30)
       .subscribe({
         next: (data: Story[]) => {
           this.story = data;

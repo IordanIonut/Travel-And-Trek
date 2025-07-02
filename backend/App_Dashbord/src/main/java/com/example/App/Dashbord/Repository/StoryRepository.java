@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public interface StoryRepository extends JpaRepository<Story, Long> {
     @Query("SELECT DISTINCT s FROM Story s " +
-            "JOIN User u on u.name = :view  and u.name = s.story_user_id.name " +
-            "JOIN Follower f ON f.follower_user_id_follower.id = u.id " +
-            "JOIN User u2 ON f.follower_user_id.id = u2.id " +
+            "LEFT JOIN FETCH User u on u.name = :view  and u.name = s.story_user_id.name " +
+            "LEFT JOIN FETCH Follower f ON f.follower_user_id_follower.id = u.id " +
+            "LEFT JOIN FETCH User u2 ON f.follower_user_id.id = u2.id " +
             "WHERE UPPER(u2.name) LIKE  UPPER(:name) " +
             "AND f.id.status = 'ACCEPTED' " +
             "AND s.expiration = false " +
@@ -24,9 +24,9 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
     List<Story> findUsersFriendsStory(@Param("name") String name, @Param("view") String view);
 
     @Query("SELECT DISTINCT s FROM Story s " +
-            "JOIN s.story_user_id u " +
-            "JOIN Follower f ON f.follower_user_id_follower = u " +
-            "JOIN User u2 ON f.follower_user_id = u2 " +
+            "LEFT JOIN FETCH  s.story_user_id u " +
+            "LEFT JOIN FETCH Follower f ON f.follower_user_id_follower = u " +
+            "LEFT JOIN FETCH User u2 ON f.follower_user_id = u2 " +
             "WHERE UPPER(u2.name) LIKE UPPER(:name) " +
             "AND f.id.status = 'ACCEPTED' " +
             "AND s.expiration = false " +

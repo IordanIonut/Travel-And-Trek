@@ -496,7 +496,9 @@ export class PostComponent {
         post_hashtag_id: [...hastag],
         post_group_id: null,
         tagged_users: [...users],
-        description: this.formPost.get('text')?.value[0],
+        description:
+          this.formPost.get('text')?.value ||
+          this.formPost.get('text')?.value[0],
         visible: true,
         create_at: new Date(),
         update_at: new Date(),

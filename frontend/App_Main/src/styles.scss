@@ -30,3 +30,7 @@
 .view {
     @apply flex flex-col gap-2.5 items-center justify-center shrink-0 relative p-2 w-16;
   }
+
+  .page-dialog{
+    padding-bottom: 0px !important;
+  }

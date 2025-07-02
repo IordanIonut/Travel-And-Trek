@@ -36,14 +36,14 @@
             <mat-option
               *ngFor="let lang of languages"
               [disabled]="true"
-              [value]="lang.language"
+              [value]="lang.flag"
               [ngClass]="{
-                'selected-option': lang.language === form.get('detect')!.value
+                'selected-option': lang.flag === form.get('detect')!.value
               }"
             >
               <div class="flex items-center">
                 <img
-                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
+                  [src]="'https://flagcdn.com/w20/' + lang.flag + '.png'"
                   class="language-flag w-5 h-4 mr-2"
                 />
                 {{ lang.name }}
@@ -66,14 +66,14 @@
           <mat-select formControlName="to" (selectionChange)="onChange($event)">
             <mat-option
               *ngFor="let lang of languages"
-              [value]="lang.language"
+              [value]="lang.flag"
               [ngClass]="{
-                'selected-option': lang.language === form.get('detect')!.value
+                'selected-option': lang.flag === form.get('to')!.value
               }"
             >
               <div class="flex items-center">
                 <img
-                  [src]="'https://flagcdn.com/w20/' + lang.language + '.png'"
+                  [src]="'https://flagcdn.com/w20/' + lang.flag + '.png'"
                   class="language-flag w-5 h-4 mr-2"
                 />
                 {{ lang.name }}
